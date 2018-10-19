@@ -1,0 +1,57 @@
+{
+    "userPoolName": "cognito0f20e89b_userpool_0f20e89b",
+    "autoVerifiedAttributes": [
+        "email"
+    ],
+    "mfaConfiguration": "OFF",
+    "mfaTypes": [
+        "SMS Text Message"
+    ],
+    "roleName": "cognito0f20e89b_sns-role",
+    "roleExternalId": "cognito0f20e89b_role_external_id",
+    "policyName": "cognito0f20e89b-sns-policy",
+    "smsAuthenticationMessage": "Your authentication code is {####}",
+    "smsVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Your AWS Calorie Tracker Verification Code",
+    "emailVerificationMessage": "Your verification code is {####}",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [
+        "Requires Lowercase",
+        "Requires Uppercase",
+        "Requires Numbers",
+        "Requires Symbols"
+    ],
+    "requiredAttributes": [
+        "email"
+    ],
+    "userpoolClientName": "cognito0f20e89b_app_client",
+    "userpoolClientGenerateSecret": true,
+    "userpoolClientRefreshTokenValidity": "30",
+    "userpoolClientReadAttributes": [
+        "email"
+    ],
+    "mfaLambdaRole": "cognito0f20e89b_totp_lambda_role",
+    "mfaLambdaLogPolicy": "cognito0f20e89b_totp_lambda_log_policy",
+    "mfaPassRolePolicy": "cognito0f20e89b_totp_pass_role_policy",
+    "mfaLambdaIAMPolicy": "cognito0f20e89b_totp_lambda_iam_policy",
+    "userpoolClientLambdaRole": "cognito0f20e89b_userpoolclient_lambda_role",
+    "userpoolClientLogPolicy": "cognito0f20e89b_userpoolclient_lambda_log_policy",
+    "userpoolClientLambdaPolicy": "cognito0f20e89b_userpoolclient_lambda_iam_policy",
+    "userpoolClientSetAttributes": false,
+    "identityPoolName": "cognito0f20e89b_identitypool_0f20e89b",
+    "allowUnauthenticatedIdentities": false,
+    "thirdPartyAuth": false,
+    "lambdaLogPolicy": "cognito0f20e89b_lambda_log_policy",
+    "openIdLambdaRoleName": "cognito0f20e89b_openid_lambda_role",
+    "openIdRolePolicy": "cognito0f20e89b_openid_pass_role_policy",
+    "openIdLambdaIAMPolicy": "cognito0f20e89b_openid_lambda_iam_policy",
+    "openIdLogPolicy": "cognito0f20e89b_openid_lambda_log_policy",
+    "useDefault": "manual",
+    "unAuthRoleName": "myapp-20180928151540-unauthRole",
+    "authRoleName": "myapp-20180928151540-authRole",
+    "unAuthRoleArn": "arn:aws:iam::101414629942:role/myapp-20180928151540-unauthRole",
+    "authRoleArn": "arn:aws:iam::101414629942:role/myapp-20180928151540-authRole",
+    "resourceName": "cognito0f20e89b",
+    "authSelections": "userPoolOnly"
+}

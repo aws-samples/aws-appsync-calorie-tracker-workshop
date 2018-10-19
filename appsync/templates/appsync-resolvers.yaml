@@ -1,0 +1,745 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: AWS AppSync resolvers
+
+Parameters:
+  AppSyncApiId:
+    Type: String
+    Description: AppSync api id
+  AppSyncUserTableDataSourceName:
+    Type: String
+    Description: AppSync User table data source name
+  AppSyncActivityTableDataSourceName:
+    Type: String
+    Description: AppSync Activity table data source name
+  AppSyncActivityCategoryTableDataSourceName:
+    Type: String
+    Description: AppSync Activity category table data source name
+  AppSyncUserAggTableDataSourceName:
+    Type: String
+    Description: AppSync User calorie aggregate table data source name
+
+Resources:
+  # ------ Mutation resolvers
+  UpdateUserAggregateMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: updateUserAggregate
+      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "UpdateItem",
+          "key": {
+            "userid": $util.dynamodb.toDynamoDBJson($ctx.args.input.userid),
+            "date": $util.dynamodb.toDynamoDBJson($ctx.args.input.date),
+          },
+
+          ## Set up some space to keep track of things we're updating **
+          #set( $expNames  = {} )
+          #set( $expValues = {} )
+          #set( $expSet = {} )
+          #set( $expAdd = {} )
+          #set( $expRemove = [] )
+
+          ## Iterate through each argument, skipping keys **
+          #foreach( $entry in $util.map.copyAndRemoveAllKeys($ctx.args.input, ["userid", "date"]).entrySet() )
+            #if( $util.isNull($entry.value) )
+              ## If the argument is set to "null", then remove that attribute from the item in DynamoDB **
+
+              #set( $discard = ${expRemove.add("#${entry.key}")} )
+              $!{expNames.put("#${entry.key}", "${entry.key}")}
+            #else
+              ## Otherwise set (or update) the attribute on the item in DynamoDB **
+
+              $!{expSet.put("#${entry.key}", ":${entry.key}")}
+              $!{expNames.put("#${entry.key}", "${entry.key}")}
+              $!{expValues.put(":${entry.key}", $util.dynamodb.toDynamoDB($entry.value))}
+            #end
+          #end
+
+          ## Start building the update expression, starting with attributes we're going to SET **
+          #set( $expression = "" )
+          #if( !${expSet.isEmpty()} )
+            #set( $expression = "SET" )
+            #foreach( $entry in $expSet.entrySet() )
+              #set( $expression = "${expression} ${entry.key} = ${entry.value}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Continue building the update expression, adding attributes we're going to ADD **
+          #if( !${expAdd.isEmpty()} )
+            #set( $expression = "${expression} ADD" )
+            #foreach( $entry in $expAdd.entrySet() )
+              #set( $expression = "${expression} ${entry.key} ${entry.value}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Continue building the update expression, adding attributes we're going to REMOVE **
+          #if( !${expRemove.isEmpty()} )
+            #set( $expression = "${expression} REMOVE" )
+
+            #foreach( $entry in $expRemove )
+              #set( $expression = "${expression} ${entry}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Finally, write the update expression into the document, along with any expressionNames and expressionValues **
+          "update": {
+            "expression": "${expression}",
+            #if( !${expNames.isEmpty()} )
+              "expressionNames": $utils.toJson($expNames),
+            #end
+            #if( !${expValues.isEmpty()} )
+              "expressionValues": $utils.toJson($expValues),
+            #end
+          },
+
+          "condition": {
+            "expression": "attribute_exists(#userid) AND attribute_exists(#date)",
+            "expressionNames": {
+              "#userid": "userid",
+              "#date": "date",
+            },
+          }
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  DeleteUserAggregateMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: deleteUserAggregate
+      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "DeleteItem",
+          "key": {
+            "userid": $util.dynamodb.toDynamoDBJson($ctx.args.input.userid),
+            "date": $util.dynamodb.toDynamoDBJson($ctx.args.input.date),
+          },
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  CreateUserAggregateMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: createUserAggregate
+      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "PutItem",
+          "key": {
+            "userid": $util.dynamodb.toDynamoDBJson($ctx.args.input.userid),
+            "date": $util.dynamodb.toDynamoDBJson($ctx.args.input.date),
+          },
+          "attributeValues": $util.dynamodb.toMapValuesJson($ctx.args.input),
+          "condition": {
+            "expression": "attribute_not_exists(#userid) AND attribute_not_exists(#date)",
+            "expressionNames": {
+              "#userid": "userid",
+              "#date": "date",
+            },
+          },
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  UpdateUserMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: updateUser
+      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "UpdateItem",
+          "key": {
+            "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id),
+          },
+
+          ## Set up some space to keep track of things we're updating **
+          #set( $expNames  = {} )
+          #set( $expValues = {} )
+          #set( $expSet = {} )
+          #set( $expAdd = {} )
+          #set( $expRemove = [] )
+
+          ## Iterate through each argument, skipping keys **
+          #foreach( $entry in $util.map.copyAndRemoveAllKeys($ctx.args.input, ["id"]).entrySet() )
+            #if( $util.isNull($entry.value) )
+              ## If the argument is set to "null", then remove that attribute from the item in DynamoDB **
+
+              #set( $discard = ${expRemove.add("#${entry.key}")} )
+              $!{expNames.put("#${entry.key}", "${entry.key}")}
+            #else
+              ## Otherwise set (or update) the attribute on the item in DynamoDB **
+
+              $!{expSet.put("#${entry.key}", ":${entry.key}")}
+              $!{expNames.put("#${entry.key}", "${entry.key}")}
+              $!{expValues.put(":${entry.key}", $util.dynamodb.toDynamoDB($entry.value))}
+            #end
+          #end
+
+          ## Start building the update expression, starting with attributes we're going to SET **
+          #set( $expression = "" )
+          #if( !${expSet.isEmpty()} )
+            #set( $expression = "SET" )
+            #foreach( $entry in $expSet.entrySet() )
+              #set( $expression = "${expression} ${entry.key} = ${entry.value}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Continue building the update expression, adding attributes we're going to ADD **
+          #if( !${expAdd.isEmpty()} )
+            #set( $expression = "${expression} ADD" )
+            #foreach( $entry in $expAdd.entrySet() )
+              #set( $expression = "${expression} ${entry.key} ${entry.value}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Continue building the update expression, adding attributes we're going to REMOVE **
+          #if( !${expRemove.isEmpty()} )
+            #set( $expression = "${expression} REMOVE" )
+
+            #foreach( $entry in $expRemove )
+              #set( $expression = "${expression} ${entry}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Finally, write the update expression into the document, along with any expressionNames and expressionValues **
+          "update": {
+            "expression": "${expression}",
+            #if( !${expNames.isEmpty()} )
+              "expressionNames": $utils.toJson($expNames),
+            #end
+            #if( !${expValues.isEmpty()} )
+              "expressionValues": $utils.toJson($expValues),
+            #end
+          },
+
+          "condition": {
+            "expression": "attribute_exists(#id)",
+            "expressionNames": {
+              "#id": "id",
+            },
+          }
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  DeleteUserMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: deleteUser
+      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "DeleteItem",
+          "key": {
+            "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id),
+          },
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  CreateUserMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: createUser
+      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "PutItem",
+          "key": {
+            "id": $util.dynamodb.toDynamoDBJson($util.autoId()),
+          },
+          "attributeValues": $util.dynamodb.toMapValuesJson($ctx.args.input),
+          "condition": {
+            "expression": "attribute_not_exists(#id)",
+            "expressionNames": {
+              "#id": "id",
+            },
+          },
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  UpdateActivityMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: updateActivity
+      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "UpdateItem",
+          "key": {
+            "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id),
+          },
+
+          ## Set up some space to keep track of things we're updating **
+          #set( $expNames  = {} )
+          #set( $expValues = {} )
+          #set( $expSet = {} )
+          #set( $expAdd = {} )
+          #set( $expRemove = [] )
+
+          ## Iterate through each argument, skipping keys **
+          #foreach( $entry in $util.map.copyAndRemoveAllKeys($ctx.args.input, ["id"]).entrySet() )
+            #if( $util.isNull($entry.value) )
+              ## If the argument is set to "null", then remove that attribute from the item in DynamoDB **
+
+              #set( $discard = ${expRemove.add("#${entry.key}")} )
+              $!{expNames.put("#${entry.key}", "${entry.key}")}
+            #else
+              ## Otherwise set (or update) the attribute on the item in DynamoDB **
+
+              $!{expSet.put("#${entry.key}", ":${entry.key}")}
+              $!{expNames.put("#${entry.key}", "${entry.key}")}
+              $!{expValues.put(":${entry.key}", $util.dynamodb.toDynamoDB($entry.value))}
+            #end
+          #end
+
+          ## Start building the update expression, starting with attributes we're going to SET **
+          #set( $expression = "" )
+          #if( !${expSet.isEmpty()} )
+            #set( $expression = "SET" )
+            #foreach( $entry in $expSet.entrySet() )
+              #set( $expression = "${expression} ${entry.key} = ${entry.value}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Continue building the update expression, adding attributes we're going to ADD **
+          #if( !${expAdd.isEmpty()} )
+            #set( $expression = "${expression} ADD" )
+            #foreach( $entry in $expAdd.entrySet() )
+              #set( $expression = "${expression} ${entry.key} ${entry.value}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Continue building the update expression, adding attributes we're going to REMOVE **
+          #if( !${expRemove.isEmpty()} )
+            #set( $expression = "${expression} REMOVE" )
+
+            #foreach( $entry in $expRemove )
+              #set( $expression = "${expression} ${entry}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Finally, write the update expression into the document, along with any expressionNames and expressionValues **
+          "update": {
+            "expression": "${expression}",
+            #if( !${expNames.isEmpty()} )
+              "expressionNames": $utils.toJson($expNames),
+            #end
+            #if( !${expValues.isEmpty()} )
+              "expressionValues": $utils.toJson($expValues),
+            #end
+          },
+
+          "condition": {
+            "expression": "attribute_exists(#id)",
+            "expressionNames": {
+              "#id": "id",
+            },
+          }
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  DeleteActivityMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: deleteActivity
+      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "DeleteItem",
+          "key": {
+            "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id),
+          },
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  CreateActivityMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: createActivity
+      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "PutItem",
+          "key": {
+            "id": $util.dynamodb.toDynamoDBJson($util.autoId()),
+          },
+          "attributeValues": {
+                "userid" : { "S" : "${context.arguments.input.userid}" },
+                "category" : { "S" : "${context.arguments.input.category}" },
+                "type": { "S" : "${context.arguments.input.type}" },
+                "caloriesConsumed": { "N" : ${context.arguments.input.caloriesConsumed} },
+                "creationDateTime": { "S" : "$util.time.nowISO8601()" }
+          },
+          "condition": {
+            "expression": "attribute_not_exists(#id)",
+            "expressionNames": {
+              "#id": "id",
+            },
+          },
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  CreateActivityCategoryMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: createActivityCategory
+      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "PutItem",
+          "key": {
+            "category": $util.dynamodb.toDynamoDBJson($ctx.args.input.category),
+          },
+          "attributeValues": $util.dynamodb.toMapValuesJson($ctx.args.input),
+          "condition": {
+            "expression": "attribute_not_exists(#category)",
+            "expressionNames": {
+              "#category": "category",
+            },
+          },
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  DeleteActivityCategoryMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: deleteActivityCategory
+      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "DeleteItem",
+          "key": {
+            "category": $util.dynamodb.toDynamoDBJson($ctx.args.input.category),
+          },
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  UpdateActivityCategoryMutationResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Mutation
+      FieldName: updateActivityCategory
+      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "UpdateItem",
+          "key": {
+            "category": $util.dynamodb.toDynamoDBJson($ctx.args.input.category),
+          },
+
+          ## Set up some space to keep track of things we're updating **
+          #set( $expNames  = {} )
+          #set( $expValues = {} )
+          #set( $expSet = {} )
+          #set( $expAdd = {} )
+          #set( $expRemove = [] )
+
+          ## Iterate through each argument, skipping keys **
+          #foreach( $entry in $util.map.copyAndRemoveAllKeys($ctx.args.input, ["category"]).entrySet() )
+            #if( $util.isNull($entry.value) )
+              ## If the argument is set to "null", then remove that attribute from the item in DynamoDB **
+
+              #set( $discard = ${expRemove.add("#${entry.key}")} )
+              $!{expNames.put("#${entry.key}", "${entry.key}")}
+            #else
+              ## Otherwise set (or update) the attribute on the item in DynamoDB **
+
+              $!{expSet.put("#${entry.key}", ":${entry.key}")}
+              $!{expNames.put("#${entry.key}", "${entry.key}")}
+              $!{expValues.put(":${entry.key}", $util.dynamodb.toDynamoDB($entry.value))}
+            #end
+          #end
+
+          ## Start building the update expression, starting with attributes we're going to SET **
+          #set( $expression = "" )
+          #if( !${expSet.isEmpty()} )
+            #set( $expression = "SET" )
+            #foreach( $entry in $expSet.entrySet() )
+              #set( $expression = "${expression} ${entry.key} = ${entry.value}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Continue building the update expression, adding attributes we're going to ADD **
+          #if( !${expAdd.isEmpty()} )
+            #set( $expression = "${expression} ADD" )
+            #foreach( $entry in $expAdd.entrySet() )
+              #set( $expression = "${expression} ${entry.key} ${entry.value}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Continue building the update expression, adding attributes we're going to REMOVE **
+          #if( !${expRemove.isEmpty()} )
+            #set( $expression = "${expression} REMOVE" )
+
+            #foreach( $entry in $expRemove )
+              #set( $expression = "${expression} ${entry}" )
+              #if ( $foreach.hasNext )
+                #set( $expression = "${expression}," )
+              #end
+            #end
+          #end
+
+          ## Finally, write the update expression into the document, along with any expressionNames and expressionValues **
+          "update": {
+            "expression": "${expression}",
+            #if( !${expNames.isEmpty()} )
+              "expressionNames": $utils.toJson($expNames),
+            #end
+            #if( !${expValues.isEmpty()} )
+              "expressionValues": $utils.toJson($expValues),
+            #end
+          },
+
+          "condition": {
+            "expression": "attribute_exists(#category)",
+            "expressionNames": {
+              "#category": "category",
+            },
+          }
+        }
+      ResponseMappingTemplate: "$util.toJson($context.result)"
+
+  # ------ Query resolvers
+  ListUsersQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: listUsers
+      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Scan",
+          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  ListUserAggregateQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: listUserAggregates
+      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Scan",
+          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  ListActivitiesQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: listActivities
+      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Scan",
+          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  GetUserAggregateQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: getUserAggregate
+      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "GetItem",
+          "key": {
+            "userid": $util.dynamodb.toDynamoDBJson($ctx.args.userid),
+            "date": $util.dynamodb.toDynamoDBJson($ctx.args.date),
+          },
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  GetUserQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: getUser
+      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "GetItem",
+          "key": {
+            "id": $util.dynamodb.toDynamoDBJson($ctx.args.id),
+          },
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  GetActivityQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: getActivity
+      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "GetItem",
+          "key": {
+            "id": $util.dynamodb.toDynamoDBJson($ctx.args.id),
+          },
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  listActivitiesOrdered:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: listActivitiesOrdered
+      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+            "version" : "2017-02-28",
+            "operation" : "Query",
+            "query" : {
+                ## Provide a query expression. **
+                "expression": "userid = :userid",
+                "expressionValues" : {
+                    ":userid" : {
+                        "S" : "${ctx.args.userid}"
+                    }
+                }
+            },
+            "index" : "userid-creationDateTime-index",
+            "scanIndexForward" : false,
+            ## Add 'limit' and 'nextToken' arguments to this field in your schema to implement pagination. **
+            "limit": $util.defaultIfNull(${ctx.args.limit}, 20),
+            "nextToken": $util.toJson($util.defaultIfNullOrBlank($ctx.args.nextToken, null))
+        }
+      ResponseMappingTemplate: |
+        ## Pass back the result from DynamoDB. **
+        $util.toJson($ctx.result)
+
+  GetActivityCategoryQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: getActivityCategory
+      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "GetItem",
+          "key": {
+            "category": $util.dynamodb.toDynamoDBJson($ctx.args.category),
+          },
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  ListActivityCategoriesQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: listActivityCategories
+      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Scan",
+          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
