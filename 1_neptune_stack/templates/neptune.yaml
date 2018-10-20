@@ -1,0 +1,514 @@
+Description: re:Invent 2018:workshop - Base Template to create Neptune Stack inside a VPC
+Parameters:
+  WorkshopName:
+    Type: String
+    Default: aws-appsync-graphql
+  NeptuneInstanceClass:
+    Type: String
+    Default: db.r4.large
+    AllowedValues:
+      - db.r4.large
+      - db.r4.xlarge
+      - db.r4.2xlarge
+      - db.r4.4xlarge
+      - db.r4.8xlarge
+    ConstraintDescription: Must be a valid Neptune instance type.
+  NeptuneEC2ClientExtraSG:
+    Description: Neptune EC2 client custom SG
+    Type: String
+    Default: ''
+  DBReplicaIdentifierSuffix:
+    Description: >-
+      OPTIONAL: The ID for the Neptune Replica to use. Empty means no read
+      replica.
+    Type: String
+    Default: ''
+  NeptuneQueryTimeout:
+    Type: Number
+    Default: 20000
+    Description: Neptune Query Time out (in milliseconds)
+  NeptuneEnableAuditLog:
+    Type: Number
+    Default: 1
+    AllowedValues:
+      - 0
+      - 1
+    Description: Enable Audit Log. 0 means disable and 1 means enable.
+  IamAuthEnabled:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Enable IAM Auth for Neptune.
+Mappings:
+  SubnetConfig:
+    VPC:
+      CIDR: 10.0.0.0/16
+    Public1:
+      CIDR: 10.0.0.0/24
+    Public2:
+      CIDR: 10.0.1.0/24
+    Private1:
+      CIDR: 10.0.2.0/24
+    Private2:
+      CIDR: 10.0.3.0/24
+    Lambda1:
+      CIDR: 10.0.4.0/24
+    Lambda2:
+      CIDR: 10.0.5.0/24
+  RegionMap:
+    us-east-1:
+      AMI: ami-14c5486b
+    us-east-2:
+      AMI: ami-922914f7
+    us-west-2:
+      AMI: ami-e251209a
+    eu-west-1:
+      AMI: ami-ca0135b3
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      CidrBlock: !FindInMap 
+        - SubnetConfig
+        - VPC
+        - CIDR
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-vpc'
+        - Key: Project
+          Value: !Ref WorkshopName
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-igw'
+        - Key: Project
+          Value: !Ref WorkshopName
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !FindInMap 
+        - SubnetConfig
+        - Public1
+        - CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${WorkshopName}-public-subnet-1
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+  NatGateway2EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref PublicSubnet
+  PrivateSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone:
+        'Fn::Select':
+          - 0
+          - 'Fn::GetAZs': !Ref 'AWS::Region'
+      VpcId: !Ref VPC
+      CidrBlock: !FindInMap 
+        - SubnetConfig
+        - Private1
+        - CIDR
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-private-subnet-1'
+        - Key: Project
+          Value: !Ref WorkshopName
+  PrivateSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone:
+        'Fn::Select':
+          - 1
+          - 'Fn::GetAZs': !Ref 'AWS::Region'
+      VpcId: !Ref VPC
+      CidrBlock: !FindInMap 
+        - SubnetConfig
+        - Private2
+        - CIDR
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-private-subnet-2'
+        - Key: Project
+          Value: !Ref WorkshopName
+  LambdaSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone:
+        'Fn::Select':
+          - 0
+          - 'Fn::GetAZs': !Ref 'AWS::Region'
+      VpcId: !Ref VPC
+      CidrBlock: !FindInMap 
+        - SubnetConfig
+        - Lambda1
+        - CIDR
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-lambda-subnet-1'
+        - Key: Project
+          Value: !Ref WorkshopName
+  LambdaSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone:
+        'Fn::Select':
+          - 1
+          - 'Fn::GetAZs': !Ref 'AWS::Region'
+      VpcId: !Ref VPC
+      CidrBlock: !FindInMap 
+        - SubnetConfig
+        - Lambda2
+        - CIDR
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-lambda-subnet-2'
+        - Key: Project
+          Value: !Ref WorkshopName
+  NeptuneEC2InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref NeptuneEC2ClientRole
+    DependsOn:
+      - NeptuneEC2ClientRole
+  NeptuneEC2ClientRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+  NeptuneIamAuthUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Path: /
+  NeptuneAccessPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: NeptuneAccessPolicy
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'rds:*'
+              - 'iam:GetAccountSummary'
+              - 'iam:ListAccountAliases'
+              - 'iam:PassRole'
+            Resource: '*'
+      Roles:
+        - !Ref NeptuneEC2ClientRole
+  NeptuneIAMAuthPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: NeptuneIAMAuthPolicy
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'neptune-db:*'
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:neptune-db:'
+                - !Ref 'AWS::Region'
+                - ':'
+                - !Ref 'AWS::AccountId'
+                - ':'
+                - !GetAtt 
+                  - NeptuneCluster
+                  - ClusterResourceId
+                - /*
+      Roles:
+        - !Ref NeptuneEC2ClientRole
+      Users:
+        - !Ref NeptuneIamAuthUser
+  PrivateRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+  PrivateRouteTable1Association:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnet1
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${WorkshopName} Public Routes
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+  LambdaSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupName: !Sub '${WorkshopName}-lambda-security-group'
+      GroupDescription: Allow traffic from AWS Lambda to Amazon Neptune
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: !FindInMap 
+            - SubnetConfig
+            - VPC
+            - CIDR
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Project
+          Value: !Ref WorkshopName
+  NeptuneCluster:
+    Type: 'AWS::Neptune::DBCluster'
+    Properties:
+      DBClusterIdentifier: !Ref WorkshopName
+      DBSubnetGroupName: !Ref NeptuneSubnets
+      VpcSecurityGroupIds:
+        - !GetAtt 
+          - VPC
+          - DefaultSecurityGroup
+        - !Ref NeptuneSG
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-neptune-cluster'
+        - Key: Project
+          Value: !Ref WorkshopName
+  NeptuneInstance:
+    Type: 'AWS::Neptune::DBInstance'
+    Properties:
+      DBClusterIdentifier: !Ref NeptuneCluster
+      DBInstanceClass: !Ref NeptuneInstanceClass
+      DBInstanceIdentifier: !Sub '${WorkshopName}-neptune'
+      DBSubnetGroupName: !Ref NeptuneSubnets
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-neptune-instance'
+        - Key: Project
+          Value: !Ref WorkshopName
+  NeptuneSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    DependsOn: LambdaSecurityGroup
+    Properties:
+      GroupName: !Sub '${WorkshopName}-neptune-security-group'
+      GroupDescription: Allow traffic to Amazon Neptune from Lambda
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8182
+          ToPort: 8182
+          SourceSecurityGroupId: !Ref LambdaSecurityGroup
+        - FromPort: '8182'
+          ToPort: '8182'
+          IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          Description: http access
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Project
+          Value: !Ref WorkshopName
+  NeptuneSubnets:
+    Type: 'AWS::Neptune::DBSubnetGroup'
+    Properties:
+      DBSubnetGroupDescription: !Sub '${WorkshopName} Subnet Group'
+      DBSubnetGroupName: !Sub '${WorkshopName}-subnet-group'
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+      Tags:
+        - Key: Name
+          Value: !Sub '${WorkshopName}-neptune-subnet-group'
+        - Key: Project
+          Value: !Ref WorkshopName
+  NeptuneSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Allow EC2 client to access Neptune via Gremlin/SparQL
+      SecurityGroupIngress:
+        - FromPort: '22'
+          ToPort: '22'
+          IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          Description: ssh from anywhere
+        - FromPort: '8182'
+          ToPort: '8182'
+          IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          Description: http access
+      Tags:
+        - Key: Name
+          Value: !Sub 'Neptune-${WorkshopName}'
+        - Key: StackId
+          Value: !Sub '${AWS::StackId}'
+        - Key: Stack
+          Value: !Sub '${AWS::Region}-${AWS::StackName}'
+        - Key: Application
+          Value: NeptuneCloudformation
+  NeptuneLoadFromS3Role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - rds.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+  NeptuneLoadFromS3Policy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: NeptuneLoadFromS3Policy
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:Get*'
+              - 's3:List*'
+            Resource: '*'
+      Roles:
+        - !Ref NeptuneLoadFromS3Role
+Outputs:  
+  DBClusterId:
+    Description: Neptune Cluster Identifier
+    Value: !Ref NeptuneCluster
+  DBSubnetGroupId:
+    Description: Neptune DBSubnetGroup Identifier
+    Value: !Ref NeptuneSubnets
+  DBClusterResourceId:
+    Description: Neptune Cluster Resource Identifier
+    Value: !GetAtt 
+      - NeptuneCluster
+      - ClusterResourceId
+  DBClusterEndpoint:
+    Description: Master Endpoint for Neptune Cluster
+    Value: !GetAtt 
+      - NeptuneCluster
+      - Endpoint
+  DBInstanceEndpoint:
+    Description: Master Instance Endpoint
+    Value: !GetAtt 
+      - NeptuneInstance
+      - Endpoint
+  SparqlEndpoint:
+    Description: Sparql Endpoint for Neptune
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - NeptuneCluster
+          - Endpoint
+        - ':'
+        - !GetAtt 
+          - NeptuneCluster
+          - Port
+        - /sparql
+  GremlinEndpoint:
+    Description: Gremlin Endpoint for Neptune
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - NeptuneCluster
+          - Endpoint
+        - ':'
+        - !GetAtt 
+          - NeptuneCluster
+          - Port
+        - /gremlin
+  LoaderEndpoint:
+    Description: Loader Endpoint for Neptune
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt 
+          - NeptuneCluster
+          - Endpoint
+        - ':'
+        - !GetAtt 
+          - NeptuneCluster
+          - Port
+        - /loader
+  DBClusterReadEndpoint:
+    Description: DB cluster Read Endpoint
+    Value: !GetAtt 
+      - NeptuneCluster
+      - ReadEndpoint
+  DBClusterPort:
+    Description: Port for the Neptune Cluster
+    Value: !GetAtt 
+      - NeptuneCluster
+      - Port
+  NeptuneLoadFromS3IAMRoleArn:
+    Description: IAM Role for loading data in Neptune
+    Value: !GetAtt 
+      - NeptuneLoadFromS3Role
+      - Arn
+  NeptuneIamAuthUser:
+    Description: IAM User for accessing Neptune via IAM Auth
+    Value: !Ref NeptuneIamAuthUser
+  PublicSubnet:
+    Description: Subnet Id
+    Value: !Ref PublicSubnet
+  NeptuneEC2InstanceProfile:
+    Description: Neptune EC2 Instance Profile
+    Value: !Ref NeptuneEC2InstanceProfile
+  VPC:
+    Description: VPC
+    Value: !Ref VPC
+  NeptuneSG:
+    Description: Neptune Security Group
+    Value: !Ref NeptuneSG
+  InternetGateway:
+    Description: 'Neptune InternetGateway '
+    Value: !Ref InternetGateway
+  LambdaSecurityGroup:
+    Description: Lambda security group
+    Value: !Ref LambdaSecurityGroup
+  LambdaSubnet1:
+    Description: Lambda security group
+    Value: !Ref LambdaSubnet1
+  LambdaSubnet2:
+    Value: !Ref LambdaSubnet2
