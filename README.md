@@ -10,7 +10,7 @@ The features that we would be building today:
 
 Following diagram shows the deployment architecture of the web application:
 
-![Architecture](images/architecture.png)
+![Architecture](aws-appsync-calorie-tracker-workshop/images/architecture.png)
 
 **Services used**
 - AWS AppSync
