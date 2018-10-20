@@ -1,4 +1,4 @@
-# Deploying Food Suggestions Stack
+# Deploying Food Suggestions
 
 Copy the `datasets`, `functions`, and `templates` directory into an S3 bucket.
 

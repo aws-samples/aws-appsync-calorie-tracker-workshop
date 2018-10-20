@@ -30,7 +30,7 @@ This workshop requires:
 
 ## Steps:
 
-1. [Setting up Neptune](1_neptune_stack/)
+1. [Setting up Neptune](1_neptune_stack/README.md)
 2. [Setting up AppSync](2_appsync_stack/)
 2. [Setting up the front end](3_frontend/)
 3. [Testing Food Calorie application]()
