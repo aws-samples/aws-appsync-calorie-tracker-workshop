@@ -1,4 +1,5 @@
 # Serverless Calorie tracking application with AWS AppSync, Amazon DynamoDB and Amazon Neptune
+
 This workshop shows you how easy it is to build a completely serverless web application. You will build a sample web application called Calorie tracker which will allow users to track the calories and get recommendations based on their food habits.
 Your application will have following featurs:
 - User sign-up, login and logout
