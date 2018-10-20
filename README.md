@@ -31,8 +31,7 @@ This workshop requires:
 ## Steps:
 
 1. [Setting up Neptune](1_neptune_stack/README.md)
-2. [Setting up AppSync](2_appsync_stack/)
-2. [Setting up the front end](3_frontend/)
-3. [Testing Food Calorie application]()
-4. [Bonus Round](4_bonus_round/)
-5. [Closing and Clean up](5_closing_and_clean_up/)
+2. [Setting up AppSync](2_appsync_stack/README.md)
+3. [Setting up the front end](3_frontend/README.md)
+4. [Bonus Round](4_bonus_round/README.md)
+5. [Closing and Clean up](5_closing_and_clean_up/README.md)

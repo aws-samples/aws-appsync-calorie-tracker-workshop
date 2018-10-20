@@ -84,3 +84,7 @@ npm run build
 * `src/main.js` - main app file where you include/import all required libs and init app
 * `src/routes.js` - app routes
 * `src/app.vue` - main app structure/component
+
+[Proceed to next section - Bonus Round](../4_bonus_roaund/README.md)
+
+[Back to home page](../README.md)

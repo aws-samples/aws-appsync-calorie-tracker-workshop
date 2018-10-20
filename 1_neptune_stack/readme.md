@@ -112,3 +112,7 @@ g.V().has('BMI',lte(24))
 - Click test
 - Enter a new event name. Leave the rest as default and click `create`
 - Test the lambda function which should return a list of recommended food based on the given BMI (under Environment variables).
+
+[Proceed to next section - Amazon AppSync](../2_appsync_stack/README.md)
+
+[Back to home page](../README.md)
