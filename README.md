@@ -31,7 +31,7 @@ This workshop requires:
 
 
 ## Steps:
-1. [Setting up AWS Cloud 9](1_AWS_Cloud9/README.md)
+1. [Setting up AWS Cloud 9](./1_AWS_Cloud9/README.md)
 2. [Setting up Amazon Neptune Cluster](2_neptune_stack/README.md)
 3. [Setting up AWS AppSync](3_appsync_stack/README.md)
 4. [Setting up the front end](4_frontend/README.md)

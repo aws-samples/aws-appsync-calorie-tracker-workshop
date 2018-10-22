@@ -8,7 +8,8 @@ In this section, we will create a AWS Cloud9 environment and configure it to acc
 
 >  If you are prompted with the below screen, type the email address for the AWS account root user, choose Next, type the password for the AWS account root user and then choose Sign In. 
 > ![Root User](../images/root_user.png)
-Follow the steps described [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html) to create a new IAM user with administrative privileges. 
+
+> Follow the steps described [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html) to create a new IAM user with administrative privileges. 
 
 > For the purpose of this workshop, its ok to use the user with adminstrative privileges. Please consider restrictive access/least privilege approach when running in production.
 
