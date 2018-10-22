@@ -85,6 +85,6 @@ npm run build
 * `src/routes.js` - app routes
 * `src/app.vue` - main app structure/component
 
-[Proceed to next section - Bonus Round](../4_bonus_round/README.md)
+[Proceed to next section - Bonus Round](../5_bonus_round/README.md)
 
 [Back to home page](../README.md)

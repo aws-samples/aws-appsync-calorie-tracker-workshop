@@ -141,6 +141,6 @@ We will create the Lambda function which will be executed every time user logs a
 ## License Summary
 This sample code is made available under a modified MIT license. See the LICENSE file.
 
-[Proceed to next section - Setting up the frontend application](../3_frontend/README.md)
+[Proceed to next section - Setting up the frontend application](../4_frontend/README.md)
 
 [Back to home page](../README.md)
