@@ -1,0 +1,89 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Lambda function to process data stream from Activity table and
+  update User Aggregate table
+
+Parameters:
+  APIName:
+    Type: String
+    Description: "Name of the API, to generate names for resources"
+    MinLength: 3
+    MaxLength: 20
+    AllowedPattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+    Default: caltrack
+
+  S3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: S3 bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
+    Description: "S3 bucket where all the templates, assets and other artifacts are \
+      \ stored. The bucket name can include numbers, lowercase letters, uppercase \
+      \ letters, and hyphens, but should not start or end with a hyphen."
+    Type: String
+    Default: reinvent-2018
+
+Resources:
+  DynamoDBStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/dynamodb-tables.yaml'
+      Parameters:
+        APIName: !Ref 'APIName'
+
+  LambdaFunctionStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - DynamoDBStack
+    Properties:
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/lambda.yaml'
+      Parameters:
+        DynamoDBActivityTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableArn'
+        DynamoDBActivityTableStreamArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableStreamARN'
+        DynamoDBUserCaloriesAggTableName: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTable'
+        DynamoDBUserCaloriesAggTableArn: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTableArn'
+        S3BucketName: !Ref 'S3BucketName'
+
+  AppSyncAPIStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - DynamoDBStack
+    Properties:
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/appsync.yaml'
+      Parameters:
+        APIName: !Ref 'APIName'
+        DynamoDBUserTableName: !GetAtt 'DynamoDBStack.Outputs.UserTable'
+        DynamoDBUserTableArn: !GetAtt 'DynamoDBStack.Outputs.UserTableArn'
+        DynamoDBActivityTableName: !GetAtt 'DynamoDBStack.Outputs.ActivityTable'
+        DynamoDBActivityTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableArn'
+        DynamoDBActivityCategoryTableName: !GetAtt 'DynamoDBStack.Outputs.ActivityCategoryTable'
+        DynamoDBActivityCategoryTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityCategoryTableArn'
+        DynamoDBUserCaloriesAggTableName: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTable'
+        DynamoDBUserCaloriesAggTableArn: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTableArn'
+        GraphQlSchemaS3DescriptionLocation: !Sub 's3://${S3BucketName}/assets/schema.graphql'
+
+  AppSyncResolverStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - DynamoDBStack
+      - AppSyncAPIStack
+    Properties:
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/appsync-resolvers.yaml'
+      Parameters:
+        AppSyncApiId: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncApiId'
+        AppSyncUserTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncUserTableDataSourceName'
+        AppSyncActivityTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncActivityTableDataSourceName'
+        AppSyncActivityCategoryTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncActivityCategoryTableDataSourceName'
+        AppSyncUserAggTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncUserAggTableDataSourceName'
+
+Outputs:
+  AppSyncApp:
+    Value:
+      !Join
+      - ''
+      - - 'https://console.aws.amazon.com/appsync/home?region='
+        - !Sub '${AWS::Region}'
+        - '#/'
+        - !GetAtt 'AppSyncAPIStack.Outputs.AppSyncApiId'
+        - '/v1/home'
+    Description: AWS console URL to AppSync application
