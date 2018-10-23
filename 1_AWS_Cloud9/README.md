@@ -2,7 +2,7 @@
 
 AWS Cloud9 is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser.
 
-In this section, we will create a AWS Cloud9 environment and configure it to access AWS resources.
+In this section, we will create a AWS Cloud9 (C9) environment and configure it to access AWS resources.
 
 1. Open the [AWS Cloud9 console](https://console.aws.amazon.com/cloud9/)
 
@@ -25,15 +25,18 @@ In this section, we will create a AWS Cloud9 environment and configure it to acc
 5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **t2.micro**. Keep the rest of the settings default, `Next Step` and click `create environment`.
 
 6. Verify the NodeJS version via the Cloud9 terminal.
+
 ``` 
 node -v 
-````
+```
+
 Update the node.js version, if you are running < 8
+
 ```
 nvm install 8
 ```
 
-7. Set the AWS Credentials. 
+7. Set the AWS Credentials. Type `aws configure` in the C9 terminal
 
 ```
 $ aws configure
@@ -42,7 +45,8 @@ AWS Secret Access Key [None]: `Enter the AWS Secret Key`
 Default region name [None]: `Enter the region that you are using`
 Default output format [None]:
 ```
-[Next section - Setting up Amazon Netptune Cluster](../2_neptune_stack/README.md)
+
+[Next section - Setting up Amazon Neptune Cluster](../2_neptune_stack/README.md)
 
 [Back to home page](../README.md)
 

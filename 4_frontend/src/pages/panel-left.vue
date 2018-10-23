@@ -18,7 +18,7 @@ export default {
     }
   },
   mounted () {
-    this.username = Cache.getItem('username')
+    this.username = localStorage['aws-calorie-tracker-username']
   }
 }
 </script>

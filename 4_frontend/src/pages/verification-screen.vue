@@ -43,7 +43,10 @@ export default {
 			// Verify
 			Auth.confirmSignUp(this.username, this.code)
 			.then(data => {
+				console.log(data)
 				// SUCCESS!
+          		// localStorage['aws-calorie-tracker-userid'] = user.signInUserSession.idToken.payload.sub
+          		// localStorage['aws-calorie-tracker-username'] = user.username
 
 				// Hide spinner
 				self.$f7.preloader.hide()
@@ -60,11 +63,8 @@ export default {
 				// Open toast
 				self.successToastMessage.open()
 
-				// Since user is logged-in by now, we'll need to save the username in the Amplify Cache
-				Cache.setItem('username', this.username)
-
-				// Navigate to welcome page
-				this.$f7router.navigate('/welcome/')
+				// Navigate to home/welcome page
+				this.$f7router.navigate('/')
 			})
 			.catch(err => {
 				// Show error toast message if verification failed

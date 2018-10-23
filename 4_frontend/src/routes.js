@@ -17,7 +17,7 @@ import { Auth } from 'aws-amplify'
 // Check if current user is authenticated via Cognito
 function checkAuth(to, from, resolve, reject) {
   Auth.currentAuthenticatedUser()
-  .then(user => { 
+  .then(user => {
     resolve() 
   })
   .catch(err => { 

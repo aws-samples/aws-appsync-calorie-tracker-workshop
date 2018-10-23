@@ -52,8 +52,9 @@ export default {
             })
           }
 
-          // Save username in Amplify Cache
-          Cache.setItem('username', user.username)
+          // Save user details in local storage
+          localStorage['aws-calorie-tracker-userid'] = user.signInUserSession.idToken.payload.sub
+          localStorage['aws-calorie-tracker-username'] = user.username
           
           // Hide spinner
           self.$f7.preloader.hide()
@@ -64,8 +65,26 @@ export default {
           // TODO: FIX THIS
           this.$f7router.navigate('/welcome/')
         })
-        .catch(err => console.log(err));      
+        .catch(err => {
+          // Hide spinner
+          self.$f7.preloader.hide()
+
+          console.log(err)
+
+          // Create toast error message
+          if (!self.errorToastMessage) {
+            self.errorToastMessage = self.$f7.toast.create({
+              closeButton: true,
+              text: 'Error from Cognito: ' + JSON.stringify(err) ,
+              closeTimeout: 3000,
+              destroyOnClose: true
+            })
+          }
+
+          // Open toast message
+          self.errorToastMessage.open()
+        })
+      }
     }
   }
-}    
 </script>

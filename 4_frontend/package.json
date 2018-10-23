@@ -1,35 +1,16 @@
 {
-  "name": "framework7-template-vue-webpack",
-  "version": "2.0.0",
-  "description": "Framework7 Vue Webpack starter app template",
+  "name": "aws-appsync-calorie-tracker-workshop",
+  "version": "1.0.0",
+  "description": "Your very own fitness cloud!",
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.config.dev.js--https",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --https",
     "start": "npm run dev",
     "build": "node build/build.js",
     "copy-fonts": "cpy node_modules/framework7-icons/fonts/*.* src/fonts && cpy node_modules/material-design-icons/iconfont/*.{eot,ttf,woff,woff2} src/fonts",
     "postinstall": "npm run copy-fonts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/framework7io/framework7-template-vue-webpack.git"
-  },
-  "keywords": [
-    "ios",
-    "webpack",
-    "framework7",
-    "vue",
-    "vuejs",
-    "material",
-    "mobile",
-    "app",
-    "f7"
-  ],
-  "author": "Vladimir Kharlampidi",
+  "author": "Alon Jupiter",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/framework7io/framework7-template-vue-webpack/issues"
-  },
-  "homepage": "http://framework7.io/vue/",
   "dependencies": {
     "aws-amplify": "^1.1.4",
     "aws-amplify-vue": "^0.1.1",

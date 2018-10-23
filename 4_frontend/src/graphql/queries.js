@@ -1,7 +1,60 @@
+// eslint-disable
 // this is an auto generated file. This will be overwritten
-export const GetActivity = `
-  query GetActivity($id: String!) {
-    getActivity(id: $id) {
+
+export const getActivity = `query GetActivity($id: String!) {
+  getActivity(id: $id) {
+    caloriesConsumed
+    category
+    creationDateTime
+    id
+    type
+    userid
+  }
+}
+`;
+export const getActivityCategory = `query GetActivityCategory($category: String!) {
+  getActivityCategory(category: $category) {
+    category
+    type
+  }
+}
+`;
+export const getUser = `query GetUser($id: ID!) {
+  getUser(id: $id) {
+    caloriesConsumed
+    caloriesTargetPerDay
+    height
+    id
+    username
+    weight
+    bmi
+  }
+}
+`;
+
+export const getUserBmi = `query GetUser($id: ID!) {
+  getUser(id: $id) {
+    bmi
+  }
+}
+`;
+
+export const getUserAggregate = `query GetUserAggregate($date: String!, $userid: String!) {
+  getUserAggregate(date: $date, userid: $userid) {
+    caloriesBurned
+    caloriesConsumed
+    date
+    userid
+  }
+}
+`;
+export const listActivities = `query ListActivities(
+  $filter: TableActivityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listActivities(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
       caloriesConsumed
       category
       creationDateTime
@@ -9,153 +62,109 @@ export const GetActivity = `
       type
       userid
     }
+    nextToken
   }
+}
 `;
-export const GetActivityCategory = `
-  query GetActivityCategory($category: String!) {
-    getActivityCategory(category: $category) {
+export const listActivitiesOrdered = `query ListActivitiesOrdered($userid: String!, $limit: Int, $nextToken: String) {
+  listActivitiesOrdered(userid: $userid, limit: $limit, nextToken: $nextToken) {
+    items {
+      caloriesConsumed
+      category
+      creationDateTime
+      id
+      type
+      userid
+    }
+    nextToken
+  }
+}
+`;
+export const listActivityCategories = `query ListActivityCategories(
+  $filter: TableActivityCategoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listActivityCategories(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
       category
       type
     }
+    nextToken
   }
+}
 `;
-export const GetUser = `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
+
+export const listActivityCategoriesOnly = `query ListActivityCategories(
+  $filter: TableActivityCategoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listActivityCategories(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      category
+    }
+    nextToken
+  }
+}
+`;
+
+export const listUserAggregates = `query ListUserAggregates(
+  $filter: TableUserAggregateFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listUserAggregates(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      caloriesBurned
+      caloriesConsumed
+      date
+      userid
+    }
+    nextToken
+  }
+}
+`;
+
+export const listUsers = `query ListUsers(
+  $filter: TableUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
       caloriesConsumed
       caloriesTargetPerDay
       height
       id
       username
       weight
+      bmi
     }
+    nextToken
   }
-`;
-export const GetUserAggregate = `
-  query GetUserAggregate($date: String!, $userid: String!) {
-    getUserAggregate(date: $date, userid: $userid) {
-      caloriesBurned
-      caloriesConsumed
-      date
-      userid
-    }
-  }
-`;
-export const ListActivities = `
-  query ListActivities(
-    $filter: TableActivityFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listActivities(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        caloriesConsumed
-        category
-        creationDateTime
-        id
-        type
-        userid
-      }
-      nextToken
-    }
-  }
-`;
-export const ListActivitiesOrdered = `
-  query ListActivitiesOrdered(
-    $userid: String!
-    $limit: Int
-    $nextToken: String
-  ) {
-    listActivitiesOrdered(
-      userid: $userid
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        caloriesConsumed
-        category
-        creationDateTime
-        id
-        type
-        userid
-      }
-      nextToken
-    }
-  }
+}
 `;
 
-export const ListActivityCategories = `
-  query ListActivityCategories(
-    $filter: TableActivityCategoryFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listActivityCategories(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        category
-        type
-      }
-      nextToken
-    }
-  }
-`;
 
-export const ListActivityCategoriesOnly = `
-  query ListActivityCategories(
-    $filter: TableActivityCategoryFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listActivityCategories(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        category
-      }
-      nextToken
-    }
-  }
-`;
 
-export const ListUserAggregates = `
-  query ListUserAggregates(
-    $filter: TableUserAggregateFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUserAggregates(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        caloriesBurned
-        caloriesConsumed
-        date
-        userid
-      }
-      nextToken
-    }
+export const suggestedFood = `query SuggestedFood(
+  $userid: String!
+  $bmi: Float
+  $calorie: Float
+  $sugar: Float
+) {
+  suggestedFood(userid: $userid, bmi: $bmi, calorie: $calorie, sugar: $sugar) {
+    category
+    type
   }
-`;
-export const ListUsers = `
-  query ListUsers(
-    $filter: TableUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        caloriesConsumed
-        caloriesTargetPerDay
-        height
-        id
-        username
-        weight
-      }
-      nextToken
-    }
-  }
+}
 `;

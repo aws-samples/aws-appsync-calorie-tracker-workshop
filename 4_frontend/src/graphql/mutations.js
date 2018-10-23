@@ -1,127 +1,120 @@
+// eslint-disable
 // this is an auto generated file. This will be overwritten
-export const CreateActivity = `
-  mutation CreateActivity($input: CreateActivityInput!) {
-    createActivity(input: $input) {
-      caloriesConsumed
-      category
-      creationDateTime
-      id
-      type
-      userid
-    }
+
+export const createActivity = `mutation CreateActivity($input: CreateActivityInput!) {
+  createActivity(input: $input) {
+    caloriesConsumed
+    category
+    creationDateTime
+    id
+    type
+    userid
   }
+}
 `;
-export const CreateActivityCategory = `
-  mutation CreateActivityCategory($input: CreateActivityCategoryInput!) {
-    createActivityCategory(input: $input) {
-      category
-      type
-    }
+export const createActivityCategory = `mutation CreateActivityCategory($input: CreateActivityCategoryInput!) {
+  createActivityCategory(input: $input) {
+    category
+    type
   }
+}
 `;
-export const CreateUser = `
-  mutation CreateUser($input: CreateUserInput!) {
-    createUser(input: $input) {
-      caloriesConsumed
-      caloriesTargetPerDay
-      height
-      id
-      username
-      weight
-    }
+export const createUser = `mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    caloriesConsumed
+    caloriesTargetPerDay
+    height
+    id
+    username
+    weight
+    bmi
   }
+}
 `;
-export const CreateUserAggregate = `
-  mutation CreateUserAggregate($input: CreateUserAggregateInput!) {
-    createUserAggregate(input: $input) {
-      caloriesBurned
-      caloriesConsumed
-      date
-      userid
-    }
+export const createUserAggregate = `mutation CreateUserAggregate($input: CreateUserAggregateInput!) {
+  createUserAggregate(input: $input) {
+    caloriesBurned
+    caloriesConsumed
+    date
+    userid
   }
+}
 `;
-export const DeleteActivity = `
-  mutation DeleteActivity($input: DeleteActivityInput!) {
-    deleteActivity(input: $input) {
-      caloriesConsumed
-      category
-      creationDateTime
-      id
-      type
-      userid
-    }
+export const deleteActivity = `mutation DeleteActivity($input: DeleteActivityInput!) {
+  deleteActivity(input: $input) {
+    caloriesConsumed
+    category
+    creationDateTime
+    id
+    type
+    userid
   }
+}
 `;
-export const DeleteActivityCategory = `
-  mutation DeleteActivityCategory($input: DeleteActivityCategoryInput!) {
-    deleteActivityCategory(input: $input) {
-      category
-      type
-    }
+export const deleteActivityCategory = `mutation DeleteActivityCategory($input: DeleteActivityCategoryInput!) {
+  deleteActivityCategory(input: $input) {
+    category
+    type
   }
+}
 `;
-export const DeleteUser = `
-  mutation DeleteUser($input: DeleteUserInput!) {
-    deleteUser(input: $input) {
-      caloriesConsumed
-      caloriesTargetPerDay
-      height
-      id
-      username
-      weight
-    }
+export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
+  deleteUser(input: $input) {
+    caloriesConsumed
+    caloriesTargetPerDay
+    height
+    id
+    username
+    weight
+    bmi
   }
+}
 `;
-export const DeleteUserAggregate = `
-  mutation DeleteUserAggregate($input: DeleteUserAggregateInput!) {
-    deleteUserAggregate(input: $input) {
-      caloriesBurned
-      caloriesConsumed
-      date
-      userid
-    }
+export const deleteUserAggregate = `mutation DeleteUserAggregate($input: DeleteUserAggregateInput!) {
+  deleteUserAggregate(input: $input) {
+    caloriesBurned
+    caloriesConsumed
+    date
+    userid
   }
+}
 `;
-export const UpdateActivity = `
-  mutation UpdateActivity($input: UpdateActivityInput!) {
-    updateActivity(input: $input) {
-      caloriesConsumed
-      category
-      creationDateTime
-      id
-      type
-      userid
-    }
+export const updateActivity = `mutation UpdateActivity($input: UpdateActivityInput!) {
+  updateActivity(input: $input) {
+    caloriesConsumed
+    category
+    creationDateTime
+    id
+    type
+    userid
   }
+}
 `;
-export const UpdateActivityCategory = `
-  mutation UpdateActivityCategory($input: UpdateActivityCategoryInput!) {
-    updateActivityCategory(input: $input) {
-      category
-      type
-    }
+export const updateActivityCategory = `mutation UpdateActivityCategory($input: UpdateActivityCategoryInput!) {
+  updateActivityCategory(input: $input) {
+    category
+    type
   }
+}
 `;
-export const UpdateUser = `
-  mutation UpdateUser($input: UpdateUserInput!) {
-    updateUser(input: $input) {
-      caloriesConsumed
-      caloriesTargetPerDay
-      height
-      id
-      username
-      weight
-    }
+export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    caloriesConsumed
+    caloriesTargetPerDay
+    height
+    id
+    username
+    weight
+    bmi
   }
+}
 `;
-export const UpdateUserAggregate = `
-  mutation UpdateUserAggregate($input: UpdateUserAggregateInput!) {
-    updateUserAggregate(input: $input) {
-      caloriesBurned
-      caloriesConsumed
-      date
-      userid
-    }
+export const updateUserAggregate = `mutation UpdateUserAggregate($input: UpdateUserAggregateInput!) {
+  updateUserAggregate(input: $input) {
+    caloriesBurned
+    caloriesConsumed
+    date
+    userid
   }
+}
 `;

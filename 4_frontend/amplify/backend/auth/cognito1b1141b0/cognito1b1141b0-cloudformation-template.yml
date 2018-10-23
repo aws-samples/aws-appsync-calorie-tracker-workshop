@@ -2,30 +2,6 @@ AWSTemplateFormatVersion: 2010-09-09
 
 Parameters:
     
-  identityPoolName:
-    Type: String
-              
-  allowUnauthenticatedIdentities:
-    Type: String
-            
-  thirdPartyAuth:
-    Type: String
-          
-  lambdaLogPolicy:
-    Type: String
-            
-  openIdLambdaRoleName:
-    Type: String
-            
-  openIdRolePolicy:
-    Type: String
-            
-  openIdLambdaIAMPolicy:
-    Type: String
-            
-  openIdLogPolicy:
-    Type: String
-            
   userPoolName:
     Type: String
                   
@@ -110,6 +86,12 @@ Parameters:
   useDefault:
     Type: String
             
+  authSelections:
+    Type: String
+            
+  resourceName:
+    Type: String
+            
   unAuthRoleName:
     Type: String
             
@@ -120,12 +102,6 @@ Parameters:
     Type: String
             
   authRoleArn:
-    Type: String
-            
-  resourceName:
-    Type: String
-            
-  authSelections:
     Type: String
           
 Resources:
@@ -198,7 +174,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: cognito0f20e89b_app_clientWeb
+      ClientName: cognito1b1141b0_app_clientWeb
       
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
       UserPoolId: !Ref UserPool
@@ -318,50 +294,8 @@ Resources:
     DependsOn: UserPoolClientLogPolicy
   
     
-  # BEGIN IDENTITY POOL RESOURCES
-  
-  
-  IdentityPool:
-  # Always created
-    Type: AWS::Cognito::IdentityPool
-    Properties: 
-      IdentityPoolName: cognito0f20e89b_identitypool_0f20e89b
-      
-      CognitoIdentityProviders:
-        - ClientId:  !Ref UserPoolClient
-          ProviderName: !Sub
-            - cognito-idp.${region}.amazonaws.com/${client}
-            - { region: !Ref "AWS::Region",  client: !Ref UserPool}
-        - ClientId:  !Ref UserPoolClientWeb
-          ProviderName: !Sub
-            - cognito-idp.${region}.amazonaws.com/${client}
-            - { region: !Ref "AWS::Region",  client: !Ref UserPool}
-            
-      AllowUnauthenticatedIdentities: !Ref allowUnauthenticatedIdentities
-       
-       
-    DependsOn: UserPoolClientInputs 
-    
-  
-  IdentityPoolRoleMap:
-  # Created to map Auth and Unauth roles to the identity pool
-  # Depends on Identity Pool for ID ref
-    Type: AWS::Cognito::IdentityPoolRoleAttachment
-    Properties: 
-      IdentityPoolId: !Ref IdentityPool
-      Roles:
-          unauthenticated: !Ref unAuthRoleArn
-          authenticated: !Ref authRoleArn
-    DependsOn: IdentityPool
-  
 
 Outputs :
-  
-  IdentityPoolId:
-    Value: !Ref 'IdentityPool'
-    Description:  Id for the identity pool
-  IdentityPoolName:
-    Value: !GetAtt IdentityPool.Name 
   
   
   UserPoolId:

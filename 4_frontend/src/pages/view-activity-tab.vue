@@ -44,10 +44,10 @@
 
 <script>
 import moment from 'moment'
-import { API, graphqlOperation } from 'aws-amplify'
-import { ListActivities, ListActivityCategoriesOnly } from '../graphql/queries'
-import { DeleteActivity } from '../graphql/mutations'
-import { OnDeleteActivity } from '../graphql/subscriptions'
+import { Auth, API, graphqlOperation } from 'aws-amplify'
+import { listActivities, listActivityCategoriesOnly } from '../graphql/queries'
+import { deleteActivity } from '../graphql/mutations'
+import { onDeleteActivity } from '../graphql/subscriptions'
 
 export default {
   data () {
@@ -55,12 +55,30 @@ export default {
       activities: [],
       categories: [],
       sortedActivities: [],
-      loading: true
+      loading: true,
+      subscription: null
     }
   },
   mounted() {
     this.getActivities()
-    // this.subscribeToDeleteActivity()
+
+    try {
+      const subscription = API.graphql(graphqlOperation(onDeleteActivity)
+        ).subscribe({
+          next: ({ value: { data }}) => {
+            console.log(data)
+          }
+          // next: (eventData) => {
+          //   console.log('fired!!')
+          // }
+          // error: (error) => console.log(error)
+        })
+        this.subscription = subscription
+    } catch (err) {
+      console.log(err)
+    }
+
+    console.log(this.subscription)
   },
   methods: {
     searchActivityByCategory(category) {
@@ -84,18 +102,23 @@ export default {
       this.loading = false
     },
     // Subscribe to OnDeleteActivity, which should trigger each team an Activity record is deleted
-    async subscribeToDeleteActivity() {
-      console.log(this.activities)
+    subscribeToDeleteActivity() {
+      // const subscription = API.graphql(graphqlOperation(OnDeleteActivity)
+      //   ).subscribe({
+      //     next: (eventData) => console.log(eventData)
+      //   })
+
+      // console.log(subscription)
     },
     async getActivities() {
       // Display spinner
       this.loading = true
-
+      
       try {
-        const activities = await API.graphql(graphqlOperation(ListActivities))
+        const activities = await API.graphql(graphqlOperation(listActivities, { userid: localStorage['aws-calorie-tracker-userid'] }))
         this.activities = activities.data.listActivities.items
         
-        const categories = await API.graphql(graphqlOperation(ListActivityCategoriesOnly))
+        const categories = await API.graphql(graphqlOperation(listActivityCategoriesOnly))
         this.categories = categories.data.listActivityCategories.items
 
       } catch(err) {
@@ -106,7 +129,7 @@ export default {
     },
     async deleteActivity(activityId) { 
       try {
-        const { data: { deleteActivity: { items }} } = await API.graphql(graphqlOperation(DeleteActivity, {
+        const { data: { deleteActivity: { items }} } = await API.graphql(graphqlOperation(deleteActivity, {
           input: {
             id: activityId
           }

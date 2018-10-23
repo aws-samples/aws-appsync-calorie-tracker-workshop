@@ -25,8 +25,11 @@ export default {
 
     Auth.currentAuthenticatedUser()
     .then(user => {
-      // Save username in cache
-      Cache.setItem('currentUsername', user.username)
+      // Save user details in local storage
+      localStorage['aws-calorie-tracker-userid'] = user.signInUserSession.idToken.payload.sub
+      localStorage['aws-calorie-tracker-username'] = user.username
+      
+
       this.$f7router.navigate('/home/')
     })
     .catch(err => {

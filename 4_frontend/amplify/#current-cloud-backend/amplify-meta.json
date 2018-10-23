@@ -1,33 +1,45 @@
 {
-	"providers": {
-		"awscloudformation": {
-			"AuthRoleName": "myapp-20181010110946-authRole",
-			"UnauthRoleArn": "arn:aws:iam::101414629942:role/myapp-20181010110946-unauthRole",
-			"AuthRoleArn": "arn:aws:iam::101414629942:role/myapp-20181010110946-authRole",
-			"Region": "us-west-2",
-			"DeploymentBucketName": "myapp-20181010110946-deployment",
-			"UnauthRoleName": "myapp-20181010110946-unauthRole",
-			"StackName": "myapp-20181010110946",
-			"StackId": "arn:aws:cloudformation:us-west-2:101414629942:stack/myapp-20181010110946/9e4429a0-cc74-11e8-bd67-503aca41a08d"
-		}
-	},
-	"auth": {
-		"cognito26fb5800": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"providerMetadata": {
-				"s3TemplateURL": "https://s3.amazonaws.com/myapp-20181010110946-deployment/amplify-cfn-templates/auth/cognito26fb5800-cloudformation-template.yml",
-				"logicalId": "authcognito26fb5800"
-			},
-			"lastPushTimeStamp": "2018-10-10T10:20:21.484Z",
-			"output": {
-				"AppClientSecret": "jg6hpdf8a18uvorqvfesk7f199p61k434kmmneb7rte3jdlrabl",
-				"UserPoolId": "us-west-2_HPuXS91it",
-				"AppClientIDWeb": "6aql3p77jtbuqq4vldbiketqv5",
-				"AppClientID": "7oguvsr3n746h2jgdo69a4opco",
-				"UserPoolName": "myapp26fb5800_userpool_26fb5800"
-			},
-			"lastPushDirHash": "UHOM3Ibc6ouSpfqquSNEp58s54A="
-		}
-	}
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "myapp-20181017163016-authRole",
+      "UnauthRoleArn": "arn:aws:iam::372707623367:role/myapp-20181017163016-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::372707623367:role/myapp-20181017163016-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "myapp-20181017163016-deployment",
+      "UnauthRoleName": "myapp-20181017163016-unauthRole",
+      "StackName": "myapp-20181017163016",
+      "StackId": "arn:aws:cloudformation:us-west-2:372707623367:stack/myapp-20181017163016/8d018180-d221-11e8-b95c-0ad5109330ec"
+    }
+  },
+  "auth": {
+    "cognito1b1141b0": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/myapp-20181017163016-deployment/amplify-cfn-templates/auth/cognito1b1141b0-cloudformation-template.yml",
+        "logicalId": "authcognito1b1141b0"
+      },
+      "lastPushTimeStamp": "2018-10-17T15:52:25.562Z",
+      "output": {
+        "AppClientSecret": "1i7c49nv58iel9sdpsmq5rfgjhss4ua64b5l7r3h1nna924m3u3a",
+        "UserPoolId": "us-west-2_sYMonNnAg",
+        "AppClientIDWeb": "2991hj5e4pshgt318sve8et6gl",
+        "AppClientID": "1g8ds8ogutvgg0n6u9f8bqkorf",
+        "UserPoolName": "myapp1b1141b0_userpool_1b1141b0"
+      },
+      "lastPushDirHash": "rsIlaJ0254tH1DuhcvF43e5u+/M="
+    }
+  },
+  "api": {
+    "Calorie Tracker App": {
+      "service": "AppSync",
+      "output": {
+        "securityType": "API_KEY",
+        "GraphQLAPIIdOutput": "3k7tukrfundx5gd436bbhxitrm",
+        "GraphQLAPIEndpointOutput": "https://a22ywilewrfzlpomedak2n6jgy.appsync-api.us-west-2.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-hfyydxmnevh5locai2c2rcs32i"
+      },
+      "lastPushTimeStamp": "2018-10-22T16:06:07.907Z"
+    }
+  }
 }

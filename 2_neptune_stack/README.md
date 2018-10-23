@@ -1,18 +1,67 @@
 # Deploying Amazon Neptune Cluster
 
-Use one of the following AWS regions 
+In order to ease the workshop we have created a CloudFormation Stack that deploys the following assets:
 
-   - us-east-1 / US East (N. Virginia) Region
+- Amazon Neptune Cluster within a VPC in a private subnet.
+- IAM Role with policy given dataset from S3 into Amazon Neptune.
+- An EC2 instances with Gremlin and Sparql clients installed. We will be using this EC2 instance and use the Gremlin traversal language to query the graph.
+- A **suggestFood** lambda function deployed in a VPC that provides food suggestions based on user activities and personal information such as BMI.
+
+Steps:
+- [1.1. Deploy the Cloudformation Stack](#11-Deploy-CloudFormation-Stack)
+- [1.2. Git Clone the project](#12-Git-Clone)
+- [1.3. Creating S3 bucket](#13-Creating-S3-bucket)
+- [1.4. Creating S3 VPC Endpoint](#14-Creating-Amazon-S3-VPC-Endpoint)
+- [1.5. Loading the dataset into Neptune](#15-Loading-the-given-food-dataset-into-Amazon-Neptune)
+- [1.6. FoodSuggestor Lambda function](#16-FoodSuggestor-lambda-function)
+
+-----
+## 1.1. Deploy the Cloudformation Stack
+
+Click one of the following link to deploy the stack. 
+
+Region| Code | Launch
+------|------|-------
+US East (Ohio) Region | us-east-2  | [![Launch in us-east-2]()]()
+US West (Oregon) Region | us-west-2 | [![Launch in us-west-2]()]()
+
+Verify if the Cloudformation stack has been successfully deployed.
+
+
+## 1.2. Git Clone the project
+
+In Cloud9 terminal, please run the following:
+
+``` 
+git clone <github url>
+```
+
+TODO: Folder structure
+
+-----
+
+## 1.3. Creating S3 bucket
+
+- Run the following command in the Cloud9 terminal. Please make sure you provide `a bucket name` and `region`.
+
+Please use one of the following regions
+
    - us-east-2 / US East (Ohio) Region
    - us-west-2 / US West (Oregon) Region
-   - eu-west-1 / EU (Ireland) Region
 
-Copy the `datasets`, `functions`, and `templates` directory into an S3 bucket.
+```
+aws s3api create-bucket --bucket <provide-an-unique-bucket-name> --region <region>
+```
 
-The above template will create a Neptune DB cluster within a VPC, suggestion lambda function (vpc enabled) and an EC2 client with gremlin enabled.
+- Copy the `datasets` folder to newly created S3 bucket.
+
+```
+aws s3 cp 2_neptune_stack/datasets/ s3://<bucket>/ --recursive
+```
 
 ------
-## Creating Amazon S3 VPC Endpoint
+
+## 1.4. Creating Amazon S3 VPC Endpoint
 
 Before loading the above datasets from S3, we need to create a Amazon S3 VPC Endpoints 
 
@@ -25,7 +74,7 @@ Before loading the above datasets from S3, we need to create a Amazon S3 VPC End
 4. Choose the Service Name `com.amazonaws.region.s3`.
 
 > Note:
->   Please make sure the console region is correct.
+>   Please make sure you choose the correct AWS region is correct.
 
 5. Choose the VPC that contains your Neptune DB instance.
 
@@ -51,11 +100,12 @@ Before loading the above datasets from S3, we need to create a Amazon S3 VPC End
 8. Choose Create Endpoint.
 
 ----------
-## Loading the given food dataset into Amazon Neptune
 
-We are using the Health and Nutrition Dataset provided by the [Center for Disease Control and Preventation](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Dietary&CycleBeginYear=2015). NHANES conducts studies designed to assess the health and nutritional status of adults and children in the United States. The survey is unique in that it combines interviews and physical examinations.
+## 1.5. Loading the given food dataset into Amazon Neptune
 
-The datasets that needs to be loaded into Amazon Neptune are available in the `datasets` folder. 
+In this workshop, we are using the Health and Nutrition Dataset provided by the [Center for Disease Control and Preventation](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Dietary&CycleBeginYear=2015). NHANES conducts studies designed to assess the health and nutritional status of adults and children in the United States. The survey is unique in that it combines interviews and physical examinations.
+
+The datasets that needs to be loaded into Amazon Neptune are available under the `datasets` folder. 
 
 `Vertex.csv` contains userId, demographics information about the user such as weight (kg), height (cm) and their BMI. 
 
@@ -109,11 +159,38 @@ g.V().has('BMI',lte(24))
 ```
 
 ----
-## Testing the FoodSuggestor lambda function
 
-- Click test
-- Enter a new event name. Leave the rest as default and click `create`
-- Test the lambda function which should return a list of recommended food based on the given BMI (under Environment variables).
+## 1.6. FoodSuggestor lambda function.
+
+Under AWS lambda, you will find a Lambda function named `FoodSuggestorFunction`. This is essentially running the following gremlin query where:
+
+- gremlin is traversing the vertex with label `person` and has a property `bmi` less than or equal to 24.
+- Get the outgoing traversal with edges as `has` and label it as `food`.
+- In the same way, get the outgoing traversal with edges as `eats`.
+- Then we filter the results where calories is less than 400, sugar is less than 2 gm, return the `name` of food types that match this criteria and label the output as `type`.
+- Select the objects labels `food` and `type` from the path and remove (`dedup`) any repeated items.
+
+```
+
+g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(values('calorie').is(lt(400))).filter(values('sugar').is(lt(2))).values('name').as('type').select('food','type').dedup()
+
+```
+
+
+- In order to test this Lambda function, copy the following as test input
+
+```
+{
+  "bmi": 24,
+  "calorie": 400,
+  "sugar": 2,
+  "userid": "239213-321421"
+}
+```
+- Enter a new event name and click `create`.
+- Test the lambda function which should return a list of suggested food based on the given BMI
+
+Congratulations. You have successfully created an Amazon Neptune Cluster, loaded the given dataset from S3 using Amazon S3 VPC endpoint, run Gremlin queries and have tested the foodSuggestor lambda function.
 
 [Proceed to next section - Amazon AppSync](../3_appsync_stack/README.md)
 

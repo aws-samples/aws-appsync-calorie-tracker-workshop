@@ -47,8 +47,8 @@
 
 <script>
 import { API, Cache, graphqlOperation } from 'aws-amplify'
-import { ListActivityCategories } from '../graphql/queries'
-import { CreateActivity } from '../graphql/mutations' 
+import { listActivityCategories } from '../graphql/queries'
+import { createActivity } from '../graphql/mutations' 
 
 export default {
   data () {
@@ -63,7 +63,7 @@ export default {
   },
   async created() {
     try {
-      const { data: { listActivityCategories: { items }} } = await API.graphql(graphqlOperation(ListActivityCategories))
+      const { data: { listActivityCategories: { items }} } = await API.graphql(graphqlOperation(listActivityCategories))
 
       this.categories = items
 
@@ -98,16 +98,45 @@ export default {
           category: this.selectedCategory,
           type: this.selectedType, 
           caloriesConsumed: this.calories,
-          userid: Cache.getItem('username')
+          userid: localStorage['aws-calorie-tracker-userid']
         }
       }
 
-      // Perform Mutation
       try {
-        await API.graphql(graphqlOperation(CreateActivity, activity))
+        // Perform Mutation
+        await API.graphql(graphqlOperation(createActivity, activity))
+
+        // Success! Let's display a quick toast message to inform the user
+        if (!self.successToasterMessage) {
+          self.successToasterMessage = this.$f7.toast.create({
+            closeButton: true,
+            text: 'Activity added successfully!',
+            closeTimeout: 3000,
+            destroyOnClose: true,
+            position: 'top'
+          })
+        }
+        
+        // Open toast
+        self.successToasterMessage.open();
+
+
       } catch (err) {
-        // Uh oh! Something went run.
-        console.log('error:' + err)
+        // Uh oh! Something went run. Print error to the console and also display toast error message
+        console.log('error:' + JSON.stringify(err))
+
+        // Create toast with error message
+        if (!self.errorToasterMessage) {
+          self.errorToasterMessage = this.$f7.toast.create({
+            closeButton: true,
+            text: 'Error from AppSync: ' + JSON.stringify(err),
+            closeTimeout: 12000,
+            destroyOnClose: true
+          })
+        }
+        
+        // Open toast
+        self.errorToasterMessage.open();
       }
 
       // Success! Close preloader and reset input fields
