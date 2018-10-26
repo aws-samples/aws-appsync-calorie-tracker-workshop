@@ -1,4 +1,4 @@
-# AWS Cloud 9 
+# AWS Cloud 9
 
 AWS Cloud9 is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser.
 
@@ -6,10 +6,10 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 1. Open the [AWS Cloud9 console](https://console.aws.amazon.com/cloud9/)
 
->  If you are prompted with the below screen, type the email address for the AWS account root user, choose Next, type the password for the AWS account root user and then choose Sign In. 
+>  If you are prompted with the below screen, type the email address for the AWS account root user, choose Next, type the password for the AWS account root user and then choose Sign In.
 > ![Root User](../images/root_user.png)
 
-> Follow the steps described [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html) to create a new IAM user with administrative privileges. 
+> Follow the steps described [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html) to create a new IAM user with administrative privileges.
 
 > For the purpose of this workshop, its ok to use the user with adminstrative privileges. Please consider restrictive access/least privilege approach when running in production.
 
@@ -22,12 +22,16 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 4. Name - `reinvent_appsync_workshop` and Click Next Step
 
-5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **t2.micro**. Keep the rest of the settings default, `Next Step` and click `create environment`.
+5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **t2.micro**. Keep the rest of the settings default, `Next Step` and click `create environment`. It will take few minutes to create your environment.
 
-6. Verify the NodeJS version via the Cloud9 terminal.
+6. Once your environment is ready, you will see the following screen. The bottom half of your window, you can see the Cloud9 terminal.
 
-``` 
-node -v 
+  ![Cloud9 Env](../images/cloud9_env.png)
+
+7. Verify the NodeJS version via the Cloud9 terminal.
+
+```
+node -v
 ```
 
 Update the node.js version, if you are running < 8
@@ -36,7 +40,7 @@ Update the node.js version, if you are running < 8
 nvm install 8
 ```
 
-7. Set the AWS Credentials. Type `aws configure` in the C9 terminal
+8. Set the AWS Credentials. Type `aws configure` in the C9 terminal
 
 ```
 $ aws configure
@@ -49,7 +53,3 @@ Default output format [None]:
 [Next section - Setting up Amazon Neptune Cluster](../2_neptune_stack/README.md)
 
 [Back to home page](../README.md)
-
-
-
-
