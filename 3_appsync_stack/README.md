@@ -1,56 +1,20 @@
-# Serverless Calorie tracking application with AWS AppSync, Amazon DynamoDB and Amazon Neptune
+# Create DynamoDB tables and AppSync backend
 
-This workshop shows you how easy it is to build a completely serverless web application. You will build a sample web application called Calorie tracker which will allow users to track the calories and get recommendations based on their food habits.
-Your application will have following featurs:
-- User sign-up, login and logout
-- Set personal information like calorie target per day, height, weight etc.
-- Track activities through out the day like add calories (breakfast, lunch, dinner, snacks) and burn calories (workout, walk, run)
-- View recommendations based on the activities
+In this section, we will create the backend for our application. We will use AWS DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
-You will build your web application using AWS Amplify. You will host the static assets of on Amazon S3 and use S3 to deliver the web application to your users. The application will integrate with AWS AppSync to provide real-time data from multiple data sources via GraphQL technology. User's personal information, and activity data will be stored in Amazon DynamoDB and AWS Lambda will query Amazon Neptune graph database to provide recommendation.
+To simplify the process, we will use AWS CloudFormation templates to create resources for our application backend.
 
-User sign-up, login and logout will done using Amazon Cognito User pools. User's personal information and activity information will be stored across multiple tables in DynamoDB and AppSync will make it easy to access these data and provide exact information as needed by our application. Amazon Neptune will be used in providing recommendations based on the user's activity. It makes it easy to build relationships between different data points and querying on those data sets.
+### Step 1: Create DynamoDB Tables and Lambda function
 
-Following diagram shows the deployment architecture of the web application:
+In this step, we will create 4 dyanmoDB tables and a Lambda function using CloudFormation template. DynamoDB tables are used to store user information and Lambda function is used to aggregate the user calories based on the user activities and update it in User Aggregate table. If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
 
-[TODO: Architecture diagram]
+This Lambda function will be executed every time user logs an activity in the app, using User activity DynamoDB stream.
 
-**Services used**
-- AWS AppSync
-- AWS Lambda
-- Amazon DynamoDB
-- Amazon Cognito User Pools
-- Amazon Neptune
-
-## Pre-requisites
-
-- AWS Account with appropriate permissions to create the related resources
-- AWS Amplify
-- AWS CLI
-- AWS Cloud9?
-
-## Implementation Instructions
-
-### Region Selection
-This workshop can be deployed in any AWS region that supports the following services:
-- AWS Lambda
-- AWS AppSync
-- Amazon DynamoDB
-- Amazon Neptune
-- Amazon Cognito
-
-You can refer to the [region table](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) in the AWS documentation to see which regions have the supported services. Among the currently supported regions you can choose are: **N. Virginia**, **Ohio**, **Oregon**, **Ireland**, and **London**.
-
-Once you've chosen a region, you should deploy all of the resources for this workshop there. Make sure you select your region from the dropdown in the upper right corner of the AWS Console before getting started.
-
-![Region Selection](images/region.jpg)
-
-### Step 1: Create DynamoDB Tables
-Execute following CLI command to create dynamoDB tables.
+Execute following CLI command to create a CloudFormation stack.
 ```
-aws cloudformation create-stack --stack-name dynamoDBStack --template-body file://templates/dynamodb-tables.yaml --parameters ParameterKey=APIName,ParameterValue=caltrack
+aws cloudformation create-stack --stack-name dynamoDBLambdaStack --template-body file://templates/dynamodb-lambda.yaml --parameters ParameterKey=APIName,ParameterValue=caltrack ParameterKey=S3BucketName,ParameterValue=reinvent-2018
 ```
-Above command will launch a Cloudformation stack. When the stack creation is completed successfully, you will see the following tables created. You can check the status of your stack from the CloudFormation console.
+When the stack creation is completed successfully, you will have following 4 tables and a Lambda function created. You can check the status of your stack from the CloudFormation console.
 - caltrack_user_table
 - caltrack_activity_table
 - caltrack_activity_category_table
@@ -62,7 +26,7 @@ aws dynamodb batch-write-item --request-items file://assets/activity-categories.
 ```
 
 ### Step 2: Create AppSync API backend
-Open the AWS AppSync Console and click **Create API**.
+Now, we will use the DynamoDB tables created in Step 1 to create GraphQL backend. Open the AWS AppSync Console and click **Create API**.
 
 ![AppSync Create API](images/appsync-createapi.jpg)
 
@@ -127,16 +91,6 @@ We will configure query, mutation and subscription resolvers in this step. Befor
   ```
 - When the CloudFormation stack is completed successfully, you will have your resolvers configured.
 
-### Step 3: Create Lambda Function
-We will create the Lambda function which will be executed every time user logs an activity in the app, using DynamoDB streams. This function will update the User Aggregate table with the calories. If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
-
-[TODO: Finish rest of the steps]
-
-### Step 4: Implement Vue.js web front end using Amplify
-
-### Step 5: Deploy Vue.js front end
-
-### Step 6: Test
 
 ## License Summary
 This sample code is made available under a modified MIT license. See the LICENSE file.
