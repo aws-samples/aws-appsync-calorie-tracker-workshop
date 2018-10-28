@@ -8,9 +8,9 @@ To simplify the process, we will use AWS CloudFormation templates to create reso
 
 In this step, we will create 4 dyanmoDB tables and a Lambda function using CloudFormation template. DynamoDB tables are used to store user information and Lambda function is used to aggregate the user calories based on the user activities and update it in User Aggregate table. If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
 
-This Lambda function will be executed every time user logs an activity in the app, using User activity DynamoDB stream.
+The Lambda function will be executed every time user logs an activity in the app, using User activity DynamoDB stream.
 
-Execute following CLI command to create a CloudFormation stack.
+Execute following CLI command to create the CloudFormation stack.
 ```
 aws cloudformation create-stack --stack-name dynamoDBLambdaStack --template-body file://templates/dynamodb-lambda.yaml --parameters ParameterKey=APIName,ParameterValue=caltrack ParameterKey=S3BucketName,ParameterValue=reinvent-2018
 ```
@@ -20,7 +20,7 @@ When the stack creation is completed successfully, you will have following 4 tab
 - caltrack_activity_category_table
 - caltrack_user_aggregate_table
 
-Execute following CLI command to load some sample activity categories to be used by the web app.
+Execute following CLI command to load the sample activity categories to be used by the app.
 ```
 aws dynamodb batch-write-item --request-items file://assets/activity-categories.json
 ```
@@ -91,6 +91,12 @@ We will configure query, mutation and subscription resolvers in this step. Befor
   ```
 - When the CloudFormation stack is completed successfully, you will have your resolvers configured.
 
+## Summary
+You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
+
+AppSync is setup to use DynamoDB tables as data sources to persist user information.
+
+Lambda function is subscribed to DynamoDB streams and is setup to be triggered every time user add or delete an activity.
 
 ## License Summary
 This sample code is made available under a modified MIT license. See the LICENSE file.
