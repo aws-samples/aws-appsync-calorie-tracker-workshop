@@ -18,6 +18,9 @@ Parameters:
   AppSyncUserAggTableDataSourceName:
     Type: String
     Description: AppSync User calorie aggregate table data source name
+  AppSyncSuggestedFoodDataSourceName:
+    Type: String
+    Description: AppSync Suggested Food Lambda Function data source name
 
 Resources:
   # ------ Mutation resolvers
@@ -569,74 +572,37 @@ Resources:
       ResponseMappingTemplate: "$util.toJson($context.result)"
 
   # ------ Query resolvers
-  ListUsersQueryResolver:
+  GetActivityQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
       ApiId: !Sub ${AppSyncApiId}
       TypeName: Query
-      FieldName: listUsers
-      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
-      RequestMappingTemplate: |
-        {
-          "version": "2017-02-28",
-          "operation": "Scan",
-          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
-          "limit": $util.defaultIfNull($ctx.args.limit, 20),
-          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
-        }
-      ResponseMappingTemplate: |
-        $util.toJson($context.result)
-
-  ListUserAggregateQueryResolver:
-    Type: "AWS::AppSync::Resolver"
-    Properties:
-      ApiId: !Sub ${AppSyncApiId}
-      TypeName: Query
-      FieldName: listUserAggregates
-      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
-      RequestMappingTemplate: |
-        {
-          "version": "2017-02-28",
-          "operation": "Scan",
-          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
-          "limit": $util.defaultIfNull($ctx.args.limit, 20),
-          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
-        }
-      ResponseMappingTemplate: |
-        $util.toJson($context.result)
-
-  ListActivitiesQueryResolver:
-    Type: "AWS::AppSync::Resolver"
-    Properties:
-      ApiId: !Sub ${AppSyncApiId}
-      TypeName: Query
-      FieldName: listActivities
+      FieldName: getActivity
       DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
-      RequestMappingTemplate: |
-        {
-          "version": "2017-02-28",
-          "operation": "Scan",
-          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
-          "limit": $util.defaultIfNull($ctx.args.limit, 20),
-          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
-        }
-      ResponseMappingTemplate: |
-        $util.toJson($context.result)
-
-  GetUserAggregateQueryResolver:
-    Type: "AWS::AppSync::Resolver"
-    Properties:
-      ApiId: !Sub ${AppSyncApiId}
-      TypeName: Query
-      FieldName: getUserAggregate
-      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
           "operation": "GetItem",
           "key": {
-            "userid": $util.dynamodb.toDynamoDBJson($ctx.args.userid),
-            "date": $util.dynamodb.toDynamoDBJson($ctx.args.date),
+            "id": $util.dynamodb.toDynamoDBJson($ctx.args.id),
+          },
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  GetActivityCategoryQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: getActivityCategory
+      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "GetItem",
+          "key": {
+            "category": $util.dynamodb.toDynamoDBJson($ctx.args.category),
           },
         }
       ResponseMappingTemplate: |
@@ -660,20 +626,39 @@ Resources:
       ResponseMappingTemplate: |
         $util.toJson($context.result)
 
-  GetActivityQueryResolver:
+  GetUserAggregateQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
       ApiId: !Sub ${AppSyncApiId}
       TypeName: Query
-      FieldName: getActivity
-      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      FieldName: getUserAggregate
+      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
           "operation": "GetItem",
           "key": {
-            "id": $util.dynamodb.toDynamoDBJson($ctx.args.id),
+            "userid": $util.dynamodb.toDynamoDBJson($ctx.args.userid),
+            "date": $util.dynamodb.toDynamoDBJson($ctx.args.date),
           },
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  ListActivitiesQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: listActivities
+      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Scan",
+          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
         }
       ResponseMappingTemplate: |
         $util.toJson($context.result)
@@ -708,24 +693,6 @@ Resources:
         ## Pass back the result from DynamoDB. **
         $util.toJson($ctx.result)
 
-  GetActivityCategoryQueryResolver:
-    Type: "AWS::AppSync::Resolver"
-    Properties:
-      ApiId: !Sub ${AppSyncApiId}
-      TypeName: Query
-      FieldName: getActivityCategory
-      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
-      RequestMappingTemplate: |
-        {
-          "version": "2017-02-28",
-          "operation": "GetItem",
-          "key": {
-            "category": $util.dynamodb.toDynamoDBJson($ctx.args.category),
-          },
-        }
-      ResponseMappingTemplate: |
-        $util.toJson($context.result)
-
   ListActivityCategoriesQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
@@ -741,5 +708,61 @@ Resources:
           "limit": $util.defaultIfNull($ctx.args.limit, 20),
           "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
         }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  ListUserAggregateQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: listUserAggregates
+      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Scan",
+          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  ListUsersQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: listUsers
+      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      RequestMappingTemplate: |
+        {
+          "version": "2017-02-28",
+          "operation": "Scan",
+          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
+          "limit": $util.defaultIfNull($ctx.args.limit, 20),
+          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($context.result)
+
+  SuggestedFoodQueryResolver:
+    Type: "AWS::AppSync::Resolver"
+    Properties:
+      ApiId: !Sub ${AppSyncApiId}
+      TypeName: Query
+      FieldName: suggestedFood
+      DataSourceName: !Sub ${AppSyncSuggestedFoodDataSourceName}
+      RequestMappingTemplate: |
+        "#**
+          The value of 'payload' after the template has been evaluated
+          will be passed as the event to AWS Lambda.
+        *#
+        {
+            "version" : "2017-02-28",
+            "operation": "Invoke",
+            "payload": $util.toJson($context.args)
+        }"
       ResponseMappingTemplate: |
         $util.toJson($context.result)
