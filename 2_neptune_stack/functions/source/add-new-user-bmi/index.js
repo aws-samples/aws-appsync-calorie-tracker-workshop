@@ -1,6 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
+const gremlin = require('gremlin');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 //Create a Translator object, which comes from the DocumentClient
@@ -10,6 +11,7 @@ var dynamodbTranslator = dynamodb.getTranslator();
 //are themselves the same Item shape as we see in a getItem response
 var ItemShape = dynamodb.service.api.operations.getItem.output.members.Item;
 
+
 exports.handler = async (event, context) => {
 
     try {
@@ -18,11 +20,11 @@ exports.handler = async (event, context) => {
             record.dynamodb.NewImage = dynamodbTranslator.translateOutput(record.dynamodb.NewImage, ItemShape);
 
             if (record.eventName === "INSERT" && !record.dynamodb.NewImage.bmi) {                
-                let weight = record.dynamodb.NewImage.weight;
-                let height = record.dynamodb.NewImage.height;
+                let weight = parseFloat(record.dynamodb.NewImage.weight);
+                let height = parseFloat(record.dynamodb.NewImage.height);
 
                 var params = {
-                    TableName: "caltrack_user_table",
+                    TableName: "caltrack_user_table" || process.env.CALTRACK_USER_TABLE,
                     Key: {
                         "id": record.dynamodb.NewImage.id
                     },
@@ -35,13 +37,11 @@ exports.handler = async (event, context) => {
 
                 // adds BMI to the new created user
                 let updateUserBMI = await dynamodb.update(params).promise();
-                console.log(updateUserBMI); 
+                console.log(updateUserBMI);   
                 
-                context.succeed(updateUserBMI);
-
             }
 
-            // TODO 
+            // TODO
             // add an vertex in Amazon Neptune for the new user
 
         }

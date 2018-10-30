@@ -29,10 +29,11 @@ exports.handler = async (event,context) => {
   console.log(`raw inputs - ${JSON.stringify(event)}`);
 
   const BMI = parseFloat(event.bmi);
-  const CALORIE_COUNT = parseFloat(event.calorie) || 300; // defaulting to 300 calories per meal
-  const SUGAR = parseFloat(event.sugar) || 2 // default sugar intake to be less than 2 gm
-  eifjccfuvgdbbthukcnfhevklkdfktviiitdhhjcdfnu
+  const CALORIE_COUNT = parseFloat(event.calorie) || 400;
+  const SUGAR = parseFloat(event.sugar) || 2
   
+  console.log(`BMI - ${BMI}, CALORIE_COUNT - ${CALORIE_COUNT}`)
+
   try {
     suggestions = await suggestedFoods(BMI,CALORIE_COUNT,SUGAR);
     console.log(suggestions)

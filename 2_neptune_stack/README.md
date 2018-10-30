@@ -6,6 +6,7 @@ In order to ease the workshop we have created a CloudFormation Stack that deploy
 - IAM Role with policy given dataset from S3 into Amazon Neptune.
 - An EC2 instances with Gremlin and Sparql clients installed. We will be using this EC2 instance and use the Gremlin traversal language to query the graph.
 - A **suggestFood** lambda function deployed in a VPC that provides food suggestions based on user activities and personal information such as BMI.
+- A **add-new-user-bmi** lambda function that gets triggered off user-table DynamoDB streams which then computes the BMI and updates the user-table with BMI
 
 Steps:
 - [1.1. Deploy the Cloudformation Stack](#11-Deploy-CloudFormation-Stack)
@@ -22,11 +23,10 @@ Click one of the following link to deploy the stack.
 
 Region| Code | Launch
 ------|------|-------
-US East (Ohio) Region | us-east-2  | [![Launch in us-east-2]()]()
-US West (Oregon) Region | us-west-2 | [![Launch in us-west-2]()]()
+US East (Ohio) Region | us-east-2  | [![Launch in us-east-2]()](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=reinvent-neptune-stack&https://s3.us-east-2.amazonaws.com/reinvent-appsync-workshop-ohio/2_neptune_stack/templates/main.yaml)
+US West (Oregon) Region | us-west-2 | [![Launch in us-west-2]()](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=reinvent-neptune-stack&https://s3-us-west-2.amazonaws.com/reinvent-appsync-workshop-oregon/2_neptune_stack/templates/main.yaml)
 
 Verify if the Cloudformation stack has been successfully deployed.
-
 
 ## 1.2. Git Clone the project
 

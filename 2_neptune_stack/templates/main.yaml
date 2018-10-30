@@ -197,13 +197,22 @@ Resources:
     Type: AWS::Serverless::Function
     DependsOn: NeptuneStack
     Properties:
-      CodeUri: s3://pputhran-food-data/functions/code.zip
-      Description: Recommends food
-      FunctionName: FoodSuggestorFunction
+      CodeUri: ../functions/source/foodSuggestor/
+      Description: Suggests food based on user BMI
+      FunctionName: suggest-food-for-user
       MemorySize: 512
       Timeout: 5 
       Policies:
         - VPCAccessPolicy: {}
+  AddBMIforNewUser:
+    Type: AWS::Serverless::Function
+    DependsOn: NeptuneStack
+    Properties:
+      CodeUri: ../functions/source/add-new-user-bmi/
+      Description: The lambda function that gets triggered off user-table DynamoDB streams which then computes the BMI and updates the user-table with BMI
+      FunctionName: add-new-user-bmi
+      MemorySize: 512
+      Timeout: 5 
 
 Outputs:
   DBClusterId:
