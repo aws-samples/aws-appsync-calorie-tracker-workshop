@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { Auth, Cache } from 'aws-amplify'
+import { Auth } from 'aws-amplify'
 
 export default {
   mounted () {
@@ -28,7 +28,6 @@ export default {
       // Save user details in local storage
       localStorage['aws-calorie-tracker-userid'] = user.signInUserSession.idToken.payload.sub
       localStorage['aws-calorie-tracker-username'] = user.username
-      
 
       this.$f7router.navigate('/home/')
     })

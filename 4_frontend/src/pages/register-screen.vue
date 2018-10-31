@@ -46,6 +46,7 @@ export default {
       // Show preloader 
       self.$f7.preloader.show();
 
+      // Register new user in Cognito's User Pool 
       Auth.signUp({
         username: this.username,
         password: this.password,
@@ -54,11 +55,11 @@ export default {
         },
         validationData: []  //optional
         })
-        .then(data => {
-          // Hide preloader 
+        .then(data => {          
+          // Success! Hide preloader 
           self.$f7.preloader.hide()
 
-          // Navigate to "Verify your email" page
+          // ...And navigate to email verification page
           this.$f7router.navigate('/verify/' + this.email + '/' + this.username)
         })
         .catch(err => {

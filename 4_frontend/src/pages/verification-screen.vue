@@ -40,13 +40,11 @@ export default {
       // Show spinner 
       self.$f7.preloader.show()
 
-			// Verify
+			// Verify user via Cognito's confirmSignUp function
 			Auth.confirmSignUp(this.username, this.code)
 			.then(data => {
 				console.log(data)
 				// SUCCESS!
-          		// localStorage['aws-calorie-tracker-userid'] = user.signInUserSession.idToken.payload.sub
-          		// localStorage['aws-calorie-tracker-username'] = user.username
 
 				// Hide spinner
 				self.$f7.preloader.hide()
@@ -55,7 +53,7 @@ export default {
 				if (!self.successToastMessage) {
 					self.successToastMessage = self.$f7.toast.create({
 						closeButton: true,
-						text: 'Registration Successful! You are now logged in.' ,
+						text: 'Registration Successful! Please login.' ,
 						closeTimeout: 5000,
 						destroyOnClose: true
 					})
@@ -64,7 +62,7 @@ export default {
 				self.successToastMessage.open()
 
 				// Navigate to home/welcome page
-				this.$f7router.navigate('/')
+				this.$f7router.navigate('/login/')
 			})
 			.catch(err => {
 				// Show error toast message if verification failed

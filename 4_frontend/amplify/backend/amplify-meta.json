@@ -34,12 +34,11 @@
     "Calorie Tracker App": {
       "service": "AppSync",
       "output": {
-        "securityType": "API_KEY",
+        "securityType": "AMAZON_COGNITO_USER_POOLS",
         "GraphQLAPIIdOutput": "3k7tukrfundx5gd436bbhxitrm",
-        "GraphQLAPIEndpointOutput": "https://a22ywilewrfzlpomedak2n6jgy.appsync-api.us-west-2.amazonaws.com/graphql",
-        "GraphQLAPIKeyOutput": "da2-hfyydxmnevh5locai2c2rcs32i"
+        "GraphQLAPIEndpointOutput": "https://a22ywilewrfzlpomedak2n6jgy.appsync-api.us-west-2.amazonaws.com/graphql"
       },
-      "lastPushTimeStamp": "2018-10-22T16:06:07.907Z"
+      "lastPushTimeStamp": "2018-10-24T13:47:58.954Z"
     }
   }
 }

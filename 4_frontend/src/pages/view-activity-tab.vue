@@ -47,7 +47,7 @@ import moment from 'moment'
 import { Auth, API, graphqlOperation } from 'aws-amplify'
 import { listActivities, listActivityCategoriesOnly } from '../graphql/queries'
 import { deleteActivity } from '../graphql/mutations'
-import { onDeleteActivity } from '../graphql/subscriptions'
+import { onDeleteActivity, onDeleteActivities } from '../graphql/subscriptions'
 
 export default {
   data () {
@@ -59,40 +59,36 @@ export default {
       subscription: null
     }
   },
+  beforeDestroy() {
+    // Unsubscribe from onDeleteActivities events
+    this.subscription.unsubscribe()
+  },
   mounted() {
+    // Fetch User ID from local storage
+    this.userid = localStorage['aws-calorie-tracker-userid']
+
+    // Fetch all activites via AppSync
     this.getActivities()
 
-    try {
-      const subscription = API.graphql(graphqlOperation(onDeleteActivity)
-        ).subscribe({
-          next: ({ value: { data }}) => {
-            console.log(data)
-          }
-          // next: (eventData) => {
-          //   console.log('fired!!')
-          // }
-          // error: (error) => console.log(error)
-        })
-        this.subscription = subscription
-    } catch (err) {
-      console.log(err)
-    }
-
-    console.log(this.subscription)
+    // Subscrive to onDeleteActivities event
+    this.subscribeToDeleteActivity()
   },
   methods: {
     searchActivityByCategory(category) {
       var returnObj = []
-      
+
+      // Find all activities associated with a specific category
       for (var activity of this.activities) {
         if (activity.category === category) {
           returnObj.push(activity)
         }
       }
 
+      // Return results as an array of objects
       return returnObj
     },
     sortActivities() {
+      // 
       for (var category of this.categories) {
         this.sortedActivities.push({
           "category": category.category,
@@ -103,21 +99,32 @@ export default {
     },
     // Subscribe to OnDeleteActivity, which should trigger each team an Activity record is deleted
     subscribeToDeleteActivity() {
-      // const subscription = API.graphql(graphqlOperation(OnDeleteActivity)
-      //   ).subscribe({
-      //     next: (eventData) => console.log(eventData)
-      //   })
+      var self = this
 
-      // console.log(subscription)
+      // Subscripte to the onDeleteActivities subscription
+      self.subscription = API.graphql(graphqlOperation(onDeleteActivities)
+        ).subscribe({
+          next: ({ value: { data }}) => {
+            // Zero all arrays so we don't get duplicates oncd we refresh activities
+            self.sortedActivities = []
+            self.activites = []
+            self.categories = []
+
+            // Refresh activities
+            self.getActivities()
+          }
+        })
     },
     async getActivities() {
       // Display spinner
       this.loading = true
       
       try {
+        // Fetch all activities associated with the current UserID
         const activities = await API.graphql(graphqlOperation(listActivities, { userid: localStorage['aws-calorie-tracker-userid'] }))
         this.activities = activities.data.listActivities.items
         
+        // Fetch all possible categories
         const categories = await API.graphql(graphqlOperation(listActivityCategoriesOnly))
         this.categories = categories.data.listActivityCategories.items
 
@@ -125,10 +132,12 @@ export default {
         console.log(err)
       }
 
+      // Done! Let's quickly sort each activity to match its respective category
       return this.sortActivities()
     },
-    async deleteActivity(activityId) { 
+    async deleteActivity(activityId) {
       try {
+        // Delete an activity via the deleteActivity Mutation
         const { data: { deleteActivity: { items }} } = await API.graphql(graphqlOperation(deleteActivity, {
           input: {
             id: activityId

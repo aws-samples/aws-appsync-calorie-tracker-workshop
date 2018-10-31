@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import { Auth, Cache } from 'aws-amplify';
+import { Auth, API, graphqlOperation } from 'aws-amplify'
+import { getUserBmi } from '../graphql/queries'
 
 export default {
   data() {
@@ -33,6 +34,23 @@ export default {
     };
   },
   methods: {
+    async redirectUser() {
+      let bmi = null
+
+      // Check if this user has a BMI value in DDB. If this value isn't present, redirect the
+      // user to the Welcome Screen for him to enter his details and have the backend
+      // calculate this value and store in DDB
+      try {
+        const { data: { getUser: { bmi }} } = await API.graphql(graphqlOperation(getUserBmi, {
+          id: localStorage['aws-calorie-tracker-userid']
+        }))
+
+        this.$f7router.navigate('/home/')
+      } catch (err) {
+        // If BMI value is null, this is a first time user. Redirect to Welcome Screen.
+        this.$f7router.navigate('/welcome/')
+      }
+    },
     signIn () {
       const self = this
 
@@ -62,14 +80,12 @@ export default {
           // Open toast
           self.successToastMessage.open()
 
-          // TODO: FIX THIS
-          this.$f7router.navigate('/welcome/')
+          // Get BMI and decide where to redirect user to
+          this.redirectUser()
         })
         .catch(err => {
           // Hide spinner
           self.$f7.preloader.hide()
-
-          console.log(err)
 
           // Create toast error message
           if (!self.errorToastMessage) {

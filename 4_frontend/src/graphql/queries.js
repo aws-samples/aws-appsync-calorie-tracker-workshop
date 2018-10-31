@@ -154,8 +154,6 @@ export const listUsers = `query ListUsers(
 }
 `;
 
-
-
 export const suggestedFood = `query SuggestedFood(
   $userid: String!
   $bmi: Float

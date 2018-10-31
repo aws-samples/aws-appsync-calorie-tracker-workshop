@@ -5,12 +5,12 @@ import LoginScreen from './pages/login-screen.vue'
 import RegisterScreen from './pages/register-screen.vue'
 import VerificationScreen from './pages/verification-screen.vue'
 import WelcomeScreen from './pages/welcome-screen.vue'
-import AboutPage from './pages/about.vue'
 import NotFoundPage from './pages/not-found.vue'
 import PanelLeftPage from './pages/panel-left.vue'
 import AddActivityTab from './pages/add-activity-tab'
 import ViewActivityTab from './pages/view-activity-tab'
 import ViewRecommendationsTab from './pages/view-recommendations-tab'
+import Logout from './pages/logout'
 
 import { Auth } from 'aws-amplify'
 
@@ -20,8 +20,9 @@ function checkAuth(to, from, resolve, reject) {
   .then(user => {
     resolve() 
   })
+  // TODO: Redirect user to login screen
   .catch(err => { 
-    reject() 
+    reject()
   })
 }
 
@@ -78,8 +79,8 @@ export default [
     component: PanelLeftPage,
   },
   {
-    path: '/about/',
-    component: AboutPage
+    path: '/logout',
+    component: Logout
   },
   {
     path: '(.*)',

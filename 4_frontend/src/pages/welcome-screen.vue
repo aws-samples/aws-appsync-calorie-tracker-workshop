@@ -63,6 +63,7 @@ export default {
     }
   },
   beforeCreate() {
+    // TODO: Fix this to use localStorage 
     Auth.currentAuthenticatedUser()
     .then(user => {
       this.data.input.username = user.username

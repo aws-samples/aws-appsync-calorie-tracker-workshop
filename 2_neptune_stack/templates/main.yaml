@@ -150,7 +150,7 @@ Resources:
   NeptuneStack:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/neptune.yaml'
+      TemplateURL: !Sub 'https://s3.us-west-2.amazonaws.com/reinvent-appsync-workshop-oregon/2_neptune_stack/templates/neptune.yaml'
       TimeoutInMinutes: '15'
       Parameters:
         DBReplicaIdentifierSuffix: !Ref DBReplicaIdentifierSuffix
@@ -161,7 +161,7 @@ Resources:
   NeptuneEC2Client:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/ec2.yaml'
+      TemplateURL: !Sub 'https://s3.us-west-2.amazonaws.com/reinvent-appsync-workshop-oregon/2_neptune_stack/templates/ec2.yaml'
       TimeoutInMinutes: '30'
       Parameters:
         EC2SSHKeyPairName: !Ref EC2SSHKeyPairName
@@ -197,22 +197,13 @@ Resources:
     Type: AWS::Serverless::Function
     DependsOn: NeptuneStack
     Properties:
-      CodeUri: ../functions/source/foodSuggestor/
+      CodeUri: s3://reinvent-appsync-workshop-oregon/2_neptune_stack/functions/source/foodSuggestor/food-suggestor.zip
       Description: Suggests food based on user BMI
       FunctionName: suggest-food-for-user
       MemorySize: 512
       Timeout: 5 
       Policies:
         - VPCAccessPolicy: {}
-  AddBMIforNewUser:
-    Type: AWS::Serverless::Function
-    DependsOn: NeptuneStack
-    Properties:
-      CodeUri: ../functions/source/add-new-user-bmi/
-      Description: The lambda function that gets triggered off user-table DynamoDB streams which then computes the BMI and updates the user-table with BMI
-      FunctionName: add-new-user-bmi
-      MemorySize: 512
-      Timeout: 5 
 
 Outputs:
   DBClusterId:

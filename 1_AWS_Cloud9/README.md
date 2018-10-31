@@ -11,7 +11,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 > Follow the steps described [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html) to create a new IAM user with administrative privileges.
 
-> For the purpose of this workshop, its ok to use the user with adminstrative privileges. Please consider restrictive access/least privilege approach when running in production.
+> For the purpose of this workshop, we are using an user with adminstrative privileges. Please consider restrictive access/least privilege approach when running in production.
 
 2. Please choose either `us-east-2 / US East (Ohio) Region`
    or `us-west-2 / US West (Oregon) Region`
