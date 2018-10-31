@@ -1,4 +1,10 @@
-﻿type Activity {
+﻿schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type Activity {
   caloriesConsumed: Int!
   category: String!
   creationDateTime: String!
@@ -43,44 +49,34 @@ type Query {
   getUser(id: ID!): User
   getUserAggregate(date: String!, userid: String!): UserAggregate
   listActivities(filter: TableActivityFilterInput, limit: Int, nextToken: String): ActivityConnection
-  listActivitiesOrdered(userid: String!, limit: Int, nextToken: String): ActivityConnection
+  listActivitiesOrdered(limit: Int, nextToken: String, userid: String!): ActivityConnection
   listActivityCategories(filter: TableActivityCategoryFilterInput, limit: Int, nextToken: String): ActivityCategoryConnection
   listUserAggregates(filter: TableUserAggregateFilterInput, limit: Int, nextToken: String): UserAggregateConnection
   listUsers(filter: TableUserFilterInput, limit: Int, nextToken: String): UserConnection
+  suggestedFood(bmi: Float, calorie: Float, sugar: Float, userid: String!): [Activity]
 }
 
 type Subscription {
-  onCreateActivity(caloriesConsumed: Int, id: String, userid: String): Activity
-    @aws_subscribe(mutations:["createActivity"])
-  onCreateActivityCategory(category: String, type: [String]): ActivityCategory
-    @aws_subscribe(mutations:["createActivityCategory"])
-  onCreateUser(caloriesTargetPerDay: Int, height: Float, id: ID, username: String, weight: Float): User
-    @aws_subscribe(mutations:["createUser"])
-  onCreateUserAggregate(caloriesBurned: Int, caloriesConsumed: Int, date: String, userid: String): UserAggregate
-    @aws_subscribe(mutations:["createUserAggregate"])
-  onDeleteActivity(caloriesConsumed: Int, id: String, userid: String): Activity
-    @aws_subscribe(mutations:["deleteActivity"])
-  onDeleteActivityCategory(category: String, type: [String]): ActivityCategory
-    @aws_subscribe(mutations:["deleteActivityCategory"])
-  onDeleteUser(caloriesTargetPerDay: Int, height: Float, id: ID, username: String, weight: Float): User
-    @aws_subscribe(mutations:["deleteUser"])
-  onDeleteUserAggregate(caloriesBurned: Int, caloriesConsumed: Int, date: String, userid: String): UserAggregate
-    @aws_subscribe(mutations:["deleteUserAggregate"])
-  onUpdateActivity(caloriesConsumed: Int, id: String, userid: String): Activity
-    @aws_subscribe(mutations:["updateActivity"])
-  onUpdateActivityCategory(category: String, type: [String]): ActivityCategory
-    @aws_subscribe(mutations:["updateActivityCategory"])
-  onUpdateUser(caloriesTargetPerDay: Int, height: Float, id: ID, username: String, weight: Float): User
-    @aws_subscribe(mutations:["updateUser"])
-  onUpdateUserAggregate(caloriesBurned: Int, caloriesConsumed: Int, date: String, userid: String): UserAggregate
-    @aws_subscribe(mutations:["updateUserAggregate"])
+  onCreateActivity(caloriesConsumed: Int, id: String, userid: String): Activity @aws_subscribe(mutations : ["createActivity"])
+  onCreateActivityCategory(category: String, type: [String]): ActivityCategory @aws_subscribe(mutations : ["createActivityCategory"])
+  onCreateUser(caloriesTargetPerDay: Int, height: Float, id: ID, username: String, weight: Float): User @aws_subscribe(mutations : ["createUser"])
+  onCreateUserAggregate(caloriesBurned: Int, caloriesConsumed: Int, date: String, userid: String): UserAggregate @aws_subscribe(mutations : ["createUserAggregate"])
+  onDeleteActivity(caloriesConsumed: Int, id: String, userid: String): Activity @aws_subscribe(mutations : ["deleteActivity"])
+  onDeleteActivityCategory(category: String, type: [String]): ActivityCategory @aws_subscribe(mutations : ["deleteActivityCategory"])
+  onDeleteUser(caloriesTargetPerDay: Int, height: Float, id: ID, username: String, weight: Float): User @aws_subscribe(mutations : ["deleteUser"])
+  onDeleteUserAggregate(caloriesBurned: Int, caloriesConsumed: Int, date: String, userid: String): UserAggregate @aws_subscribe(mutations : ["deleteUserAggregate"])
+  onUpdateActivity(caloriesConsumed: Int, id: String, userid: String): Activity @aws_subscribe(mutations : ["updateActivity"])
+  onUpdateActivityCategory(category: String, type: [String]): ActivityCategory @aws_subscribe(mutations : ["updateActivityCategory"])
+  onUpdateUser(caloriesTargetPerDay: Int, height: Float, id: ID, username: String, weight: Float): User @aws_subscribe(mutations : ["updateUser"])
+  onUpdateUserAggregate(caloriesBurned: Int, caloriesConsumed: Int, date: String, userid: String): UserAggregate @aws_subscribe(mutations : ["updateUserAggregate"])
 }
 
 type User {
+  bmi: Float
   caloriesConsumed: Int
   caloriesTargetPerDay: Int!
   height: Float!
-  id: ID!
+  id: String!
   username: String!
   weight: Float!
 }
@@ -125,6 +121,7 @@ input CreateUserInput {
   caloriesConsumed: Int
   caloriesTargetPerDay: Int!
   height: Float!
+  id: String
   username: String!
   weight: Float!
 }
