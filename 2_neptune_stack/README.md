@@ -20,11 +20,7 @@ Steps:
 
 Use the following link to deploy the stack. 
 
-
-<a href="https://us-east-2.console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=WorkSpacesCostOptimizer&amp;templateURL=https:%2F%2Fs3.us-east-2.amazonaws.com%2Freinvent-appsync-workshop-ohio%2F2_neptune_stack%2Ftemplates%2Fmain.yaml" target="_blank">Use this</a>
-
-<a href="https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://s3-eu-west-1.amazonaws.com/peerjako-workshops/ml-id/lab1-cloudformation.yaml&stackName=[Your-Initials]-ml-lab1" target="_blank">Use this link</a> to initialize a CloudFormation Create Stack page.
-
+[Use this](https://us-east-2.console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=Test&templateURL=https://s3.us-east-2.amazonaws.com/reinvent-appsync-workshop-ohio/2_neptune_stack/templates/main.yaml)
 
 
 https://s3.us-east-2.amazonaws.com/reinvent-appsync-workshop-ohio/2_neptune_stack/templates/main.yaml
