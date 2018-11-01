@@ -49,13 +49,10 @@ git clone ssh://git.amazon.com/pkg/Jupitera-calorie-tracker -b draft
 
 - Run the following command in the Cloud9 terminal. Please make sure you provide `a bucket name` and `region`.
 
-Please use one of the following regions
-
-   - us-east-2 / US East (Ohio) Region
-   - us-west-2 / US West (Oregon) Region
+Please create the bucket in `us-east-2 / US East (Ohio)` Region
 
 ```
-aws s3api create-bucket --bucket <provide-an-unique-bucket-name> --region <region>
+aws s3api create-bucket --bucket <provide-an-unique-bucket-name> --region us-east-2
 ```
 
 - Copy the `datasets` folder under `2_neptune_stack` into your newly created S3 bucket.
