@@ -1,0 +1,17 @@
+projects:
+  Calorie Tracker App:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        graphQLApiId: 3k7tukrfundx5gd436bbhxitrm
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: src/graphql
+        region: us-west-2
+      endpoints:
+        prod: >-
+          https://a22ywilewrfzlpomedak2n6jgy.appsync-api.us-west-2.amazonaws.com/graphql

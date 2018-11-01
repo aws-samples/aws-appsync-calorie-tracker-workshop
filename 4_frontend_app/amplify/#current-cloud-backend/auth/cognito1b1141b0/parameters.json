@@ -1,0 +1,49 @@
+{
+    "userPoolName": "myapp1b1141b0_userpool_1b1141b0",
+    "autoVerifiedAttributes": [
+        "email"
+    ],
+    "mfaConfiguration": "OFF",
+    "mfaTypes": [
+        "SMS Text Message"
+    ],
+    "roleName": "cognito1b1141b0_sns-role",
+    "roleExternalId": "cognito1b1141b0_role_external_id",
+    "policyName": "cognito1b1141b0-sns-policy",
+    "smsAuthenticationMessage": "Your authentication code is {####}",
+    "smsVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Your verification code",
+    "emailVerificationMessage": "Your verification code is {####}",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [
+        "Requires Lowercase",
+        "Requires Uppercase",
+        "Requires Numbers",
+        "Requires Symbols"
+    ],
+    "requiredAttributes": [
+        "email"
+    ],
+    "userpoolClientName": "cognito1b1141b0_app_client",
+    "userpoolClientGenerateSecret": true,
+    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientReadAttributes": [
+        "email"
+    ],
+    "mfaLambdaRole": "cognito1b1141b0_totp_lambda_role",
+    "mfaLambdaLogPolicy": "cognito1b1141b0_totp_lambda_log_policy",
+    "mfaPassRolePolicy": "cognito1b1141b0_totp_pass_role_policy",
+    "mfaLambdaIAMPolicy": "cognito1b1141b0_totp_lambda_iam_policy",
+    "userpoolClientLambdaRole": "cognito1b1141b0_userpoolclient_lambda_role",
+    "userpoolClientLogPolicy": "cognito1b1141b0_userpoolclient_lambda_log_policy",
+    "userpoolClientLambdaPolicy": "cognito1b1141b0_userpoolclient_lambda_iam_policy",
+    "userpoolClientSetAttributes": false,
+    "useDefault": "manual",
+    "authSelections": "userPoolOnly",
+    "resourceName": "cognito1b1141b0",
+    "unAuthRoleName": "myapp-20181017163016-unauthRole",
+    "authRoleName": "myapp-20181017163016-authRole",
+    "unAuthRoleArn": "arn:aws:iam::372707623367:role/myapp-20181017163016-unauthRole",
+    "authRoleArn": "arn:aws:iam::372707623367:role/myapp-20181017163016-authRole"
+}
