@@ -165,7 +165,7 @@ g.V().count()
 Returns the list of users whose BMI < 24
 
 ```
-g.V().has('BMI',lte(24)) 
+g.V().has('bmi',lte(24)) 
 ```
 
 ----
