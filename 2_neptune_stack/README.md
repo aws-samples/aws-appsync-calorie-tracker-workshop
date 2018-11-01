@@ -1,5 +1,7 @@
 # Deploying Amazon Neptune Cluster
 
+
+
 In order to ease the workshop we have created a CloudFormation Stack that deploys the following assets:
 
 - Amazon Neptune Cluster within a VPC in a private subnet.
