@@ -20,6 +20,11 @@ Steps:
 
 Use the following link to deploy the stack. 
 
+
+<a href="https://us-east-2.console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=WorkSpacesCostOptimizer&amp;templateURL=https:%2F%2Fs3.us-east-2.amazonaws.com%2Freinvent-appsync-workshop-ohio%2F2_neptune_stack%2Ftemplates%2Fmain.yaml" target="_blank">Use this</a>
+
+
+
 https://s3.us-east-2.amazonaws.com/reinvent-appsync-workshop-ohio/2_neptune_stack/templates/main.yaml
 
 ![CFN](../images/input_cfn.png)
@@ -83,6 +88,8 @@ Before loading the above datasets from S3, we need to create a Amazon S3 VPC End
 5. Choose the VPC that contains your Neptune DB instance.
 
 6. Select the check box next to the route tables that are associated with the subnets related to your cluster. If you only have one route table, you must select that box.
+
+![VPCE](../images/VPCE.png)
 
 7. Under `Policy`, copy the following
 
