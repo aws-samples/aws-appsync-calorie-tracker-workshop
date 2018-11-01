@@ -50,6 +50,6 @@ Default region name [None]: `Enter the region that you are using`
 Default output format [None]:
 ```
 
-[Next section - Setting up Amazon Neptune Cluster](../2_neptune_stack/README.md)
+Congratulations on setting up your AWS Cloud9 environment. In the next section, you will be [setting up Amazon Neptune Cluster](../2_neptune_stack/README.md)
 
-[Back to home page](../README.md)
+Click if you want to go [back to the home page](../README.md)

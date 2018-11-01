@@ -28,6 +28,7 @@ This workshop requires:
 - An active AWS Account with administrative permissions.
 - If you are using your own laptop, you should have [npm](https://docs.npmjs.com/getting-started/installing-node) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed.
 - Knowledge of Javascript/ NodeJS will be an added advantage.
+- Knowledge of Amazon DynamoDB, AWS Lambda and Amazon Cognito will be an added advantage.
 
 
 ## Steps:

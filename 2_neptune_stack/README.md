@@ -22,17 +22,24 @@ Use the following link to deploy the stack.
 
 https://s3.us-east-2.amazonaws.com/reinvent-appsync-workshop-ohio/2_neptune_stack/templates/main.yaml
 
+![CFN](../images/input_cfn.png)
+
+- Provide the stack name
+- Specify the SSH keyPair name. If you do not have one, please [create a KeyPair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) from within EC2 console.
+
 Verify if the Cloudformation stack has been successfully deployed.
 
 ## 1.2. Git Clone the project
 
-In Cloud9 terminal, please run the following:
+In Cloud9 terminal, please clone the github repo:
 
 ``` 
-git clone <github url>
+git clone ssh://git.amazon.com/pkg/Jupitera-calorie-tracker -b draft
 ```
 
-TODO: Folder structure
+> Internal Note: the above github link will be replaced with public github repo
+
+![Folder Structure](../images/C9_folder_structure.png)
 
 -----
 
@@ -49,12 +56,13 @@ Please use one of the following regions
 aws s3api create-bucket --bucket <provide-an-unique-bucket-name> --region <region>
 ```
 
-- Copy the `datasets` folder to newly created S3 bucket.
+- Copy the `datasets` folder under `2_neptune_stack` into your newly created S3 bucket.
+
+![Datasets](../images/dataset_folder.png)
 
 ```
-aws s3 cp 2_neptune_stack/datasets/ s3://<bucket>/ --recursive
+aws s3 cp 2_neptune_stack/datasets/ s3://<your-bucket-name>/ --recursive
 ```
-
 ------
 
 ## 1.4. Creating Amazon S3 VPC Endpoint
@@ -107,14 +115,14 @@ The datasets that needs to be loaded into Amazon Neptune are available under the
 
 `food_edges.txt` contains the gremlin queries that creates the edges/relationships between the vertices.
 
-Step 1: SSH into the EC2 client and type the following:
+Step 1: SSH into the EC2 instance and type the following:
 
 ```
 curl -X POST \
     -H 'Content-Type: application/json' \
-    http://your-neptune-endpoint:8182/loader -d '
+    <http://your-neptune-endpoint:8182/loader> -d '
     { 
-      "source" : "s3://your-s3-bucket/vertex.csv, 
+      "source" : "s3://<your-bucket-name>/vertex.csv, 
       "iamRoleArn" : "arn:aws:iam::account-id:role/role-name",
       "format" : "csv", 
       "region" : "<region>", 
@@ -122,7 +130,9 @@ curl -X POST \
     }'
 ```
 
-> Replace the neptune loader endpoint, source S3 and IAM Role ARN. Get all these values from CFN outputs.
+> Replace the `neptune loader endpoint`, `source S3` and `IAM Role ARN`. You can find these from CFN outputs.
+
+![Outputs](../images/cfn_outputs.png)
 
 You can check the status of your load with the following command:
 
