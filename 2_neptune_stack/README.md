@@ -138,6 +138,7 @@ curl -X POST \
 
 ![Outputs](../images/cfn_outputs.png)
 
+---
 You can check the status of your load with the following command:
 
 ```
