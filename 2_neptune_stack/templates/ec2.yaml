@@ -3,7 +3,7 @@ Parameters:
   EC2ClientInstanceType:
     Description: EC2 client instance
     Type: String
-    Default: r4.2xlarge
+    Default: t2.medium
     AllowedValues:
       - t2.micro
       - t2.small

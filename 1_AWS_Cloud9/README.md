@@ -11,14 +11,14 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 > Follow the steps described [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html) to create a new IAM user with administrative privileges.
 
-> For the purpose of this workshop, we are using an user with adminstrative privileges. Please consider restrictive access/least privilege approach when running in production.
+> For the purpose of this workshop, we are using an user with adminstrative privileges. Please consider restrictive access/least privilege permissions when running in production.
 
-2. Please choose either `us-east-2 / US East (Ohio) Region`
-   or `us-west-2 / US West (Oregon) Region`
+2. Please choose either `us-east-2 US East (Ohio) Region`
+   or `us-west-2 US West (Oregon) Region`
 
 3. Click `Create Environment`
 
-> ![Create Env](../images/create_env.png)
+> ![Create Env](../images/image-root-login.png)
 
 4. Name - `reinvent_appsync_workshop` and Click Next Step
 
@@ -50,6 +50,6 @@ Default region name [None]: `Enter the region that you are using`
 Default output format [None]:
 ```
 
-Congratulations on setting up your AWS Cloud9 environment. In the next section, you will be [setting up Amazon Neptune Cluster](../2_neptune_stack/README.md)
+Congratulations!!!. You have completed setting up your AWS Cloud9 environment. In the next section, you will be [setting up Amazon Neptune Cluster](../2_neptune_stack/README.md)
 
-Click if you want to go [back to the home page](../README.md)
+[Go back to the home page](../README.md)
