@@ -37,9 +37,9 @@ us-east-2 | [![Launch](../images/cloudformation-launch-stack-button.png)](https:
 
 Go to Cloud9 terminal, please clone the github repo:
 
-> Internal Note: the above github link will be replaced with public github repo
+> Internal Note: the public github link will be updated later
 
-Either clone this project locally
+Either clone this project locally on your laptop
 
 ``` 
 git clone ssh://git.amazon.com/pkg/Jupitera-calorie-tracker -b draft
@@ -48,6 +48,8 @@ git clone ssh://git.amazon.com/pkg/Jupitera-calorie-tracker -b draft
 OR
 
 copy the following S3 zip into your Cloud9 environment and unzip it.
+
+https://s3-us-west-2.amazonaws.com/calorie-test/aws-appsync-calorie-tracker-workshop.zip
 
 
 ![Folder Structure](../images/C9_folder_structure.png)
