@@ -259,7 +259,9 @@ g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(
 - Test the lambda function which should return a list of suggested food based on the given BMI
 
 
-Congratulations. You have successfully created an Amazon Neptune Cluster, loaded the given dataset from S3 using Amazon S3 VPC endpoint, run Gremlin queries and have tested the foodSuggestor lambda function.
+---
+
+Congratulations!!!  You have successfully completed creating an Amazon Neptune Cluster, loaded the given dataset from S3 using Amazon S3 VPC endpoint, run Gremlin queries and have tested the foodSuggestor lambda function.
 
 Next, we will be setting up the [Amazon AppSync](../3_appsync_stack/README.md)
 
