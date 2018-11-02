@@ -65,16 +65,13 @@ In case you are using the Cloud9 terminal, paste the following command to create
 aws s3api create-bucket --bucket <provide-an-unique-bucket-name> --region us-east-2
 ```
 
-<details>
-<summary><strong>
 In case you run into any error creating an S3 bucket via s3api (expand for details)
-</strong></summary>
+
 
 ```
 aws s3api create-bucket --bucket <bucket-name> --region us-east-2 --create-bucket-configuration LocationConstraint=us-east-2 { "Location": "http://<bucket-name>.s3.amazonaws.com/" }
 ```
 
-</details>
 
 - Copy the `datasets` folder under `2_neptune_stack` into your newly created S3 bucket.
 
@@ -216,19 +213,12 @@ gremlin> g.E().limit(5)
 ==>e[22b368d5-b6c3-74f7-04d0-b24bbaa54dfb][Dinner-eats->98b368d5-b6c0-3903-407a-f84d3f243720]
 ```
 
-<details>
-<summary><strong>
-Can you write a gremlin query to get the names of food consumed by one of the user/person say userid=83744 (expand for details)
-</strong></summary>
-<p>
+Can you write a gremlin query to get the names of food consumed by one of the user/person say userid=83744
 
 ```
 gremlin> g.V("83744").out('has').out('eats').values('name')
 ==> Sandwiches combined with Coffee, tea with: milk, cream, sugar
 ```
-</details>
-</p>
-
 
 ----
 
