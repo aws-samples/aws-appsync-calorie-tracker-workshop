@@ -22,7 +22,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 4. Name - `reinvent_appsync_workshop` and Click Next Step
 
-5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **t2.micro**. Keep the rest of the settings default, `Next Step` and click `create environment`. It will take few minutes to create your environment.
+5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **m4.large**. Keep the rest of the settings default, `Next Step` and click `create environment`. It will take few minutes to create your environment.
 
 6. Once your environment is ready, you will see the following screen. The bottom half of your window, you can see the Cloud9 terminal.
 
