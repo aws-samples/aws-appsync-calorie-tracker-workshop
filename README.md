@@ -35,6 +35,6 @@ This workshop requires:
 1. [Setting up AWS Cloud 9](./1_AWS_Cloud9/README.md)
 2. [Setting up Amazon Neptune Cluster](./2_neptune_stack/README.md)
 3. [Setting up AWS AppSync](./3_appsync_stack/README.md)
-4. [Setting up the front end](./4_frontend/README.md)
+4. [Setting up the front end](./4_frontend_app/README.md)
 5. [Bonus Round - Optional](./5_bonus_round/README.md)
 6. [Closing and Clean up](./6_closing_and_clean_up/README.md)

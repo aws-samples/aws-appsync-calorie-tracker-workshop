@@ -16,7 +16,7 @@ $ git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop 
 Repository will be downloaded into `calorie-tracker/` folder. CD into the folder and install dependencies:
 
 ``` bash
-$ cd aws-appsync-calorie-tracker-workshop && npm install
+$ cd aws-appsync-calorie-tracker-workshop/4_frontend_app/ && npm install
 ```
 
 ### 2. Install dependencies and AWS Amplify
@@ -70,7 +70,7 @@ Choose the 'No, I will set up my own configuration' option, and then 'User Sign-
 
 The end result should look something like this:
 
-![Screenshot-3](static/readme-3.png)
+![Screenshot-3](../images/readme-3.png)
 
 Once done, the Amplify client-side library is configured to point all Auth API requests to the Cognito Pool we've just created.
 
@@ -84,7 +84,7 @@ $ amplify push auth
 
 The Cloudformation template will take about a minute or two to run, and once done the app should be able to authenticate and register new users!
 
-![Screenshot-4](static/readme-4.png)
+![Screenshot-4](../images/readme-4.png)
 
 Pop over to the AWS Console if you'd like to take a better look at the newly created Cognito User Pool. 
 
@@ -95,11 +95,11 @@ In the last stage we added Cognito Authentication to our app. The next step woul
 
 Start by logging into the [AWS AppSync Console](https://us-west-2.console.aws.amazon.com/appsync/home) and scroll to the `"Integrate Your App"` section and choosing the JavaScript option, then copy the codegen code snippet.
 
-![Screenshot-5](static/readme-5.png)
+![Screenshot-5](../images/readme-5.png)
 
 Click through the onscreen options:
 
-![Screenshot-6](static/readme-6.png)
+![Screenshot-6](../images/readme-6.png)
 
 Viola! Amplify just fetched all avaliable queries, mutations ans subscriptions from our AppSync Schema and generated their respective code snippets in the `src/graphql` folder. Browse to this folder with your favourite IDE, we'll need to add 2 queries that Amplify did not generate.
 
@@ -160,11 +160,11 @@ $ npm start
 
 After Webpack is done arranging the compiling all of the App's assests, you should be seeing the following message:
 
-![Screenshot-7](static/readme-7.png)
+![Screenshot-7](../images/readme-7.png)
 
 If you've chosen your local machine as your development box, simply browse to `https://localhost:8080` and have a look through the app. Since we're building a mobile app, we would recommend using your browser's development toolbar to mimic an actual iPhone 6 device screen:
 
-![Screenshot-8](static/readme-8.png)
+![Screenshot-8](../images/readme-8.png)
 
 If you're presented with the login screen, we're good to go! 
 
@@ -189,7 +189,12 @@ Once you're ready, run the `$ amplify publish` command. Amplify will then build 
 
 You should see something similar to this message once done:
 
-![Screenshot-9](static/readme-9.png)
+![Screenshot-9](../images/readme-9.png)
 
 Congrats! The app is now live in production.
+
+Next, [bonus round](../5_bonus_round/README.md)
+
+[Back to home page](../README.md)
+
 
