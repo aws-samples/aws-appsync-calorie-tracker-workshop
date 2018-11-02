@@ -145,7 +145,7 @@ Step 1: Go to EC2 console and SSH into the EC2 instance named `Neptune-aws-appsy
 ```
 curl -X POST \
     -H 'Content-Type: application/json' \
-    <http://your-neptune-endpoint:8182/loader> -d '
+    http://your-neptune-endpoint:8182/loader -d '
     { 
       "source" : "s3://<your-bucket-name>/vertex.csv", 
       "iamRoleArn" : "arn:aws:iam::account-id:role/role-name",
@@ -159,7 +159,7 @@ curl -X POST \
 
 ![Outputs](../images/cfn_outputs.png)
 
-![Outputs](../images/image-curl.png)
+![curl](../images/image-curl.png)
 
 ---
 You can check the status of your load with the following command:
@@ -255,7 +255,7 @@ g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(
   "bmi": 24,
   "calorie": 400,
   "sugar": 2,
-  "userid": "239213-321421"
+  "userid": "83740"
 }
 ```
 
