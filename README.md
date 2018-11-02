@@ -1,4 +1,4 @@
-# Building Serverless Calorie tracker application with AWS AppSync
+# Building Serverless Calorie tracker application with AWS AppSync and Amazon Neptune
 
 ## Overview 
 

@@ -1,12 +1,14 @@
 # Create DynamoDB tables and AppSync backend
 
-In this section, we will create the backend for our application. We will use AWS DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
+In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
 To simplify the process, we will use AWS CloudFormation templates to create resources for our application backend.
 
 ### Step 1: Create DynamoDB Tables and Lambda function
 
-In this step, we will create 4 dyanmoDB tables and a Lambda function using CloudFormation template. DynamoDB tables are used to store user information and Lambda function is used to aggregate the user calories based on the user activities and update it in User Aggregate table. If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
+In this step, we will create 4 DynamoDB tables and a Lambda function using CloudFormation template. 
+
+DynamoDB tables are used to store user information and Lambda function is used to aggregate the user calories based on the user activities and update it in User Aggregate table. If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
 
 The Lambda function will be executed every time user logs an activity in the app, using User activity DynamoDB stream.
 
@@ -139,6 +141,13 @@ We will configure query, mutation and subscription resolvers in this step. Befor
 
   ![AppSync resolvers](images/appsync-resolvers.jpg)
 
+---
+#### Add Amazon DynamoDB (user-table) as Event Source for `add-new-user-bmi` Lambda
+
+  ![BMI Lambda](../images/image-add-bmi-lambda.png)
+  ![BMI Lambda](../images/image-configure-trigger.png)
+---
+
 ## Summary
 You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
 
@@ -146,9 +155,6 @@ AppSync is setup to use DynamoDB tables as data sources to persist user informat
 
 Lambda function is subscribed to DynamoDB streams and is setup to be triggered every time user add or delete an activity.
 
-## License Summary
-This sample code is made available under a modified MIT license. See the LICENSE file.
-
-[Proceed to next section - Setting up the frontend application](../4_frontend/README.md)
+[Proceed to next section - Setting up the frontend application](../4_frontend_app/README.md)
 
 [Back to home page](../README.md)
