@@ -155,11 +155,11 @@ curl -X POST \
     }'
 ```
 
+![curl](../images/image-curl.png)
+
 > Replace the `neptune loader endpoint`, `source S3` and `IAM Role ARN`. You can find these from CFN outputs.
 
 ![Outputs](../images/cfn_outputs.png)
-
-![curl](../images/image-curl.png)
 
 ---
 You can check the status of your load with the following command:
@@ -220,13 +220,14 @@ gremlin> g.E().limit(5)
 <summary><strong>
 Can you write a gremlin query to get the names of food consumed by one of the user/person say userid=83744 (expand for details)
 </strong></summary>
+<p>
 
 ```
 gremlin> g.V("83744").out('has').out('eats').values('name')
 ==> Sandwiches combined with Coffee, tea with: milk, cream, sugar
 ```
-
 </details>
+</p>
 
 
 ----
