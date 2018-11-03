@@ -30,7 +30,6 @@ This workshop requires:
 - Knowledge of Javascript/ NodeJS will be an added advantage.
 - Knowledge of Amazon DynamoDB, AWS Lambda and Amazon Cognito will be an added advantage.
 
-
 ## Steps:
 0. [Deploying Amazon Neptune Cluster](./0_NEPTUNE/README.md)
 1. [Setting up AWS Cloud 9](./1_AWS_Cloud9/README.md)
