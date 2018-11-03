@@ -30,4 +30,11 @@ This workshop requires:
 - Knowledge of Javascript/ NodeJS will be an added advantage.
 - Knowledge of Amazon DynamoDB, AWS Lambda and Amazon Cognito will be an added advantage.
 
-
+## Steps:
+0. [Deploying Amazon Neptune Cluster](./0_NEPTUNE/README.md)
+1. [Setting up AWS Cloud 9](./1_AWS_Cloud9/README.md)
+2. [Loading dataset into Neptune Cluster](./2_LOAD_DATA/README.md)
+3. [AWS AppSync - GraphQL](./3_APPSYNC/README.md)
+4. [Setting up frontend - Vuejs application](./4_FRONTEND_APP/README.md)
+5. [Bonus Round - Optional](./5_BONUS_OPTIONAL/README.md)
+6. [Closing and Clean up](./6_CLEANUP/README.md)
