@@ -1,0 +1,280 @@
+Description: re:Invent 2018 - workshop - Template to create Neptune EC2 Client with gremlin and rdf4j console
+Parameters:
+  EC2ClientInstanceType:
+    Description: EC2 instance with Gremlin and Sparql clients installed. We will be using Gremlin traversal language to query the graph.
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - m4.large
+  WorkshopName:
+    Type: String
+    Default: reinvent-calorie-tracker
+  NeptuneInstanceClass:
+    Type: String
+    Default: db.r4.large
+  EC2SSHKeyPairName:
+    Description: >-
+      Name of an existing EC2 KeyPair to enable SSH access to the instances.
+      Required Input
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: Must be the name of an existing EC2 KeyPair in same region.
+  AttachBulkloadIAMRoleToNeptuneClusterCondition:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+  SetupGremlinConsoleCondition:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+  NeptuneEC2ClientExtraSG:
+    Description: Neptune EC2 client custom SG
+    Type: String
+    Default: ''
+  PublicSubnet:
+    Description: Valid Subnet
+    Type: 'AWS::EC2::Subnet::Id'
+    ConstraintDescription: Must be the name of an existing Subnet in same region.
+  NeptuneLoadFromS3IAMRoleArn:
+    Description: Neptune Load From S3 IAM Role Arn
+    Type: String
+  NeptuneDBCluster:
+    Description: Neptune DB Cluster Identifier
+    Type: String
+  NeptuneDBClusterEndpoint:
+    Description: Neptune DB Cluster Endpoint
+    Type: String
+  NeptuneDBClusterPort:
+    Description: Neptune DB Cluster Port
+    Type: String
+  NeptuneSG:
+    Description: Neptune Security Group
+    Type: String
+  NeptuneEC2InstanceProfile:
+    Description: 'Neptune EC2 Instance Profile '
+    Type: String
+  VPC:
+    Description: Valid VPCId
+    Type: 'AWS::EC2::VPC::Id'
+    ConstraintDescription: Must be the name of an existing VPC in same region.
+  SetupGremlinConsole:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Setup Gremlin console.
+  SetupRDF4JConsole:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Setup RDF4J console.
+  AttachBulkloadIAMRoleToNeptuneCluster:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Attach Bulkload IAM role to cluster
+Mappings:
+  SubnetConfig:
+    VPC:
+      CIDR: 10.0.0.0/16
+    Public1:
+      CIDR: 10.0.0.0/24
+    Public2:
+      CIDR: 10.0.1.0/24
+    Private1:
+      CIDR: 10.0.2.0/24
+    Private2:
+      CIDR: 10.0.3.0/24
+    Lambda1:
+      CIDR: 10.0.4.0/24
+    Lambda2:
+      CIDR: 10.0.5.0/24
+  RegionMap:
+    us-east-1:
+      AMI: ami-14c5486b
+    us-east-2:
+      AMI: ami-922914f7
+    us-west-2:
+      AMI: ami-e251209a
+    eu-west-1:
+      AMI: ami-ca0135b3
+Conditions:
+  AddExtraSGPresent: !Not 
+    - !Equals 
+      - !Ref NeptuneEC2ClientExtraSG
+      - ''
+  SetupGremlinConsoleCondition: !Equals 
+    - !Ref SetupGremlinConsole
+    - 'true'
+  SetupRDF4JConsoleCondition: !Equals 
+    - !Ref SetupRDF4JConsole
+    - 'true'
+  AttachBulkloadIAMRoleToNeptuneClusterCondition: !Equals 
+    - !Ref AttachBulkloadIAMRoleToNeptuneCluster
+    - 'true'
+Resources:
+  NeptuneEC2ClientInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      KeyName: !Ref EC2SSHKeyPairName
+      InstanceType: !Ref EC2ClientInstanceType
+      ImageId: !FindInMap 
+        - RegionMap
+        - !Ref 'AWS::Region'
+        - AMI
+      IamInstanceProfile: !Ref NeptuneEC2InstanceProfile
+      SubnetId: !Ref PublicSubnet
+      SecurityGroupIds:
+        - !Ref NeptuneSG
+        - !If 
+          - AddExtraSGPresent
+          - !Ref NeptuneEC2ClientExtraSG
+          - !Ref 'AWS::NoValue'
+      Tags:
+        - Key: Name
+          Value: !Sub 'Neptune-${WorkshopName}'
+        - Key: StackId
+          Value: !Sub '${AWS::StackName}'
+        - Key: Stack
+          Value: !Sub '${AWS::Region}-${AWS::StackName}'
+        - Key: Application
+          Value: NeptuneCloudformation
+      UserData: !Base64 
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -xe
+            - 'yum update -y '
+            - |+
+
+            - yum -y install java-1.8.0-devel
+            - |+
+
+            - yum -y remove java-1.7.0-openjdk
+            - |+
+
+            - cur_dir=$PWD
+            - |+
+
+            - cd /home/ec2-user/
+            - |+
+
+            - pip install --upgrade awscli
+            - |+
+
+            - !If 
+              - AttachBulkloadIAMRoleToNeptuneClusterCondition
+              - !Join 
+                - ''
+                - - 'aws neptune add-role-to-db-cluster '
+                  - '--region '
+                  - !Ref 'AWS::Region'
+                  - ' --db-cluster-identifier '
+                  - !Ref NeptuneDBCluster
+                  - ' --role-arn '
+                  - !Ref NeptuneLoadFromS3IAMRoleArn
+                  - |+
+
+              - !Ref 'AWS::NoValue'
+            - |+
+
+            - !If 
+              - SetupGremlinConsoleCondition
+              - !Join 
+                - ''
+                - - >-
+                    wget
+                    https://archive.apache.org/dist/tinkerpop/3.3.2/apache-tinkerpop-gremlin-console-3.3.2-bin.zip
+                  - |+
+
+                  - unzip apache-tinkerpop-gremlin-console-3.3.2-bin.zip
+                  - |+
+
+                  - rm apache-tinkerpop-gremlin-console-3.3.2-bin.zip
+                  - |+
+
+                  - cd apache-tinkerpop-gremlin-console-3.3.2/conf
+                  - |+
+
+                  - 'echo hosts: ['
+                  - !Ref NeptuneDBClusterEndpoint
+                  - '] >> neptune-remote.yaml'
+                  - |+
+
+                  - 'echo port: '
+                  - !Ref NeptuneDBClusterPort
+                  - ' >> neptune-remote.yaml'
+                  - |+
+
+                  - >-
+                    echo serializer: { className:
+                    org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV3d0,
+                    config: { serializeResultToString: true }}
+                  - ' >> neptune-remote.yaml'
+                  - |+
+
+              - !Ref 'AWS::NoValue'
+            - |+
+
+            - |
+              # Send signal to WaitHandle that the setup is completed
+            - /opt/aws/bin/cfn-signal
+            - ' -e 0'
+            - ' '''
+            - !Ref WaitHandle
+            - ''''
+            - |+
+
+    Metadata:
+      'AWS::CloudFormation::Init':
+        config:
+          packages:
+            yum: {}
+  WaitHandle:
+    Type: 'AWS::CloudFormation::WaitConditionHandle'
+  WaitCondition:
+    Type: 'AWS::CloudFormation::WaitCondition'
+    DependsOn: NeptuneEC2ClientInstance
+    Properties:
+      Handle: !Ref WaitHandle
+      Timeout: '1200'
+Outputs:
+  EC2Client:
+    Description: EC2 client Identifier
+    Value: !Ref NeptuneEC2ClientInstance
+  SSHAccess:
+    Description: This is how you gain remote access to the EC2 client.
+    Value: !Join 
+      - ''
+      - - ssh ec2-user@
+        - !GetAtt 
+          - NeptuneEC2ClientInstance
+          - PublicIp
+        - ' -i '
+        - !Ref EC2SSHKeyPairName
+        - .pem
+  EC2SSHTunnelCommand:
+    Description: >-
+      Command to connect to the local web server on the EC2 in VPC, you create
+      an SSH tunnel between your computer and the EC2 node. This is also known
+      as port forwarding.
+    Value: !Join 
+      - ''
+      - - ssh ec2-user@
+        - !GetAtt 
+          - NeptuneEC2ClientInstance
+          - PublicIp
+        - ' -i '
+        - !Ref EC2SSHKeyPairName
+        - '.pem -L localhost:8080:localhost:8080'

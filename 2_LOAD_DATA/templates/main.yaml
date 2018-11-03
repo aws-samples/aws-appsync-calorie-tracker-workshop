@@ -1,0 +1,331 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: re:Invent 2018:workshop Building Serverless applications with Graphql and Graph databases
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: "EC2 Configuration"
+        Parameters:
+          - EC2SSHKeyPairName
+          - EC2ClientInstanceType
+          - WorkshopName
+          - S3BucketName
+      -
+        Label:
+          default: "Other default configurations"
+        Parameters:
+          - AttachBulkloadIAMRoleToNeptuneCluster
+          - NeptuneEC2ClientExtraSG
+          - NeptuneEnableAuditLog
+          - DbInstanceType
+          - NeptuneQueryTimeout
+          - IamAuthEnabled
+          - DBReplicaIdentifierSuffix
+          - SetupGremlinConsole
+          - SetupRDF4JConsole
+Parameters:
+  EC2ClientInstanceType:
+    Description: EC2 instance with Gremlin and Sparql clients installed. We will be using Gremlin traversal language to query the graph.
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - m4.large
+  WorkshopName:
+    Type: String
+    Default: reinvent-calorie-tracker
+    Description: The name that you provide here would be used to create the AWS resource with that name.
+  S3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: S3 bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
+    Description: "S3 bucket where all the templates, assets and other artifacts are \
+      \ stored. The bucket name can include numbers, lowercase letters, uppercase \
+      \ letters, and hyphens, but should not start or end with a hyphen."
+    Type: String
+    Default: reinvent-cal-tracker-your-initials
+  EC2SSHKeyPairName:
+    Description: >-
+      Required!! Name of an existing EC2 KeyPair to enable SSH access to the instances.
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: Must be the name of an existing EC2 KeyPair in same region.
+  AttachBulkloadIAMRoleToNeptuneCluster:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Attach Bulkload IAM role to cluster
+  NeptuneEC2ClientExtraSG:
+    Description: Neptune EC2 client custom SG
+    Type: String
+    Default: ''
+  NeptuneEnableAuditLog:
+    Type: Number
+    Default: 1
+    AllowedValues:
+      - 0
+      - 1
+    Description: Enable Audit Log. 0 means disable and 1 means enable.
+  DbInstanceType:
+    Description: Neptune DB instance type
+    Type: String
+    Default: db.r4.xlarge
+    AllowedValues:
+      - db.r4.large
+      - db.r4.xlarge
+      - db.r4.2xlarge
+      - db.r4.4xlarge
+      - db.r4.8xlarge
+    ConstraintDescription: Must be a valid Neptune instance type.
+  NeptuneQueryTimeout:
+    Type: Number
+    Default: 20000
+    Description: Neptune Query Time out (in milliseconds)
+  IamAuthEnabled:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Enable IAM Auth for Neptune.
+  DBReplicaIdentifierSuffix:
+    Description: >-
+      OPTIONAL: The ID for the Neptune Replica to use. Empty means no read
+      replica.
+    Type: String
+    Default: ''
+  SetupGremlinConsole:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Setup Gremlin console.
+  SetupRDF4JConsole:
+    Type: String
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Setup RDF4J console.
+Mappings:
+  SubnetConfig:
+    VPC:
+      CIDR: 10.0.0.0/16
+    Public1:
+      CIDR: 10.0.0.0/24
+    Public2:
+      CIDR: 10.0.1.0/24
+    Private1:
+      CIDR: 10.0.2.0/24
+    Private2:
+      CIDR: 10.0.3.0/24
+    Lambda1:
+      CIDR: 10.0.4.0/24
+    Lambda2:
+      CIDR: 10.0.5.0/24
+  RegionMap:
+    us-east-1:
+      AMI: ami-14c5486b
+    us-east-2:
+      AMI: ami-922914f7
+    us-west-2:
+      AMI: ami-e251209a
+    eu-west-1:
+      AMI: ami-ca0135b3
+Conditions:
+  CreateDBReplicaInstance: !Not 
+    - !Equals 
+      - !Ref DBReplicaIdentifierSuffix
+      - ''
+Globals:
+  Function:
+    Runtime: nodejs8.10
+    Handler: index.handler
+    Environment:
+      Variables: 
+        NEPTUNE_ENDPOINT: !GetAtt NeptuneStack.Outputs.DBClusterEndpoint
+        NEPTUNE_PORT: !GetAtt NeptuneStack.Outputs.DBClusterPort
+
+Resources:
+  S3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Ref S3BucketName
+  NeptuneStack:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/1_NEPTUNE/templates/neptune.yaml'
+      TimeoutInMinutes: '15'
+      Parameters:
+        DBReplicaIdentifierSuffix: !Ref DBReplicaIdentifierSuffix
+        NeptuneInstanceClass: !Ref DbInstanceType
+        NeptuneQueryTimeout: !Ref NeptuneQueryTimeout
+        NeptuneEnableAuditLog: !Ref NeptuneEnableAuditLog
+        IamAuthEnabled: !Ref IamAuthEnabled
+  NeptuneEC2Client:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/1_NEPTUNE/templates/ec2.yaml'
+      TimeoutInMinutes: '30'
+      Parameters:
+        EC2SSHKeyPairName: !Ref EC2SSHKeyPairName
+        EC2ClientInstanceType: !Ref EC2ClientInstanceType
+        SetupGremlinConsole: !Ref SetupGremlinConsole
+        SetupRDF4JConsole: !Ref SetupRDF4JConsole
+        AttachBulkloadIAMRoleToNeptuneCluster: !Ref AttachBulkloadIAMRoleToNeptuneCluster
+        VPC: !GetAtt 
+          - NeptuneStack
+          - Outputs.VPC
+        PublicSubnet: !GetAtt 
+          - NeptuneStack
+          - Outputs.PublicSubnet
+        NeptuneDBCluster: !GetAtt 
+          - NeptuneStack
+          - Outputs.DBClusterId
+        NeptuneDBClusterEndpoint: !GetAtt 
+          - NeptuneStack
+          - Outputs.DBClusterEndpoint
+        NeptuneDBClusterPort: !GetAtt 
+          - NeptuneStack
+          - Outputs.DBClusterPort
+        NeptuneLoadFromS3IAMRoleArn: !GetAtt 
+          - NeptuneStack
+          - Outputs.NeptuneLoadFromS3IAMRoleArn
+        NeptuneSG: !GetAtt 
+          - NeptuneStack
+          - Outputs.NeptuneSG
+        NeptuneEC2InstanceProfile: !GetAtt 
+          - NeptuneStack
+          - Outputs.NeptuneEC2InstanceProfile
+  FoodSuggestor:
+    Type: AWS::Serverless::Function
+    DependsOn: NeptuneStack
+    Properties:
+      CodeUri: s3://reinvent-calorie-tracker-workshop/1_NEPTUNE/functions/source/foodSuggestor/food-suggestor.zip
+      Description: Suggests food based on user BMI
+      FunctionName: suggest-food-for-user
+      MemorySize: 512
+      Timeout: 5
+      VpcConfig:
+        SecurityGroupIds: 
+          - !GetAtt
+            - NeptuneStack
+            - Outputs.LambdaSecurityGroup  
+        SubnetIds:
+          - !GetAtt 
+            - NeptuneStack
+            - Outputs.LambdaSubnet1 
+          - !GetAtt 
+            - NeptuneStack
+            - Outputs.LambdaSubnet2 
+      Policies:
+        - VPCAccessPolicy: {}
+  AddNewUserBMI:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://reinvent-calorie-tracker-workshop/1_NEPTUNE/functions/source/add-new-user-bmi/add-new-user-bmi.zip
+      Description: The lambda gets triggered based off user-table DynamoDB stream and updates the user table with the user BMI
+      FunctionName: add-new-user-bmi
+      MemorySize: 512
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Timeout: 5
+
+Outputs:
+  DBClusterId:
+    Description: Neptune Cluster Identifier
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.DBClusterId
+  DBSubnetGroupId:
+    Description: Neptune DBSubnetGroup Identifier
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.DBSubnetGroupId
+  DBClusterResourceId:
+    Description: Neptune Cluster Resource Identifier
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.DBClusterResourceId
+  DBClusterEndpoint:
+    Description: Master Endpoint for Neptune Cluster
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.DBClusterEndpoint
+  DBInstanceEndpoint:
+    Description: Master Instance Endpoint
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.DBInstanceEndpoint
+  DBReplicaInstanceEndpoint:
+    Description: ReadReplica Instance Endpoint
+    Condition: CreateDBReplicaInstance
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.DBReplicaInstanceEndpoint
+  SparqlEndpoint:
+    Description: Sparql Endpoint for Neptune
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.SparqlEndpoint
+  GremlinEndpoint:
+    Description: Gremlin Endpoint for Neptune
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.GremlinEndpoint
+  LoaderEndpoint:
+    Description: Loader Endpoint for Neptune
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.LoaderEndpoint
+  DBClusterReadEndpoint:
+    Description: DB cluster Read Endpoint
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.DBClusterReadEndpoint
+  DBClusterPort:
+    Description: Port for the Neptune Cluster
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.DBClusterPort
+  NeptuneLoadFromS3IAMRoleArn:
+    Description: IAM Role for loading data in Neptune
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.NeptuneLoadFromS3IAMRoleArn
+  NeptuneIamAuthUser:
+    Description: IAM User for IAM Auth
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.NeptuneIamAuthUser
+  EC2Client:
+    Description: EC2 client Identifier
+    Value: !GetAtt 
+      - NeptuneEC2Client
+      - Outputs.EC2Client
+  SSHAccess:
+    Description: This is how you gain remote access to the EC2 client.
+    Value: !GetAtt 
+      - NeptuneEC2Client
+      - Outputs.SSHAccess
+  VPC:
+    Description: VPC
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.VPC
+  PublicSubnet:
+    Description: PublicSubnet
+    Value: !GetAtt 
+      - NeptuneStack
+      - Outputs.PublicSubnet
+  S3Bucket:
+    Description: URL for the website bucket
+    Value: !Ref S3Bucket
+
