@@ -21,7 +21,7 @@ $ cd aws-appsync-calorie-tracker-workshop/4_frontend_app/ && npm install
 
 ### 2. Install dependencies and AWS Amplify
 
-Now to install and configure[AWS Amplify](https://aws-amplify.github.io/). AWS Amplify includes:
+Now to install and configure [AWS Amplify](https://aws-amplify.github.io/). AWS Amplify includes:
 
 * a JavaScript library with support for React Native and web frameworks including 
 React, Angular, Vue and Ionic

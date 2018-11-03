@@ -1,4 +1,4 @@
-# Create DynamoDB tables and AppSync backend
+# Module 3: Create DynamoDB tables and AppSync backend
 
 In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
@@ -135,7 +135,7 @@ We will configure query, mutation and subscription resolvers in this step. Befor
 - Replace **API_ID** with your API ID, in the command below.
 - Execute the CLI command below. It will launch a CloudFormation stack to configure resolvers.
   ```
-  aws cloudformation create-stack --stack-name resolver-stack --template-body file://templates/appsync-resolvers.yaml --parameters ParameterKey=AppSyncApiId,ParameterValue=3xrxari5hzamrb4vhq4ryms7iu ParameterKey=AppSyncUserTableDataSourceName,ParameterValue=UserTable ParameterKey=AppSyncActivityTableDataSourceName,ParameterValue=ActivityTable ParameterKey=AppSyncActivityCategoryTableDataSourceName,ParameterValue=ActivityCategoryTable ParameterKey=AppSyncUserAggTableDataSourceName,ParameterValue=UserAggregateTable
+  aws cloudformation create-stack --stack-name resolver-stack --template-body file://templates/appsync-resolvers.yaml --parameters ParameterKey=AppSyncApiId,ParameterValue=3rkwiozkr5cxppoaa575hczwoy ParameterKey=AppSyncUserTableDataSourceName,ParameterValue=UserTable ParameterKey=AppSyncActivityTableDataSourceName,ParameterValue=ActivityTable ParameterKey=AppSyncActivityCategoryTableDataSourceName,ParameterValue=ActivityCategoryTable ParameterKey=AppSyncUserAggTableDataSourceName,ParameterValue=UserAggregateTable ParameterKey=AppSyncSuggestedFoodDataSourceName,ParameterValue=suggest-food-for-user --region us-east-2
   ```
 - When the CloudFormation stack is completed successfully, you will have your resolvers configured.
 

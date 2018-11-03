@@ -32,9 +32,10 @@ This workshop requires:
 
 
 ## Steps:
+0. [Deploying Amazon Neptune Cluster](./0_NEPTUNE/README.md)
 1. [Setting up AWS Cloud 9](./1_AWS_Cloud9/README.md)
-2. [Setting up Amazon Neptune Cluster](./2_neptune_stack/README.md)
-3. [Setting up AWS AppSync](./3_appsync_stack/README.md)
-4. [Setting up the front end](./4_frontend_app/README.md)
-5. [Bonus Round - Optional](./5_bonus_round/README.md)
-6. [Closing and Clean up](./6_closing_and_clean_up/README.md)
+2. [Loading dataset into Neptune Cluster](./2_LOAD_DATA/README.md)
+3. [AWS AppSync - GraphQL](./3_APPSYNC/README.md)
+4. [Setting up frontend - Vuejs application](./4_FRONTEND_APP/README.md)
+5. [Bonus Round - Optional](./5_BONUS_OPTIONAL/README.md)
+6. [Closing and Clean up](./6_CLEANUP/README.md)

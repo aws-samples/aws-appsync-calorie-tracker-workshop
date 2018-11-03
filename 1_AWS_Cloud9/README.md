@@ -1,4 +1,4 @@
-# AWS Cloud 9
+# Module 1: Preparing your AWS Cloud 9
 
 AWS Cloud9 is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser.
 
@@ -6,50 +6,58 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 1. Open the [AWS Cloud9 console](https://console.aws.amazon.com/cloud9/)
 
->  If you are prompted with the below screen, type the email address for the AWS account root user, choose Next, type the password for the AWS account root user and then choose Sign In.
-> ![Root User](../images/root_user.png)
-
-> Follow the steps described [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html) to create a new IAM user with administrative privileges.
-
-> For the purpose of this workshop, we are using an user with adminstrative privileges. Please consider restrictive access/least privilege permissions when running in production.
-
-2. Please choose either `us-east-2 US East (Ohio) Region`
-   or `us-west-2 US West (Oregon) Region`
+2. Choose Ireland region. Please ensure you are in the correct AWS region.
+  ![Cloud9 Env](../images/image_c9.png)
 
 3. Click `Create Environment`
 
-> ![Create Env](../images/image-root-login.png)
+4. Name - `reinvent-calorie-tracker-workshop` and Click Next Step
 
-4. Name - `reinvent_appsync_workshop` and Click Next Step
+5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **m4.large**.
+  ![Cloud9 Instance](../images/image-c9-instance.png)
 
-5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **m4.large**. Keep the rest of the settings default, `Next Step` and click `create environment`. It will take few minutes to create your environment.
+6. Clic `Next Step` and click `Create Environment`.
 
-6. Once your environment is ready, you will see the following screen. The bottom half of your window, you can see the Cloud9 terminal.
+7. Once your environment is ready, you will see the following screen. The bottom half of your window, you can see the Cloud9 terminal.
+  ![Cloud9 Env](../images/image-c9-view.png)
 
-  ![Cloud9 Env](../images/cloud9_env.png)
+8. Attach an IAM role to your Cloud9 EC2 instance.
 
-7. Verify the NodeJS version via the Cloud9 terminal.
+> IAM roles for EC2 make it easier for your applications to make API requests securely from an instance because they do not require you to manage AWS security credentials that the applications use.
+
+* Step 8.1. Go to EC2 console. Select the instance named as cloud9. Under `Actions` | `Instance Settings` | Select `Attach or Replace IAM Role`
+  ![Cloud9 Env](../images/image-c9-ec2-instance.png)
+
+* Step 8.2. Choose the role that has `AWSCloud9InstanceProfile` and click `Apply`.
+  ![Cloud9 Env](../images/image-c9-role.png)
+
+9. Go to Cloud9 console and within the terminal windows type the following S3 list command to view the S3 buckets in your region
+```
+aws s3 ls --region eu-west-1
+```
+  ![Cloud9 Env](../images/image-c9-s3.png)
+
+10. Verify the NodeJS version via the Cloud9 terminal.
 
 ```
-node -v
+$ node -v
+v6.14.4
 ```
 
 Update the node.js version, if you are running < 8
 
 ```
-nvm install 8
+$ nvm install 8
+Now using node v8.12.0 (npm v6.4.1)
 ```
 
-8. Set the AWS Credentials. Type `aws configure` in the C9 terminal
+After the upgrade, verify the NodeJS version.
 
 ```
-$ aws configure
-AWS Access Key ID [None]: `Enter the AWS Access Key Id`
-AWS Secret Access Key [None]: `Enter the AWS Secret Key`
-Default region name [None]: `Enter the region that you are using`
-Default output format [None]:
+$ node -v
+v8.12.0
 ```
 
-Congratulations!!!. You have completed setting up your AWS Cloud9 environment. In the next section, you will be [setting up Amazon Neptune Cluster](../2_neptune_stack/README.md)
+Congratulations!!!. You have completed setting up your AWS Cloud9 environment. In the next section, you will [load the given dataset into Amazon Neptune Cluster](../2_LOAD_DATA/README.md)
 
 [Go back to the home page](../README.md)
