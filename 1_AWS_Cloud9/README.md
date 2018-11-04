@@ -57,7 +57,8 @@ After the upgrade, verify the NodeJS version.
 $ node -v
 v8.12.0
 ```
+---
 
-Congratulations!!!. You have completed setting up your AWS Cloud9 environment. In the next section, you will [load the given dataset into Amazon Neptune Cluster](../2_LOAD_DATA/README.md)
+Congratulations!!! You have completed setting up your AWS Cloud9 environment. In the next section, you will [load the given dataset into Amazon Neptune Cluster](../2_LOAD_DATA/README.md)
 
 [Go back to the home page](../README.md)

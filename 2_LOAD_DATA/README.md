@@ -9,7 +9,7 @@ Steps:
 - [1.2. Copy the dataset files to Amazon S3 bucket](#12-Copy-the-dataset-files-to-S3)
 - [1.3. Creating S3 VPC Endpoint](#14-Creating-Amazon-S3-VPC-Endpoint)
 - [1.4. Loading the dataset into Neptune](#15-Loading-the-given-food-dataset-into-Amazon-Neptune)
-- [1.5. FoodSuggestor Lambda function](#15-FoodSuggestor-lambda-function)
+- [1.5. Food-Suggestor Lambda function](#15-Food-Suggestor-lambda-function)
 
 ## 1.1. Cloning the project
 
@@ -57,16 +57,13 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
 
 4. Choose the Service Name `com.amazonaws.region.s3`.
 
-> Note:
->   Please make sure you choose the correct AWS region is correct.
-
 5. Choose the VPC that contains your Neptune DB instance.
 
 6. Select the check box next to the route tables that are associated with the subnets related to your cluster. If you only have one route table, you must select that box.
 
 ![VPCE](../images/image-VPCE.png)
 
-7. Under `Policy`, update the `bucket name` and then copy the following 
+7. Under `Policy`, update the `bucket name` and then copy the following
 
 ```json
 {
@@ -115,11 +112,12 @@ curl -X POST \
     }'
 ```
 
-![curl](../images/image-curl.png)
-
 > Replace the `neptune loader endpoint`, `source S3` and `IAM Role ARN`. You can find these from CFN outputs.
 
 ![Outputs](../images/cfn_outputs.png)
+
+![curl](../images/image-curl.png)
+
 
 ---
 You can check the status of your load with the following command. Ensure the `status` is **LOAD_COMPLETED** as shown in the picture below
@@ -157,7 +155,7 @@ gremlin> g.V().count()
 ==>80
 ```
 
-In case the count is not 80, please make sure `Step 3` under 1.4 is executed correctly.
+> IMPORTANT: In case the count is not 80, please make sure `Step 3` under 1.4 is executed correctly.
 
 Query 2: Returns the list of users whose BMI < 24
 
@@ -190,7 +188,7 @@ gremlin> g.V("83744").out('has').out('eats').values('name')
 
 ----
 
-## 1.5. FoodSuggestor lambda function.
+## 1.5. Food-Suggestor lambda function.
 
 Under AWS lambda, you will find a Lambda function named `suggest-food-for-user
 `. This is essentially running the following gremlin query where:

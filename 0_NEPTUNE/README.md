@@ -31,6 +31,8 @@ Once the stack has been successfully deployed, the cloudformation  will print al
 
 ![Outputs](../images/cfn_outputs.png)
 
+---
+
 Next, we will be setting up the [AWS Cloud9 environment](../1_AWS_Cloud9/README.md)
 
 [Go back to the home page](../README.md)
