@@ -9,7 +9,7 @@ Steps:
 - [1.2. Copy the dataset files to Amazon S3 bucket](#12-Copy-the-dataset-files-to-S3)
 - [1.3. Creating S3 VPC Endpoint](#14-Creating-Amazon-S3-VPC-Endpoint)
 - [1.4. Loading the dataset into Neptune](#15-Loading-the-given-food-dataset-into-Amazon-Neptune)
-- [1.5. FoodSuggestor Lambda function](#16-FoodSuggestor-lambda-function)
+- [1.5. FoodSuggestor Lambda function](#15-FoodSuggestor-lambda-function)
 
 ## 1.1. Cloning the project
 
@@ -192,7 +192,8 @@ gremlin> g.V("83744").out('has').out('eats').values('name')
 
 ## 1.5. FoodSuggestor lambda function.
 
-Under AWS lambda, you will find a Lambda function named `FoodSuggestorFunction`. This is essentially running the following gremlin query where:
+Under AWS lambda, you will find a Lambda function named `suggest-food-for-user
+`. This is essentially running the following gremlin query where:
 
 - gremlin is traversing the vertex with label `person` and has a property `bmi` less than or equal to 24.
 - Get the outgoing traversal with edges as `has` and label it as `food`.

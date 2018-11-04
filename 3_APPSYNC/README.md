@@ -13,25 +13,33 @@ In this step, we will create 4 DynamoDB tables and a Lambda function using Cloud
 - If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
 - The Lambda function will be executed every time user logs an activity in the app, using User activity DynamoDB stream.
 
-Execute following CLI command to create the CloudFormation stack.
+Use the following link to deploy the stack. 
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=[DynamoDB-lambda-stack]&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/dynamodb-lambda.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-appsync&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/dynamodb-lambda.yaml)
 
-```
-aws cloudformation create-stack --stack-name dynamoDBLambdaStack --template-body file://templates/dynamodb-lambda.yaml --parameters ParameterKey=APIName,ParameterValue=caltrack ParameterKey=S3BucketName,ParameterValue=reinvent-2018
-```
+![CFN](../images/image-appsync-cf-inputs.png)
+
+> Leave all Cloudformation inputs as defaults and clic Next and Create the Stack
+
 When the stack creation is completed successfully, you will have following 4 tables and a Lambda function created. You can check the status of your stack from the CloudFormation console.
+
 - caltrack_user_table
 - caltrack_activity_table
 - caltrack_activity_category_table
 - caltrack_user_aggregate_table
 
-Execute following CLI command to load the sample activity categories to be used by the app.
+![DynamoDB Tables](../images/image-dynamodb.png)
+
+![Calories Aggregator function](../images/image-calories-aggregator-lambda.png)
+
+Next, go to AWS Cloud 9 terminal and execute following command from the terminal windows to load the sample activity categories. Please make you are in the correct directory
 ```
-aws dynamodb batch-write-item --request-items file://assets/activity-categories.json
+aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
 ```
+![Calories Aggregator function](../images/image-dynamo-batch-write.png)
+
 
 ### Step 2: Create AppSync API backend
 Now, we will use the DynamoDB tables created in Step 1 to create GraphQL backend. Open the AWS AppSync Console and click **Create API**.
@@ -47,39 +55,48 @@ Enter a name for your API (e.g. '*Calorie Tracker App*') and click **Create**.
 #### 2.1 Setup data sources
 We will be using DynamoDB as our data sources. We will create 4 data sources, one for each DynamoDB table.
 
+![AppSync DS](../images/image-appsync-datasource.png)
+
 **UserTable data source**
 
 On the left pane, select **Data Sources**. Click **New**. Fill the details as provided below and click **Create**.
-- Data source name: *UserTable*
-- Data source type: *Amazon DynamoDB table*
-- Region: *{Region in which you are in}*
-- Table name: *caltrack_user_table*
+- Data source name: **UserTable**
+- Data source type: **Amazon DynamoDB table**
+- Region: **EU-WEST-1**
+- Table name: **caltrack_user_table**
+- Use an Existing Role: **appsync-ddb-source**
 
-![AppSync data source](images/appsync-ds.jpg)
+![AppSync data source](../images/images_appsync_usertable_ds.png)
 
 **ActivityTable data source**
 
 Click **New**. Fill the details as provided below and click **Create**.
-- Data source name: *ActivityTable*
-- Data source type: *Amazon DynamoDB table*
-- Region: *{Region in which you are in}*
-- Table name: *caltrack_activity_table*
+- Data source name: **ActivityTable**
+- Data source type: **Amazon DynamoDB table**
+- Region: **EU-WEST-1**
+- Table name: **caltrack_activity_table**
+- Use an Existing Role: **appsync-ddb-source**
 
 **UserAggregateTable data source**
 
 Click **New**. Fill the details as provided below and click **Create**.
-- Data source name: *UserAggregateTable*
-- Data source type: *Amazon DynamoDB table*
-- Region: *{Region in which you are in}*
-- Table name: *caltrack_user_aggregate_table*
+- Data source name: **UserAggregateTable**
+- Data source type: **Amazon DynamoDB table**
+- Region: **EU-WEST-1**
+- Table name: **caltrack_user_aggregate_table**
+- Use an Existing Role: **appsync-ddb-source**
 
 **ActivityCategoryTable data source**
 
 Click **New**. Fill the details as provided below and click **Create**.
-- Data source name: *ActivityCategoryTable*
-- Data source type: *Amazon DynamoDB table*
-- Region: *{Region in which you are in}*
-- Table name: *caltrack_activity_category_table*
+- Data source name: **ActivityCategoryTable**
+- Data source type: **Amazon DynamoDB table**
+- Region: **EU-WEST-1**
+- Table name: **caltrack_activity_category_table**
+- Use an Existing Role: **appsync-ddb-source**
+
+Once you have create the datasource, you should have 4 Appsync Datasources. 
+![AppSync data source](../images/image-completed-ds.png)
 
 #### 2.2 Setup AppSync Schema
 In this section we will create a GraphQL Schema. In the following first few steps, we will show you how to create type, query and mutations from scratch. But, in the interest of time, we have the GrapphQL schema pre-created for you, which you can directly copy and paste in your schema editor.
@@ -108,7 +125,25 @@ In this section we will create a GraphQL Schema. In the following first few step
   ```
   - The query **getUser** take **ID** as input argument and returns **User** type.
 
-  ##### Create Mutation - createUser
+  Your AppSync Schema should like the below and Click `Save`.
+  ```
+  type User {
+    caloriesConsumed: Int
+    caloriesTargetPerDay: Int!
+    height: Float!
+    id: String!
+    username: String!
+    weight: Float!
+    bmi: Float
+  }
+
+  type Query {
+      getUser(id: ID!): User
+  }
+  ```
+    ![AppSync Schema](../images/image-appsync-schema.png)
+
+  ##### Next, Create Mutation - createUser
     - Now let's create a Mutation type **createUser**. This mutation will be used by our app to store user information.
     - To create **createUser** mutation type, copy the text from below and paste it in your AppSync Schema.
     ```
@@ -128,21 +163,33 @@ In this section we will create a GraphQL Schema. In the following first few step
     - The mutation **createUser** takes **CreateUserInput** as input argument and return **User** type. **CreateUserInput** is an Input type which contains the attributes we want to store for each user.
 
 
-- To save time, we have pre-created the schema. Copy the contents of the **assets/schema.graphql** file, select all in your Schema editor and paste the schema, then lick **Save**.
+- To save time, we have pre-created the schema. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
 
   ![AppSync Schema](images/appsync-schema.jpg)
 
 - At this point, you have your GraphQL schema ready for your app, but we do not have the resolvers configured. In next section, we will configure resolvers for our types.
 
 #### 2.3 Configure resolvers
-We will configure query, mutation and subscription resolvers in this step. Before configuring your resolvers, get your AppSync API Id.
-- On the left page, select **Settings**.
-- Click **Copy** button next to the API ID field.
-- Replace **API_ID** with your API ID, in the command below.
-- Execute the CLI command below. It will launch a CloudFormation stack to configure resolvers.
-  ```
-  aws cloudformation create-stack --stack-name resolver-stack --template-body file://templates/appsync-resolvers.yaml --parameters ParameterKey=AppSyncApiId,ParameterValue=3rkwiozkr5cxppoaa575hczwoy ParameterKey=AppSyncUserTableDataSourceName,ParameterValue=UserTable ParameterKey=AppSyncActivityTableDataSourceName,ParameterValue=ActivityTable ParameterKey=AppSyncActivityCategoryTableDataSourceName,ParameterValue=ActivityCategoryTable ParameterKey=AppSyncUserAggTableDataSourceName,ParameterValue=UserAggregateTable ParameterKey=AppSyncSuggestedFoodDataSourceName,ParameterValue=suggest-food-for-user --region us-east-2
-  ```
+
+> GraphQL resolvers connect the fields in a type's schema to a data source. Resolvers are the mechanism by which requests are fulfilled. Resolvers in AWS AppSync use mapping templates written in Apache Velocity Template Language (VTL) to convert a GraphQL expression into a format the data source can use
+
+We will configure query, mutation and subscription resolvers in this step. 
+
+> Make a note of your AppSync API ID.
+>- On the left page, select **Settings**.
+>- Click **Copy** button next to the API ID field.
+>- Replace **API_ID** with your API ID, in the command below.
+
+  ![AppSync resolvers](../images/image-appsync-api.png)
+
+Use the following link to deploy the stack. 
+
+Region| Launch
+------|-----
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/appsync-resolvers.yaml)
+
+  ![AppSync resolvers](../images/image-resolvers-ds.png)
+
 - When the CloudFormation stack is completed successfully, you will have your resolvers configured.
 
   ![AppSync resolvers](images/appsync-resolvers.jpg)

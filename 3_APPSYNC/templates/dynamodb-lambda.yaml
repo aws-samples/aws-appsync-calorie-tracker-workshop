@@ -17,8 +17,7 @@ Parameters:
       letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
       (-).
     Description: "S3 bucket where all the templates, assets and other artifacts are \
-      \ stored. The bucket name can include numbers, lowercase letters, uppercase \
-      \ letters, and hyphens, but should not start or end with a hyphen."
+      \ stored. DO NOT UPDATE THIS."
     Type: String
     Default: reinvent-calorie-tracker-workshop
 

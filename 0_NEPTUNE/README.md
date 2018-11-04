@@ -6,7 +6,7 @@ In this section, we will create:
 - An IAM Role to load the given dataset from Amazon S3 into Amazon Neptune. Loading data from an Amazon S3 bucket requires an AWS Identity and Access Management (IAM) role that has access to the bucket. Amazon Neptune assumes this role in order to load the data.
 - S3 bucket to copy the given dataset files.
 - An EC2 instance with Gremlin and Sparql clients installed. We will be using Gremlin traversal language to query the graph. 
-- A **suggestFood** lambda function deployed in a VPC that provides food suggestions based on user activities and personal information such as BMI.
+- A **suggest-food-for-user** lambda function deployed in a VPC that provides food suggestions based on user activities and personal information such as BMI.
 
 In order to ease the workshop, we have created a CloudFormation template that deploys the above resources.
 

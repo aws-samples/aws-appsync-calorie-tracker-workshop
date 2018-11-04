@@ -23,13 +23,15 @@ Parameters:
 Resources:
   AggregateCaloriesFunction:
     Properties:
+      FunctionName: calories-aggreator-function
+      Description: The lambda gets triggered based off activity_table DynamoDB stream and updates the user_aggregate_table
       Handler: update-daily-calories.lambda_handler
       Role: !GetAtt 'AggregateCaloriesRole.Arn'
       Runtime: python3.6
       Timeout: 30
       Code:
         S3Bucket: !Sub ${S3BucketName}
-        S3Key: !Sub "functions/packages/updateCalories.zip"
+        S3Key: !Sub "3_APPSYNC/functions/packages/updateCalories.zip"
       Environment:
         Variables:
           USER_CAL_AGG_TABLE: !Ref 'DynamoDBUserCaloriesAggTableName'
@@ -103,4 +105,4 @@ Resources:
         Fn::GetAtt:
           - "AggregateCaloriesFunction"
           - "Arn"
-      StartingPosition: "TRIM_HORIZON"
+      StartingPosition: "LATEST"

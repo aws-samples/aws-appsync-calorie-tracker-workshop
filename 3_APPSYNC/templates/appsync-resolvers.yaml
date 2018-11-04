@@ -3,34 +3,38 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: AWS AppSync resolvers
 
 Parameters:
-  AppSyncApiId:
+  AppSyncAPIId:
     Type: String
-    Description: AppSync api id
-  AppSyncUserTableDataSourceName:
+    Description: AppSync API ID
+  UserTableDataSourceName:
     Type: String
     Description: AppSync User table data source name
-  AppSyncActivityTableDataSourceName:
+    Default: UserTable
+  ActivityTableDataSourceName:
     Type: String
     Description: AppSync Activity table data source name
-  AppSyncActivityCategoryTableDataSourceName:
+    Default: ActivityTable
+  ActivityCategoryTableDataSourceName:
     Type: String
     Description: AppSync Activity category table data source name
-  AppSyncUserAggTableDataSourceName:
+    Default: ActivityCategoryTable
+  UserAggTableDataSourceName:
     Type: String
     Description: AppSync User calorie aggregate table data source name
-  AppSyncSuggestedFoodDataSourceName:
-    Type: String
-    Description: AppSync Suggested Food Lambda Function data source name
+    Default: UserAggregateTable
+#  AppSyncSuggestedFoodDataSourceName:
+#    Type: String
+#    Description: AppSync Suggested Food Lambda Function data source name
 
 Resources:
   # ------ Mutation resolvers
   UpdateUserAggregateMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: updateUserAggregate
-      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      DataSourceName: !Sub ${UserAggTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -122,10 +126,10 @@ Resources:
   UpdateUserMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: updateUser
-      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      DataSourceName: !Sub ${UserTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -215,10 +219,10 @@ Resources:
   UpdateActivityCategoryMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: updateActivityCategory
-      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      DataSourceName: !Sub ${ActivityCategoryTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -308,10 +312,10 @@ Resources:
   UpdateActivityMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: updateActivity
-      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      DataSourceName: !Sub ${ActivityTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -401,10 +405,10 @@ Resources:
   DeleteUserAggregateMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: deleteUserAggregate
-      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      DataSourceName: !Sub ${UserAggTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -419,10 +423,10 @@ Resources:
   CreateUserAggregateMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: createUserAggregate
-      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      DataSourceName: !Sub ${UserAggTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -445,10 +449,10 @@ Resources:
   DeleteUserMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: deleteUser
-      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      DataSourceName: !Sub ${UserTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -462,10 +466,10 @@ Resources:
   DeleteActivityCategoryMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: deleteActivityCategory
-      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      DataSourceName: !Sub ${ActivityCategoryTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -479,10 +483,10 @@ Resources:
   DeleteActivityMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: deleteActivity
-      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      DataSourceName: !Sub ${ActivityTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -496,10 +500,10 @@ Resources:
   CreateUserAggregateMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: createUserAggregate
-      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      DataSourceName: !Sub ${UserAggTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -522,10 +526,10 @@ Resources:
   CreateUserMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: createUser
-      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      DataSourceName: !Sub ${UserTableDataSourceName}
       RequestMappingTemplate: |
         ## Below example shows how to create an object from all provided GraphQL arguments
         ## The primary key of the obejct is a randomly generated UUD using the $util.autoId() utility
@@ -555,10 +559,10 @@ Resources:
   CreateActivityMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: createActivity
-      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      DataSourceName: !Sub ${ActivityTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -585,10 +589,10 @@ Resources:
   CreateActivityCategoryMutationResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Mutation
       FieldName: createActivityCategory
-      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      DataSourceName: !Sub ${ActivityCategoryTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -610,10 +614,10 @@ Resources:
   GetActivityQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: getActivity
-      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      DataSourceName: !Sub ${ActivityTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -628,10 +632,10 @@ Resources:
   GetActivityCategoryQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: getActivityCategory
-      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      DataSourceName: !Sub ${ActivityCategoryTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -646,10 +650,10 @@ Resources:
   GetUserQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: getUser
-      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      DataSourceName: !Sub ${UserTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -664,10 +668,10 @@ Resources:
   GetUserAggregateQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: getUserAggregate
-      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      DataSourceName: !Sub ${UserAggTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -683,10 +687,10 @@ Resources:
   ListActivitiesQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: listActivities
-      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      DataSourceName: !Sub ${ActivityTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -701,10 +705,10 @@ Resources:
   listActivitiesOrdered:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: listActivitiesOrdered
-      DataSourceName: !Sub ${AppSyncActivityTableDataSourceName}
+      DataSourceName: !Sub ${ActivityTableDataSourceName}
       RequestMappingTemplate: |
         {
             "version" : "2017-02-28",
@@ -731,10 +735,10 @@ Resources:
   ListActivityCategoriesQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: listActivityCategories
-      DataSourceName: !Sub ${AppSyncActivityCategoryTableDataSourceName}
+      DataSourceName: !Sub ${ActivityCategoryTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -749,10 +753,10 @@ Resources:
   ListUserAggregateQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: listUserAggregates
-      DataSourceName: !Sub ${AppSyncUserAggTableDataSourceName}
+      DataSourceName: !Sub ${UserAggTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -767,10 +771,10 @@ Resources:
   ListUsersQueryResolver:
     Type: "AWS::AppSync::Resolver"
     Properties:
-      ApiId: !Sub ${AppSyncApiId}
+      ApiId: !Sub ${AppSyncAPIId}
       TypeName: Query
       FieldName: listUsers
-      DataSourceName: !Sub ${AppSyncUserTableDataSourceName}
+      DataSourceName: !Sub ${UserTableDataSourceName}
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
@@ -782,22 +786,23 @@ Resources:
       ResponseMappingTemplate: |
         $util.toJson($context.result)
 
-  SuggestedFoodQueryResolver:
-    Type: "AWS::AppSync::Resolver"
-    Properties:
-      ApiId: !Sub ${AppSyncApiId}
-      TypeName: Query
-      FieldName: suggestedFood
-      DataSourceName: !Sub ${AppSyncSuggestedFoodDataSourceName}
-      RequestMappingTemplate: |
-        "#**
-          The value of 'payload' after the template has been evaluated
-          will be passed as the event to AWS Lambda.
-        *#
-        {
-            "version" : "2017-02-28",
-            "operation": "Invoke",
-            "payload": $util.toJson($context.args)
-        }"
-      ResponseMappingTemplate: |
-        $util.toJson($context.result)
+
+  # SuggestedFoodQueryResolver:
+  #   Type: "AWS::AppSync::Resolver"
+  #   Properties:
+  #     ApiId: !Sub ${AppSyncAPIId}
+  #     TypeName: Query
+  #     FieldName: suggestedFood
+  #     DataSourceName: !Sub ${AppSyncSuggestedFoodDataSourceName}
+  #     RequestMappingTemplate: |
+  #       "#**
+  #         The value of 'payload' after the template has been evaluated
+  #         will be passed as the event to AWS Lambda.
+  #       *#
+  #       {
+  #           "version" : "2017-02-28",
+  #           "operation": "Invoke",
+  #           "payload": $util.toJson($context.args)
+  #       }"
+  #     ResponseMappingTemplate: |
+  #       $util.toJson($context.result)
