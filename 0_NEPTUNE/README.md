@@ -17,7 +17,7 @@ Use the following link to deploy the stack.
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=[reinvent-calorietracker-workshop]&templateURL=https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/1_NEPTUNE/templates/main.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=[reinvent-calorietracker-workshop]&templateURL=https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/0_NEPTUNE/templates/main.yaml)
 
 - Please provide the Stack Name
 - Update the following `EC2 Configuration` section under `Parameters`

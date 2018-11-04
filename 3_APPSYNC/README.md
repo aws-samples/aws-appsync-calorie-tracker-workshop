@@ -8,11 +8,17 @@ To simplify the process, we will use AWS CloudFormation templates to create reso
 
 In this step, we will create 4 DynamoDB tables and a Lambda function using CloudFormation template. 
 
-DynamoDB tables are used to store user information and Lambda function is used to aggregate the user calories based on the user activities and update it in User Aggregate table. If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
-
-The Lambda function will be executed every time user logs an activity in the app, using User activity DynamoDB stream.
+- DynamoDB tables are used to store user information and Lambda function is used to aggregate the user calories based on the user activities and update it in User Aggregate table. 
+- If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. 
+- If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
+- The Lambda function will be executed every time user logs an activity in the app, using User activity DynamoDB stream.
 
 Execute following CLI command to create the CloudFormation stack.
+
+Region| Launch
+------|-----
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=[DynamoDB-lambda-stack]&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/dynamodb-lambda.yaml)
+
 ```
 aws cloudformation create-stack --stack-name dynamoDBLambdaStack --template-body file://templates/dynamodb-lambda.yaml --parameters ParameterKey=APIName,ParameterValue=caltrack ParameterKey=S3BucketName,ParameterValue=reinvent-2018
 ```

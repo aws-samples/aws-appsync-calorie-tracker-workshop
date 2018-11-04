@@ -161,7 +161,7 @@ Resources:
   NeptuneStack:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/1_NEPTUNE/templates/neptune.yaml'
+      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/0_NEPTUNE/templates/neptune.yaml'
       TimeoutInMinutes: '15'
       Parameters:
         DBReplicaIdentifierSuffix: !Ref DBReplicaIdentifierSuffix
@@ -172,7 +172,7 @@ Resources:
   NeptuneEC2Client:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/1_NEPTUNE/templates/ec2.yaml'
+      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/0_NEPTUNE/templates/ec2.yaml'
       TimeoutInMinutes: '30'
       Parameters:
         EC2SSHKeyPairName: !Ref EC2SSHKeyPairName
@@ -208,7 +208,7 @@ Resources:
     Type: AWS::Serverless::Function
     DependsOn: NeptuneStack
     Properties:
-      CodeUri: s3://reinvent-calorie-tracker-workshop/1_NEPTUNE/functions/source/foodSuggestor/food-suggestor.zip
+      CodeUri: s3://reinvent-calorie-tracker-workshop/0_NEPTUNE/functions/source/foodSuggestor/food-suggestor.zip
       Description: Suggests food based on user BMI
       FunctionName: suggest-food-for-user
       MemorySize: 512
@@ -230,7 +230,7 @@ Resources:
   AddNewUserBMI:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://reinvent-calorie-tracker-workshop/1_NEPTUNE/functions/source/add-new-user-bmi/add-new-user-bmi.zip
+      CodeUri: s3://reinvent-calorie-tracker-workshop/0_NEPTUNE/functions/source/add-new-user-bmi/add-new-user-bmi.zip
       Description: The lambda gets triggered based off user-table DynamoDB stream and updates the user table with the user BMI
       FunctionName: add-new-user-bmi
       MemorySize: 512

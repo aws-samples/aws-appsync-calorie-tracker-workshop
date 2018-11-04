@@ -20,7 +20,7 @@ Parameters:
       \ stored. The bucket name can include numbers, lowercase letters, uppercase \
       \ letters, and hyphens, but should not start or end with a hyphen."
     Type: String
-    Default: reinvent-2018
+    Default: reinvent-calorie-tracker-workshop
 
 Resources:
   LambdaFunctionStack:
@@ -28,7 +28,7 @@ Resources:
     DependsOn:
       - DynamoDBStack
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/lambda.yaml'
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/3_APPSYNC/templates/lambda.yaml'
       Parameters:
         DynamoDBActivityTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableArn'
         DynamoDBActivityTableStreamArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableStreamARN'
@@ -39,6 +39,6 @@ Resources:
   DynamoDBStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/dynamodb-tables.yaml'
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/3_APPSYNC/templates/dynamodb-tables.yaml'
       Parameters:
         APIName: !Ref 'APIName'
