@@ -76,9 +76,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
             "Effect": "Allow",
             "Principal": "*",
             "Action": "s3:*",
-            "Resource": [
-                "arn:aws:s3:::update-bucket-name-here"
-            ]
+            "Resource": "*"
         }
     ]
 }
