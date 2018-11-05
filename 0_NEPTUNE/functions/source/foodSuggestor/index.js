@@ -1,9 +1,6 @@
 'use strict';
 
 const gremlin = require('gremlin');
-const _uniqBy = require('lodash.uniqby');
-const _groupBy = require('lodash.groupby');
-const _foreach = require('lodash.foreach');
 
 const DriverRemoteConnection = gremlin.driver.DriverRemoteConnection;
 const Graph = gremlin.structure.Graph;
