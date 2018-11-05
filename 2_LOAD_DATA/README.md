@@ -8,7 +8,7 @@ Steps:
 - [1.1. Cloning the project](#11-Cloning-the-project)
 - [1.2. Copy the dataset files to Amazon S3 bucket](#12-Copy-the-dataset-files-to-S3)
 - [1.3. Creating S3 VPC Endpoint](#14-Creating-Amazon-S3-VPC-Endpoint)
-- [1.4. Loading the dataset into Neptune](#15-Loading-the-given-food-dataset-into-Amazon-Neptune)
+- [1.4. Loading the dataset into Neptune](#14-Loading-the-given-food-dataset-into-Amazon-Neptune)
 - [1.5. Food-Suggestor Lambda function](#15-Food-Suggestor-lambda-function)
 
 ## 1.1. Cloning the project
