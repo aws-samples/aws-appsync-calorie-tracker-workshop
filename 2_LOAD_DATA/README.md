@@ -63,7 +63,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
 
 ![VPCE](../images/image-VPCE.png)
 
-7. Under `Policy`, update the `bucket name` and then copy the following
+7. Under `Policy`, update the `Resource` parameter to allow access to the relevant bucket name. For example:
 
 ```json
 {
@@ -73,11 +73,10 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
             "Effect": "Allow",
             "Principal": "*",
             "Action": "s3:*",
-            "Resource": "*"
+            "Resource": "arn:aws:s3:::your-bucket-name"
         }
     ]
 }
-
 ```
 
 8. Create Endpoint.

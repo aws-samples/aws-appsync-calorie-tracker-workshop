@@ -42,3 +42,10 @@ dist/
 npm-debug.log
 www/
 src/fonts
+
+# Amplify configuration
+amplify/
+.amplifyrc
+.graphqlconfig.yml
+src/aws-exports.js
+src/graphql

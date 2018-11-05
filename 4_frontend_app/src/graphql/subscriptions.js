@@ -41,13 +41,13 @@ export const onCreateUser = `subscription OnCreateUser(
     username: $username
     weight: $weight
   ) {
+    bmi
     caloriesConsumed
     caloriesTargetPerDay
     height
     id
     username
     weight
-    bmi
   }
 }
 `;
@@ -70,7 +70,6 @@ export const onCreateUserAggregate = `subscription OnCreateUserAggregate(
   }
 }
 `;
-
 export const onDeleteActivity = `subscription OnDeleteActivity(
   $caloriesConsumed: Int
   $id: String
@@ -90,13 +89,6 @@ export const onDeleteActivity = `subscription OnDeleteActivity(
   }
 }
 `;
-
-export const onDeleteActivities = `subscription OnDeleteActivity {
-  onDeleteActivity {
-    id
-  }
-}`
-
 export const onDeleteActivityCategory = `subscription OnDeleteActivityCategory($category: String, $type: String) {
   onDeleteActivityCategory(category: $category, type: $type) {
     category
@@ -118,13 +110,13 @@ export const onDeleteUser = `subscription OnDeleteUser(
     username: $username
     weight: $weight
   ) {
+    bmi
     caloriesConsumed
     caloriesTargetPerDay
     height
     id
     username
     weight
-    bmi
   }
 }
 `;
@@ -187,13 +179,13 @@ export const onUpdateUser = `subscription OnUpdateUser(
     username: $username
     weight: $weight
   ) {
+    bmi
     caloriesConsumed
     caloriesTargetPerDay
     height
     id
     username
     weight
-    bmi
   }
 }
 `;

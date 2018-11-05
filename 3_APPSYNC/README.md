@@ -34,7 +34,7 @@ When the stack creation is completed successfully, you will have following 4 tab
 
 ![Calories Aggregator function](../images/image-calories-aggregator-lambda.png)
 
-Next, go to AWS Cloud 9 terminal and execute following command from the terminal windows to load the sample activity categories. Please make you are in the correct directory
+Next, go to either your `AWS Cloud 9 terminal` or local command shell prompt and execute following command from the to load the sample activity categories (Make sure you are at the right directory):
 ```
 aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
 ```

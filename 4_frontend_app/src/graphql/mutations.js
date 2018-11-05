@@ -21,13 +21,13 @@ export const createActivityCategory = `mutation CreateActivityCategory($input: C
 `;
 export const createUser = `mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
+    bmi
     caloriesConsumed
     caloriesTargetPerDay
     height
     id
     username
     weight
-    bmi
   }
 }
 `;
@@ -60,13 +60,13 @@ export const deleteActivityCategory = `mutation DeleteActivityCategory($input: D
 `;
 export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
   deleteUser(input: $input) {
+    bmi
     caloriesConsumed
     caloriesTargetPerDay
     height
     id
     username
     weight
-    bmi
   }
 }
 `;
@@ -99,13 +99,13 @@ export const updateActivityCategory = `mutation UpdateActivityCategory($input: U
 `;
 export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {
+    bmi
     caloriesConsumed
     caloriesTargetPerDay
     height
     id
     username
     weight
-    bmi
   }
 }
 `;

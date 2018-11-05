@@ -27,9 +27,15 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 
 ![CFN](../images/image-cfn-inputs.png)
 
-Once the stack has been successfully deployed, the cloudformation  will print all the resource details in the `Output` section.
+Once the stack has been successfully deployed, the cloudformation will print all the resource details in the `Output` section:
 
 ![Outputs](../images/cfn_outputs.png)
+
+You could also use the AWS CLI to fetch these details by running:
+
+```bash
+$ aws cloudformation describe-stacks --stack-name your-stack-name --query 'Stacks[0].Outputs'
+``` 
 
 ---
 

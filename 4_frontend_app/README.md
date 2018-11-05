@@ -74,7 +74,7 @@ The end result should look something like this:
 
 Once done, the Amplify client-side library is configured to point all Auth API requests to the Cognito Pool we've just created.
 
-But wait a minute, we haven't created anything aside for a bunch of local configuration files and a Cloudformation template. See `./amplify/backend/auth/{{labelname}}/` for the full details.
+But, wait a minute! We haven't created anything aside for a bunch of local configuration files and a Cloudformation template. See `./amplify/backend/auth/{{labelname}}/` for the full details.
 
 To create the Cognito endpoint we've just configured in your AWS account simply run:
 
@@ -82,7 +82,7 @@ To create the Cognito endpoint we've just configured in your AWS account simply 
 $ amplify push auth
 ```
 
-The Cloudformation template will take about a minute or two to run, and once done the app should be able to authenticate and register new users!
+The Cloudformation template will take about a minute or two to run, and once done the app should be able to authenticate and register new users since Amplify is now pointing our local code to point at the newly created Cognito Pool!
 
 ![Screenshot-4](../images/readme-4.png)
 
@@ -93,7 +93,7 @@ Pop over to the AWS Console if you'd like to take a better look at the newly cre
 
 In the last stage we added Cognito Authentication to our app. The next step would be to generate the AppSync Queries, Mutations and Subscriptions for us by parsing the AppSync GraphQL Schema in the AWS Account.
 
-Start by logging into the [AWS AppSync Console](https://us-west-2.console.aws.amazon.com/appsync/home) and scroll to the `"Integrate Your App"` section and choosing the JavaScript option, then copy the codegen code snippet.
+Start by logging into the [AWS AppSync Console](https://console.aws.amazon.com/appsync/home) and scroll to the `"Integrate Your App"` section and choosing the JavaScript option, then copy the codegen code snippet.
 
 ![Screenshot-5](../images/readme-5.png)
 

@@ -1,5 +1,30 @@
 // eslint-disable
 // this is an auto generated file. This will be overwritten
+export const getUserBmi = `query getUser($id: String!) {
+  getUser(id: $id) {
+    bmi
+  }
+}
+`;
+
+export const listActivityCategoriesOnly = `query ListActivityCategories(
+  $filter: TableActivityCategoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listActivityCategories(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      category
+    }
+    nextToken
+  }
+}
+`;
+
 
 export const getActivity = `query GetActivity($id: String!) {
   getActivity(id: $id) {
@@ -21,24 +46,16 @@ export const getActivityCategory = `query GetActivityCategory($category: String!
 `;
 export const getUser = `query GetUser($id: ID!) {
   getUser(id: $id) {
+    bmi
     caloriesConsumed
     caloriesTargetPerDay
     height
     id
     username
     weight
-    bmi
   }
 }
 `;
-
-export const getUserBmi = `query GetUser($id: ID!) {
-  getUser(id: $id) {
-    bmi
-  }
-}
-`;
-
 export const getUserAggregate = `query GetUserAggregate($date: String!, $userid: String!) {
   getUserAggregate(date: $date, userid: $userid) {
     caloriesBurned
@@ -66,8 +83,8 @@ export const listActivities = `query ListActivities(
   }
 }
 `;
-export const listActivitiesOrdered = `query ListActivitiesOrdered($userid: String!, $limit: Int, $nextToken: String) {
-  listActivitiesOrdered(userid: $userid, limit: $limit, nextToken: $nextToken) {
+export const listActivitiesOrdered = `query ListActivitiesOrdered($limit: Int, $nextToken: String, $userid: String!) {
+  listActivitiesOrdered(limit: $limit, nextToken: $nextToken, userid: $userid) {
     items {
       caloriesConsumed
       category
@@ -98,25 +115,6 @@ export const listActivityCategories = `query ListActivityCategories(
   }
 }
 `;
-
-export const listActivityCategoriesOnly = `query ListActivityCategories(
-  $filter: TableActivityCategoryFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listActivityCategories(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      category
-    }
-    nextToken
-  }
-}
-`;
-
 export const listUserAggregates = `query ListUserAggregates(
   $filter: TableUserAggregateFilterInput
   $limit: Int
@@ -133,7 +131,6 @@ export const listUserAggregates = `query ListUserAggregates(
   }
 }
 `;
-
 export const listUsers = `query ListUsers(
   $filter: TableUserFilterInput
   $limit: Int
@@ -141,28 +138,31 @@ export const listUsers = `query ListUsers(
 ) {
   listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      bmi
       caloriesConsumed
       caloriesTargetPerDay
       height
       id
       username
       weight
-      bmi
     }
     nextToken
   }
 }
 `;
-
 export const suggestedFood = `query SuggestedFood(
-  $userid: String!
   $bmi: Float
   $calorie: Float
   $sugar: Float
+  $userid: String!
 ) {
-  suggestedFood(userid: $userid, bmi: $bmi, calorie: $calorie, sugar: $sugar) {
+  suggestedFood(bmi: $bmi, calorie: $calorie, sugar: $sugar, userid: $userid) {
+    caloriesConsumed
     category
+    creationDateTime
+    id
     type
+    userid
   }
 }
 `;
