@@ -41,6 +41,18 @@ $ aws cloudformation describe-stacks --stack-name your-stack-name --query 'Stack
 
 ---
 
+<details><summary>CLICK ME</summary>
+<p>
+
+#### yes, even hidden code blocks!
+
+```python
+print("hello world!")
+```
+
+</p>
+</details>
+
 Next, we will be setting up the [AWS Cloud9 environment](../1_AWS_Cloud9/README.md)
 
 [Go back to the home page](../README.md)
