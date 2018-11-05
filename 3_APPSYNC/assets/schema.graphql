@@ -61,7 +61,7 @@ type Subscription {
   onCreateActivityCategory(category: String, type: [String]): ActivityCategory @aws_subscribe(mutations : ["createActivityCategory"])
   onCreateUser(caloriesTargetPerDay: Int, height: Float, id: ID, username: String, weight: Float): User @aws_subscribe(mutations : ["createUser"])
   onCreateUserAggregate(caloriesBurned: Int, caloriesConsumed: Int, date: String, userid: String): UserAggregate @aws_subscribe(mutations : ["createUserAggregate"])
-  onDeleteActivity(caloriesConsumed: Int, id: String, userid: String): Activity @aws_subscribe(mutations : ["deleteActivity"])
+  onDeleteActivity: Activity @aws_subscribe(mutations : ["deleteActivity"])
   onDeleteActivityCategory(category: String, type: [String]): ActivityCategory @aws_subscribe(mutations : ["deleteActivityCategory"])
   onDeleteUser(caloriesTargetPerDay: Int, height: Float, id: ID, username: String, weight: Float): User @aws_subscribe(mutations : ["deleteUser"])
   onDeleteUserAggregate(caloriesBurned: Int, caloriesConsumed: Int, date: String, userid: String): UserAggregate @aws_subscribe(mutations : ["deleteUserAggregate"])

@@ -494,6 +494,12 @@ Resources:
           "key": {
             "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id),
           },
+          "condition" : {
+            "expression": "userid = :expectedUserid",
+            "expressionValues" : {
+              ":expectedUserid" : { "S" : "${context.identity.sub}" } 
+            }
+          }
         }
       ResponseMappingTemplate: "$util.toJson($context.result)"
 
@@ -571,7 +577,7 @@ Resources:
             "id": $util.dynamodb.toDynamoDBJson($util.autoId()),
           },
           "attributeValues": {
-                "userid" : { "S" : "${context.arguments.input.userid}" },
+                "userid" : { "S" : "${context.identity.sub}" },
                 "category" : { "S" : "${context.arguments.input.category}" },
                 "type": { "S" : "${context.arguments.input.type}" },
                 "caloriesConsumed": { "N" : ${context.arguments.input.caloriesConsumed} },
@@ -694,10 +700,13 @@ Resources:
       RequestMappingTemplate: |
         {
           "version": "2017-02-28",
-          "operation": "Scan",
-          "filter": #if($context.args.filter) $util.transform.toDynamoDBFilterExpression($ctx.args.filter) #else null #end,
-          "limit": $util.defaultIfNull($ctx.args.limit, 20),
-          "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null)),
+            "operation": "Scan",
+            "filter" : {
+              "expression": "userid = :i",
+              "expressionValues": {
+                  ":i" : { "S" : "${context.identity.sub}" }
+                }
+            }
         }
       ResponseMappingTemplate: |
         $util.toJson($context.result)
