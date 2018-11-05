@@ -12,8 +12,8 @@
   "author": "Alon Jupiter",
   "license": "MIT",
   "dependencies": {
-    "aws-amplify": "^1.1.4",
-    "aws-amplify-vue": "^0.1.1",
+    "aws-amplify": "^1.1.9",
+    "aws-amplify-vue": "^0.1.6",
     "chart.js": "^2.7.2",
     "framework7": "^3.0.0",
     "framework7-icons": "^0.9.1",

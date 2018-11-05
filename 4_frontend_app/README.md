@@ -1,13 +1,3 @@
-### 0. OPTIONAL: Provision a Cloud9 Environment.
-
-We'd recommend using a t2.small or above for best performance. There's no need for the environment to be deployed to a specific VPC.
-
-Once the environment is ready to use, use nvm to upgrade the current Node revision to v8:
-
-```
-$ nvm install 8
-```
-
 ### 1. Clone the code from Github[TODO: CORRECT URL]
 ```
 $ git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop aws-appsync-calorie-tracker-workshop
@@ -115,7 +105,6 @@ export const getUserBmi = `query getUser($id: String!) {
 }`
 ``` 
 
-
 #### ListActivityCategories:
 
 ```javascript
@@ -148,7 +137,66 @@ In REST-based APIs this could be achieved in two eays:
 
 Luckily this is not an issue with GraphQL. As you can see in the queries we've added above, we can specify which parameters should be returned at runtime. No performance penalty, no changes to our precious production API.
 
-Once the additional queries were added, Save the `queries.js` file and return to the terminal.
+Once the additional queries were added, Save the `queries.js` file and return to the AWS Console.
+
+### 5. Setup AppSync Authorization Type
+
+Using a public API key can be quite useful for various use-cases, but in our case we would like to lock it down to specific users and keep permissions as granular as possible. For example, we wouldn't want to allow  User A to access or modify data related to User B.
+
+We will be leveraging the Cognito User Pool we've created earlier for autorization. Navigate to the AWS AppSync Console's `Settings` page and change the Authorization type to `Amazon Cognito User Pool`:
+
+![Screenshot-10](../images/readme-10.png)
+
+Select the relevant region and user pool at the newly revealed "User Pool configuration" section. Default action should be set to `ALLOW`:
+
+![Screenshot-12](../images/readme-12.png)
+
+Click the `Save` button to save and apply changes. Once done the AppSync Endpoint should only accept requests containing valid tokens in respect to the configured Cognito User Pool.
+
+Let's configure our frontend code to send the authentication and authorization tokens with every AWS AppSync API call. Since we're using AWS Amplify this would only require a one line change. Edit the `src/aws-exports.js` file and change the `"aws_appsync_authenticationType"` value to `"AMAZON_COGNITO_USER_POOLS"` and save the changes:
+
+![Screenshot-12](../images/readme-13.png)
+
+Right, so now now our AppSync Endpoint will only accept requests from Cognito-authenticated users. This is an important first step towards securing our API, however we're still missing granular access control. Or are we?
+
+Consider the `deleteActivity` mutation resolver template:
+
+```json
+{
+  "version": "2017-02-28",
+  "operation": "DeleteItem",
+  "key": {
+    "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id),
+  },
+  "condition" : {
+  	"expression": "userid = :expectedUserid",
+    "expressionValues" : {
+    	":expectedUserid" : { "S" : "${context.identity.sub}" }
+    }
+  }
+}
+```
+
+As you can see, there's a condition in place that should restrict users for deleting only activities that are associated with their unique id.
+
+The same applies for the `listActivities` query resolver template:
+
+```json
+{
+  "version": "2017-02-28",
+    "operation": "Scan",
+    "filter" : {
+      "expression": "userid = :i",
+      "expressionValues": {
+          ":i" : { "S" : "${context.identity.sub}" }
+        }
+    }
+}
+```
+
+The filter ensures that when the query is executed it should only return activities that are associated with the requesting user's unique id.
+
+There are many additional ways to lock-down and secure your AWS AppSync APIs. See the [AWS AppSync Developer's Guide](https://docs.aws.amazon.com/appsync/latest/devguide/security.html#amazon-cognito-user-pools-authorization) for additional details. 
 
 ### 5. Run the app locally
 
@@ -166,6 +214,8 @@ If you've chosen your local machine as your development box, simply browse to `h
 
 ![Screenshot-8](../images/readme-8.png)
 
+# TODO:
+
 If you're presented with the login screen, we're good to go! 
 
 Try running through an actual user flow. Register yourself as a new user (Cognito), add, view and delete activities (AppSync) and get recommendations to meet your calories per day target (Neptune).
@@ -174,8 +224,6 @@ To better understand how the app works, browse through the various pages and use
 
 
 ### 4. Build app for production
-
-#WIP
 
 We will be using AWS Amplify to build, push and host our app on S3. Simply run:
 

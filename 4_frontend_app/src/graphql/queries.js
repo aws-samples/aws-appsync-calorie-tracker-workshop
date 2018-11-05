@@ -1,11 +1,5 @@
 // eslint-disable
 // this is an auto generated file. This will be overwritten
-export const getUserBmi = `query getUser($id: String!) {
-  getUser(id: $id) {
-    bmi
-  }
-}
-`;
 
 export const listActivityCategoriesOnly = `query ListActivityCategories(
   $filter: TableActivityCategoryFilterInput
@@ -25,6 +19,11 @@ export const listActivityCategoriesOnly = `query ListActivityCategories(
 }
 `;
 
+export const getUserBmi = `query getUser($id: String!) {
+  getUser(id: $id) {
+    bmi
+  }
+}`
 
 export const getActivity = `query GetActivity($id: String!) {
   getActivity(id: $id) {

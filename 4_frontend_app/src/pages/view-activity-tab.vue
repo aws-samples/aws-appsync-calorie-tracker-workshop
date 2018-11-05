@@ -102,7 +102,7 @@ export default {
       var self = this
 
       // Subscripte to the onDeleteActivities subscription
-      self.subscription = API.graphql(graphqlOperation(onDeleteActivities)
+      self.subscription = API.graphql(graphqlOperation(onDeleteActivity)
         ).subscribe({
           next: ({ value: { data }}) => {
             // Zero all arrays so we don't get duplicates oncd we refresh activities

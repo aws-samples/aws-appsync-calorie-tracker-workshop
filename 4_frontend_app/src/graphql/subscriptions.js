@@ -70,16 +70,8 @@ export const onCreateUserAggregate = `subscription OnCreateUserAggregate(
   }
 }
 `;
-export const onDeleteActivity = `subscription OnDeleteActivity(
-  $caloriesConsumed: Int
-  $id: String
-  $userid: String
-) {
-  onDeleteActivity(
-    caloriesConsumed: $caloriesConsumed
-    id: $id
-    userid: $userid
-  ) {
+export const onDeleteActivity = `subscription OnDeleteActivity {
+  onDeleteActivity {
     caloriesConsumed
     category
     creationDateTime
