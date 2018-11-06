@@ -7,7 +7,7 @@ Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup
 Steps:
 - [1.1. Cloning the project](#11-Cloning-the-project)
 - [1.2. Copy the dataset files to Amazon S3 bucket](#12-Copy-the-dataset-files-to-S3)
-- [1.3. Creating S3 VPC Endpoint](#14-Creating-Amazon-S3-VPC-Endpoint)
+- [1.3. Creating S3 VPC Endpoint](#13-Creating-Amazon-S3-VPC-Endpoint)
 - [1.4. Loading the dataset into Neptune](#14-Loading-the-given-food-dataset-into-Amazon-Neptune)
 - [1.5. Food-Suggestor Lambda function](#15-Food-Suggestor-lambda-function)
 
@@ -55,7 +55,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
 
 3. Choose Create Endpoint.
 
-4. Choose the Service Name `com.amazonaws.region.s3`.
+4. Choose the Service Name `com.amazonaws.eu-west-1.s3`.
 
 5. Choose the VPC that contains your Neptune DB instance.
 
@@ -72,8 +72,16 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
         {
             "Effect": "Allow",
             "Principal": "*",
-            "Action": "s3:*",
-            "Resource": "arn:aws:s3:::your-bucket-name"
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::bucket-name",
+                "arn:aws:s3:::bucket-name/*"
+            ]
         }
     ]
 }
@@ -94,9 +102,11 @@ The datasets that needs to be loaded into Amazon Neptune are available under the
 - `food_edges.txt` contains the gremlin queries that creates the edges/relationships between the vertices.
 -----
 
-Step 1: Go to `EC2 console` and SSH into the EC2 instance named `Neptune-reinvent-calorie-tracker`
+Step 1: Go to `EC2 console` and SSH into the EC2 instance named `Neptune-reinvent-calorie-tracker` and copy the below curl command
 
-type the following:
+> Replace the `neptune loader endpoint`, `source S3` and `IAM Role ARN`. You can find these in `reinvent-calorietracker-workshop` Cloudformation outputs
+
+![Outputs](../images/cfn_outputs.png)
 
 ```
 curl -X POST \
@@ -111,9 +121,7 @@ curl -X POST \
     }'
 ```
 
-> Replace the `neptune loader endpoint`, `source S3` and `IAM Role ARN`. You can find these from CFN outputs.
 
-![Outputs](../images/cfn_outputs.png)
 
 ![curl](../images/image-curl.png)
 
