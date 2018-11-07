@@ -18,7 +18,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 6. Clic `Next Step` and click `Create Environment`.
 
-7. Once your environment is ready, you will see the following screen. The bottom half of your window, you can see the Cloud9 terminal.
+7. Once your environment is ready, you will see the following screen. The bottom half of your window, you can see the Cloud9 terminal. It may take few minutes to complete.
   ![Cloud9 Env](../images/image-c9-view.png)
 
 8. Attach an IAM role to your Cloud9 EC2 instance.
@@ -28,7 +28,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 * Step 8.1. Go to EC2 console. Select the instance named as cloud9. Under `Actions` | `Instance Settings` | Select `Attach or Replace IAM Role`
   ![Cloud9 Env](../images/image-c9-ec2-instance.png)
 
-* Step 8.2. Choose the role that has `AWSCloud9InstanceProfile` and click `Apply`.
+* Step 8.2. Choose the role that has the text `AWSCloud9InstanceProfile` in the name, and click `Apply`.
   ![Cloud9 Env](../images/image-c9-role.png)
 
 9. Go to Cloud9 console and within the terminal windows type the following S3 list command to view the S3 buckets in your region
