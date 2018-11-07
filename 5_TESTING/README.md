@@ -20,6 +20,7 @@
 
 ![add activities](../images/dashboard.png)
 
+---
 ### Next, lets check the suggested food
 
 Oops!!!. if you find the page spinning and dont get any suggestions, lets configure it and get it working
