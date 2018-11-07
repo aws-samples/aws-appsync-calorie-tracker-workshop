@@ -197,12 +197,27 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 ---
 #### Add Amazon DynamoDB (user-table) as Event Source for `add-new-user-bmi` Lambda
 
+When a new user signup, the app captured their height and weight. Using this, we need calculate their BMI which will be used later to provide diet suggestions. 
+
+In this step, we will setup configure Amazon DynamoDB as an event source to `add-new-user-bmi` Lambda function.
+
+- Go to AWS Lambda console.
+- Click `add-new-user-bmi` function.
+- Under `triggers` in the left pane, select `DynamoDB`
+- Select `DynamoDB` in the center pane, scroll down to `Configure trigger` section
   ![BMI Lambda](../images/image-add-bmi-lambda.png)
+- Select `caltrack_user_table` as DynamoDB Table
+- Leave the batch size as default
+- Starting position as `Latest`
+- Ensure `Enable trigger` is checked and click `Add`
   ![BMI Lambda](../images/image-configure-trigger.png)
+
+You have successfully configured DynamoDB as an event source for the Lambda function.
+
 ---
 
 ## Summary
-You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
+Congratulations. You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
 
 AppSync is setup to use DynamoDB tables as data sources to persist user information.
 
