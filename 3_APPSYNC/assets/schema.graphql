@@ -46,7 +46,7 @@ type Mutation {
 type Query {
   getActivity(id: String!): Activity
   getActivityCategory(category: String!): ActivityCategory
-  getUser(id: ID!): User
+  getUser(id: String!): User
   getUserAggregate(date: String!, userid: String!): UserAggregate
   listActivities(filter: TableActivityFilterInput, limit: Int, nextToken: String): ActivityConnection
   listActivitiesOrdered(limit: Int, nextToken: String, userid: String!): ActivityConnection

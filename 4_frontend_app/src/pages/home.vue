@@ -11,7 +11,7 @@
       <f7-link tab-link route-tab-id="home" href="./" text="Home" icon-ios="f7:home_fill" icon-md="material:home"></f7-link>
       <f7-link tab-link route-tab-id="addActivity" href="./add_activity/" text="Add Activity" icon-ios="f7:add_fill" icon-md="material:add"></f7-link>
       <f7-link tab-link route-tab-id="viewActivity" href="./view_activity/" text="View Activity" icon-ios="f7:graph_round_fill" icon-md="material:graph_round"></f7-link>
-      <f7-link tab-link route-tab-id="viewRecommendations" href="./view_recommendations/" text="Recommendations" icon-ios="f7:favorites" icon-md="material:favorites_round"></f7-link>
+      <f7-link tab-link route-tab-id="viewRecommendations" href="./view_recommendations/" text="Suggestions" icon-ios="f7:favorites" icon-md="material:favorites_round"></f7-link>
     </f7-toolbar>
 
     <f7-tabs routable>

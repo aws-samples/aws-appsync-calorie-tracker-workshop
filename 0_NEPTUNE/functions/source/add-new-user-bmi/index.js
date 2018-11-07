@@ -1,7 +1,6 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const gremlin = require('gremlin');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 //Create a Translator object, which comes from the DocumentClient
