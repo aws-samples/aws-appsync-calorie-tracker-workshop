@@ -283,7 +283,7 @@ You should see something similar to this message once done:
 
 Congrats! The app is now live in production.
 
-Next, [bonus round](../5_5_BONUS_OPTIONAL/README.md)
+Next, [bonus round](../5_BONUS_OPTIONAL/README.md)
 
 [Back to home page](../README.md)
 
