@@ -46,6 +46,7 @@ Oops!!!. if you find the page spinning and dont get any suggestions, lets config
 
 ```
 2. Under `Resolvers` in the right pane, locate suggestedFood
+
 ![AppSync DS](../images/image-resolvers-suggested.png)
 3. Click Attach
 4. `Create a New Resolver`
