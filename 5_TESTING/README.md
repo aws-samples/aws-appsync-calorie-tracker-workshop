@@ -76,7 +76,11 @@ export const suggestedFood = `query SuggestedFood(
 `;
 ```
 
-Recomplie the app and you should see the suggestions being returned
+Start the application and should see the suggestions being returned
+
+```bash
+$ npm start
+```
 
 ![New Resolver](../images/suggestions.png)
 
