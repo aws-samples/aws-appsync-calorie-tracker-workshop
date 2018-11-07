@@ -27,6 +27,7 @@ Oops!!!. if you find the page spinning and dont get any suggestions, lets config
 #### Step 1: Setup a new Appsync Data source:
 
 1. Go to AWS Appsync console, `data source`.
+
 ![AppSync DS](../images/image-appsync-datasource.png)
 2. Click `New`, Data Source Name: `suggestedFood`
 3. Data Source type as `AWS Lambda function`
@@ -51,6 +52,7 @@ Oops!!!. if you find the page spinning and dont get any suggestions, lets config
 3. Click Attach
 4. `Create a New Resolver`
 5. Select `suggesteFood` data source that was created in Step 1
+
 ![New Resolver](../images/create-suggested-food-resolver.png)
 6. Save Resolver.
 
