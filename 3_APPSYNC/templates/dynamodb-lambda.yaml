@@ -16,8 +16,8 @@ Parameters:
     ConstraintDescription: S3 bucket name can include numbers, lowercase
       letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
       (-).
-    Description: "S3 bucket where all the templates, assets and other artifacts are \
-      \ stored. DO NOT UPDATE THIS."
+    Description: "DO NOT UPDATE THIS. S3 bucket where all the templates, assets and other artifacts are \
+      \ stored. "
     Type: String
     Default: reinvent-calorie-tracker-workshop
 

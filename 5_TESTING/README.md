@@ -59,7 +59,7 @@ Oops!!!. if you find the page spinning and dont get any suggestions, lets config
 
 #### Step 3: Updating the graphql schema in your code:
 
-Within `4_FRONTEND_APP/src/graphql/queries.js`, updated the `suggestedFood` schema to return only category and type. Save the code change.
+Within `4_FRONTEND_APP/src/graphql/queries.js`, update the `suggestedFood` schema to return only category and type. Save the code change.
 
 ```Javascript
 export const suggestedFood = `query SuggestedFood(
