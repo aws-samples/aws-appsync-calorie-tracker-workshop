@@ -13,7 +13,7 @@ Steps:
 
 ## 1.1. Cloning the project
 
-Within your `AWS Cloud9 environment`, copy the following command to copy the S3 object and unzip it.
+Within your `AWS Cloud9 environment`, run the following commands to copy the zip file containing the workshop artifacts from S3 to Cloud9 environment, and unzip it.
 
 ```
 wget https://s3-us-west-2.amazonaws.com/calorie-test/aws-appsync-calorie-tracker-workshop.zip
@@ -38,9 +38,9 @@ cd aws-appsync-calorie-tracker-workshop
 - Copy both `food_edges` and `vertex.csv` to the bucket that was created as part of the Cloudformation Stack. To get the `bucket name` go to Cloudformation output section and make a note of the S3Bucket
 ![S3 CF outputs](../images/image-s3-cf-output.png)
 
-- Within your Cloud terminal, type the following command
+- Within your Cloud terminal, run the following command. Make sure you replace the YOUR_BUCKET_NAME_HERE with the S3 Bucket name from previous step.
 ```
-aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursive
+aws s3 cp 2_LOAD_DATA/datasets/ s3://YOUR_BUCKET_NAME_HERE/ --recursive
 ```
 ![S3 CF outputs](../images/image-s3-copy-datasets.png)
 ------
@@ -63,7 +63,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
 
 ![VPCE](../images/image-VPCE.png)
 
-7. Under `Policy`, update the `Resource` parameter to allow access to the relevant bucket name. For example:
+7. Under `Policy`, select `custom`, copy and paste the following policy. Make sure you replace the YOUR_BUCKET_NAME_HERE with the S3 Bucket name from step 1.2.
 
 ```json
 {
@@ -79,8 +79,8 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
                 "s3:GetBucketLocation"
             ],
             "Resource": [
-                "arn:aws:s3:::reinvent-calorie-tracker-YOUR-INITIAL",
-                "arn:aws:s3:::reinvent-calorie-tracker-YOUR-INITIAL/*"
+                "arn:aws:s3:::YOUR_BUCKET_NAME_HERE",
+                "arn:aws:s3:::YOUR_BUCKET_NAME_HERE/*"
             ]
         }
     ]
@@ -95,9 +95,9 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
 
 In this workshop, we are using the Health and Nutrition Dataset provided by the [Center for Disease Control and Preventation](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Dietary&CycleBeginYear=2015). NHANES conducts studies designed to assess the health and nutritional status of adults and children in the United States. The survey is unique in that it combines interviews and physical examinations.
 
-The datasets that needs to be loaded into Amazon Neptune are available under the `datasets` folder. 
+The datasets that needs to be loaded into Amazon Neptune are available under the `datasets` folder.
 
-- `Vertex.csv` contains userId, demographics information about the user such as weight (kg), height (cm) and their BMI. 
+- `Vertex.csv` contains userId, demographics information about the user such as weight (kg), height (cm) and their BMI.
 
 - `food_edges.txt` contains the gremlin queries that creates the edges/relationships between the vertices.
 -----
@@ -112,11 +112,11 @@ Step 1: Go to `EC2 console` and SSH into the EC2 instance named `Neptune-reinven
 curl -X POST \
     -H 'Content-Type: application/json' \
     http://your-neptune-endpoint:8182/loader -d '
-    { 
-      "source" : "s3://<your-bucket-name>/vertex.csv", 
+    {
+      "source" : "s3://<your-bucket-name>/vertex.csv",
       "iamRoleArn" : "arn:aws:iam::account-id:role/role-name",
-      "format" : "csv", 
-      "region" : "eu-west-1", 
+      "format" : "csv",
+      "region" : "eu-west-1",
       "failOnError" : "FALSE"
     }'
 ```
@@ -147,7 +147,7 @@ bin/gremlin.sh
 
 ![gremlin](../images/image-gremlin.png)
 
-Step 3:  In **Step 1**, we loaded all the vertices. Here we would be creating the edges or relationship between the person, actvity and the food they consumed. 
+Step 3:  In **Step 1**, we loaded all the vertices. Here we would be creating the edges or relationship between the person, actvity and the food they consumed.
 
 Copy and paste all the queries from `2_LOAD_DATA/datasets/food_edges.txt` into the gremlin console
 
@@ -167,7 +167,7 @@ gremlin> g.V().count()
 Query 2: Returns the list of users whose BMI < 24
 
 ```
-gremlin> g.V().has('bmi',lte(24)) 
+gremlin> g.V().has('bmi',lte(24))
 ==>v[83740]
 ==>v[83739]
 ==>v[83748]
