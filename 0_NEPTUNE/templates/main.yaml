@@ -48,7 +48,7 @@ Parameters:
       \ stored. The bucket name can include numbers, lowercase letters, uppercase \
       \ letters, and hyphens, but should not start or end with a hyphen."
     Type: String
-    Default: reinvent-cal-tracker-your-initials
+    Default: reinvent-cal-tracker-YOUR-INITIALS
   EC2SSHKeyPairName:
     Description: >-
       Required!! Name of an existing EC2 KeyPair to enable SSH access to the instances.

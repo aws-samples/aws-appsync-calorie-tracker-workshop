@@ -79,8 +79,8 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://copy-bucket-name-from-cfn-output/ --recursi
                 "s3:GetBucketLocation"
             ],
             "Resource": [
-                "arn:aws:s3:::bucket-name",
-                "arn:aws:s3:::bucket-name/*"
+                "arn:aws:s3:::reinvent-calorie-tracker-YOUR-INITIAL",
+                "arn:aws:s3:::reinvent-calorie-tracker-YOUR-INITIAL/*"
             ]
         }
     ]
