@@ -36,5 +36,5 @@ This workshop requires:
 2. [Loading dataset into Neptune Cluster](./2_LOAD_DATA/README.md)
 3. [AWS AppSync - GraphQL](./3_APPSYNC/README.md)
 4. [Setting up frontend - Vuejs application](./4_FRONTEND_APP/README.md)
-5. [Bonus Round - Optional](./5_BONUS_OPTIONAL/README.md)
+5. [Testing the application](./5_TESTING/README.md)
 6. [Closing and Clean up](./6_CLEANUP/README.md)
