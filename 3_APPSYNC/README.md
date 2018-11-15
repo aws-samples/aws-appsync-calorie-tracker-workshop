@@ -21,7 +21,7 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 
 ![CFN](../images/image-appsync-cf-inputs.png)
 
-> Leave all Cloudformation inputs as defaults and clic Next and Create the Stack
+> Leave all Cloudformation inputs as defaults and click Next and Create the Stack
 
 When the stack creation is completed successfully, you will have following 4 tables and a Lambda function created. You can check the status of your stack from the CloudFormation console.
 
@@ -50,7 +50,8 @@ Choose **Build from Scratch** and click **Start**.
 
 ![AppSync Start](images/appsync-start.jpg)
 
-Enter a name for your API (e.g. '*Calorie Tracker App*') and click **Create**.
+Enter a name for your API `Calorie Tracker App` and click **Create**.
+
 
 #### 2.1 Setup data sources
 We will be using DynamoDB as our data sources. We will create 4 data sources, one for each DynamoDB table.
