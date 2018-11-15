@@ -66,7 +66,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://YOUR_BUCKET_NAME_HERE/ --recursive
 
 7. Under `Policy`, select `custom`, copy and paste the following policy. Make sure you replace the YOUR_BUCKET_NAME_HERE with the S3 Bucket name from step 1.2.
 
-```json
+  ```json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -86,7 +86,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://YOUR_BUCKET_NAME_HERE/ --recursive
         }
     ]
 }
-```
+  ```
 
 8. Create Endpoint.
 
