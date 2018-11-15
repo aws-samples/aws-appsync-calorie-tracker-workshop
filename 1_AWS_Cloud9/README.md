@@ -7,6 +7,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 1. Open the [AWS Cloud9 console](https://console.aws.amazon.com/cloud9/)
 
 2. Choose Ireland region. Please ensure you are in the correct AWS region.
+
   ![Cloud9 Env](../images/image_c9.png)
 
 3. Click `Create Environment`
