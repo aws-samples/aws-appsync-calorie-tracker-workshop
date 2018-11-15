@@ -188,11 +188,14 @@ In this step, we will setup configure Amazon DynamoDB as an event source to `add
 - Click `add-new-user-bmi` function.
 - Under `triggers` in the left pane, select `DynamoDB`
 - Select `DynamoDB` in the center pane, scroll down to `Configure trigger` section
+
   ![BMI Lambda](../images/image-add-bmi-lambda.png)
+
 - Select `caltrack_user_table` as DynamoDB Table
 - Leave the batch size as default
 - Starting position as `Latest`
 - Ensure `Enable trigger` is checked and click `Add`
+
   ![BMI Lambda](../images/image-configure-trigger.png)
 
 You have successfully configured DynamoDB as an event source for the Lambda function.
