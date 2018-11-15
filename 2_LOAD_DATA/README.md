@@ -207,11 +207,9 @@ Under AWS lambda, you will find a Lambda function named `suggest-food-for-user
 - Then we filter the results where calories is less than 400, sugar is less than 2 gm, return the `name` of food types that match this criteria and label the output as `type`.
 - Select the objects labels `food` and `type` from the path and remove (`dedup`) any repeated items.
 
-  ```
-
+```
 g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(values('calorie').is(lt(400))).filter(values('sugar').is(lt(2))).values('name').as('type').select('food','type').dedup()
-
-  ```
+```
 
 
 - In order to test this Lambda function, copy the following as test input
