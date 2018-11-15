@@ -25,7 +25,7 @@ cd aws-appsync-calorie-tracker-workshop
 ```
 > Internal Note: The above steps will be replaced once we get the public github repo published.
 
-![Folder Structure](../images/image_c9_folder_structure.png)
+  ![Folder Structure](../images/image_c9_folder_structure.png)
 
 -----
 
@@ -33,16 +33,17 @@ cd aws-appsync-calorie-tracker-workshop
 
 - The `datasets` files can be found under `2_LOAD_DATA/datasets` folder.
 
-![Datasets](../images/image-dataset.png)
+  ![Datasets](../images/image-dataset.png)
 
 - Copy both `food_edges` and `vertex.csv` to the bucket that was created as part of the Cloudformation Stack. To get the `bucket name` go to Cloudformation output section and make a note of the S3Bucket
-![S3 CF outputs](../images/image-s3-cf-output.png)
+
+  ![S3 CF outputs](../images/image-s3-cf-output.png)
 
 - Within your Cloud terminal, run the following command. Make sure you replace the YOUR_BUCKET_NAME_HERE with the S3 Bucket name from previous step.
 ```
 aws s3 cp 2_LOAD_DATA/datasets/ s3://YOUR_BUCKET_NAME_HERE/ --recursive
 ```
-![S3 CF outputs](../images/image-s3-copy-datasets.png)
+  ![S3 CF outputs](../images/image-s3-copy-datasets.png)
 ------
 
 ## 1.3. Creating Amazon S3 VPC Endpoint
@@ -61,7 +62,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://YOUR_BUCKET_NAME_HERE/ --recursive
 
 6. Select the route tables that are associated with the private subnet related to your cluster.
 
-![VPCE](../images/image-VPCE.png)
+  ![VPCE](../images/image-VPCE.png)
 
 7. Under `Policy`, select `custom`, copy and paste the following policy. Make sure you replace the YOUR_BUCKET_NAME_HERE with the S3 Bucket name from step 1.2.
 
