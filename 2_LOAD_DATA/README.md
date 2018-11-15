@@ -132,7 +132,7 @@ You can check the status of your load with the following command. Ensure the `st
 
   ```
 curl http://your-neptune-endpoint:8182/loader?loadId=[loadId value]
-  ``
+  ```
 
   ![Outputs](../images/image-loader-output.png)
 
