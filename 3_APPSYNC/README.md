@@ -64,7 +64,7 @@ On the left pane, select **Data Sources**. Click **New**. Fill the details as pr
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
 - Table name: **caltrack_user_table**
-- Use an Existing Role: **appsync-ddb-source**
+- Use an Existing Role: **appsync-ddb-datasource**
 
 ![AppSync data source](../images/images_appsync_usertable_ds.png)
 
@@ -75,7 +75,7 @@ Click **New**. Fill the details as provided below and click **Create**.
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
 - Table name: **caltrack_activity_table**
-- Use an Existing Role: **appsync-ddb-source**
+- Use an Existing Role: **appsync-ddb-datasource**
 
 **UserAggregateTable data source**
 
@@ -84,7 +84,7 @@ Click **New**. Fill the details as provided below and click **Create**.
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
 - Table name: **caltrack_user_aggregate_table**
-- Use an Existing Role: **appsync-ddb-source**
+- Use an Existing Role: **appsync-ddb-datasource**
 
 **ActivityCategoryTable data source**
 
@@ -93,7 +93,7 @@ Click **New**. Fill the details as provided below and click **Create**.
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
 - Table name: **caltrack_activity_category_table**
-- Use an Existing Role: **appsync-ddb-source**
+- Use an Existing Role: **appsync-ddb-datasource**
 
 Once you have create the datasource, you should have 4 Appsync Datasources. 
 ![AppSync data source](../images/image-completed-ds.png)
@@ -102,28 +102,10 @@ Once you have create the datasource, you should have 4 Appsync Datasources.
 In this section we will create a GraphQL Schema. In the following first few steps, we will show you how to create type, query and mutations from scratch. But, in the interest of time, we have the GrapphQL schema pre-created for you, which you can directly copy and paste in your schema editor.
 - On the left pane, select **Schema**.
   ##### Create Type - User
-  - First, we will create a **User** type which will contain the attributes we want to store in DynamoDB table for each user. It will look something like below. Copy the type from below and paste it in your AppSync Schema.
-  ```
-  type User {
-  	caloriesConsumed: Int
-  	caloriesTargetPerDay: Int!
-  	height: Float!
-  	id: String!
-  	username: String!
-  	weight: Float!
-  	bmi: Float
-  }
-  ```
+  - First, we will create a **User** type which will contain the attributes we want to store in DynamoDB table for each user. 
 
   ##### Create Query - getUser
-  - Now we will create a Query type **getUser** to fetch user details based on the User Id.
-  - To create **getUser** query type, copy the text from below and paste it in your AppSync Schema.
-  ```
-  type Query {
-	   getUser(id: ID!): User
-  }
-  ```
-  - The query **getUser** take **ID** as input argument and returns **User** type.
+  - Now we will create a Query type **getUser** to fetch user details based on the User Id. The query **getUser** take **ID** as input argument and returns **User** type.
 
   Your AppSync Schema should like the below and Click `Save`.
   ```
