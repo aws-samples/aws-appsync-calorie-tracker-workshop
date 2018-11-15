@@ -59,7 +59,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://YOUR_BUCKET_NAME_HERE/ --recursive
 
 5. Choose the VPC that contains your Neptune DB instance.
 
-6. Select the check box next to the route tables that are associated with the subnets related to your cluster. If you only have one route table, you must select that box.
+6. Select the route tables that are associated with the private subnet related to your cluster.
 
 ![VPCE](../images/image-VPCE.png)
 

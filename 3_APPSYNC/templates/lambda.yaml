@@ -16,9 +16,6 @@ Parameters:
   DynamoDBUserCaloriesAggTableArn:
     Type: String
     Description: "User calories aggregate table ARN"
-  S3BucketName:
-    Type: String
-    Description: "S3 Bucket name"
 
 Resources:
   AggregateCaloriesFunction:
@@ -30,7 +27,7 @@ Resources:
       Runtime: python3.6
       Timeout: 30
       Code:
-        S3Bucket: !Sub ${S3BucketName}
+        S3Bucket: 'reinvent-calorie-tracker-workshop'
         S3Key: !Sub "3_APPSYNC/functions/packages/updateCalories.zip"
       Environment:
         Variables:

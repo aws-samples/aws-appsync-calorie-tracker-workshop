@@ -11,33 +11,22 @@ Parameters:
     AllowedPattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
     Default: caltrack
 
-  S3BucketName:
-    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: S3 bucket name can include numbers, lowercase
-      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
-      (-).
-    Description: "DO NOT UPDATE THIS. S3 bucket where all the templates, assets and other artifacts are \
-      \ stored. "
-    Type: String
-    Default: reinvent-calorie-tracker-workshop
-
 Resources:
   LambdaFunctionStack:
     Type: AWS::CloudFormation::Stack
     DependsOn:
       - DynamoDBStack
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/3_APPSYNC/templates/lambda.yaml'
+      TemplateURL: 'https://reinvent-calorie-tracker-workshop.s3.amazonaws.com/3_APPSYNC/templates/lambda.yaml'
       Parameters:
         DynamoDBActivityTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableArn'
         DynamoDBActivityTableStreamArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableStreamARN'
         DynamoDBUserCaloriesAggTableName: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTable'
         DynamoDBUserCaloriesAggTableArn: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTableArn'
-        S3BucketName: !Ref 'S3BucketName'
 
   DynamoDBStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/3_APPSYNC/templates/dynamodb-tables.yaml'
+      TemplateURL: 'https://reinvent-calorie-tracker-workshop.s3.amazonaws.com/3_APPSYNC/templates/dynamodb-tables.yaml'
       Parameters:
         APIName: !Ref 'APIName'
