@@ -198,6 +198,10 @@ In this step, we will setup configure Amazon DynamoDB as an event source to `add
 
   ![BMI Lambda](../images/image-configure-trigger.png)
 
+- Click `Save`
+
+  ![Save](../images/image-lambda-save.png)
+
 You have successfully configured DynamoDB as an event source for the Lambda function.
 
 ---

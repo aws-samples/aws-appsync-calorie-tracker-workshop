@@ -1,4 +1,4 @@
-# Module 3: Frontend VueJS application
+# Module 4: Frontend VueJS application
 
 In this module, we will configure the frontend VueJS application to use AWS Appsync and Amazon Cognito for Authentication. We will use AWS Amplify, a Javascript library, that does the heavy lifting and building web and mobile application really simple.
 
