@@ -35,7 +35,7 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 
 Once the stack has been successfully deployed, the cloudformation will print all the resource details in the `Output` section:
 
-![Outputs](../images/cfn_outputs.png)
+  ![Outputs](../images/cfn_outputs.png)
 
 You could also use the AWS CLI to fetch these details by running:
 
