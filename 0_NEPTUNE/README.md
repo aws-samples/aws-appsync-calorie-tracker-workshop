@@ -27,11 +27,11 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
   - Please provide the S3 Bucket Name. This needs to be a unique name.
   - Keep the rest as default and create the stack
 
-![CFN](../images/image-cfn-inputs.png)
+  ![CFN](../images/image-cfn-inputs.png)
 
-Click next and under `Capabilities`, check both the boxes and click `Crate Change Set` under Transform. Then click `Next`
+- Click next and under `Capabilities`, check both the boxes and click `Crate Change Set` under Transform. Then click `Next`
 
-![CFN](../images/image-cfn-capability.png)
+  ![CFN](../images/image-cfn-capability.png)
 
 Once the stack has been successfully deployed, the cloudformation will print all the resource details in the `Output` section:
 
