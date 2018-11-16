@@ -84,9 +84,28 @@ $ npm start
 
 ![New Resolver](../images/suggestions.png)
 
-### Other Ideas (TODO):
+
+###  Build app for production
+
+We will be using AWS Amplify to build, push and host our app on S3. Simply run within your Cloud9 terminal:
+
+```
+$ amplify add hosting
+```
+
+And pick 'PROD' as the environment and leave all other options at their default value. 
+
+Once you're ready, run the `$ amplify publish` command. Amplify will then build the app using Webpack, upload the assests to the designated S3 Bucket and setup all the necessary configuration and permissions to host the app on that bucket. As a bonus we also get Cloudfront in front of the bucket to cache all the static assests (HTML, JavaScript, etc.) and make our app blazing fast!
+
+You should see something similar to this message once done:
+
+![Screenshot-9](../images/readme-9.png)
+
+Congrats! The app is now live in production.
+
+### Other Ideas:
 - Login to app using Cognito's Federated Auth - Facebook
-- Fine the gremlin query to provide personalized suggestions
+- Fine tune the gremlin query to provide personalized suggestions
 
 [Proceed to next section - Closing and Cleanup](../6_CLEANUP/README.md)
 
