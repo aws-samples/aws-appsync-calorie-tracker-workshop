@@ -10,7 +10,7 @@ Steps:
   - [2.1 Setup data sources](#21-setup-data-sources)
   - [2.2 Setup AppSync Schema](#22-setup-appsync-schema)
   - [2.3 Configure resolvers](#23-configure-resolvers)
- - [3. Setup Lambda event source](#add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
+ - [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
 -----
 
