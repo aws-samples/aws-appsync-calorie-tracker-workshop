@@ -5,10 +5,10 @@ Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup
 -----
 
 Steps:
-- [1.1. Copy the dataset files to Amazon S3 bucket](#12-Copy-the-dataset-files-to-S3-bucket)
-- [1.2. Creating S3 VPC Endpoint](#13-Creating-Amazon-S3-VPC-Endpoint)
-- [1.3. Loading the dataset into Neptune](#14-Loading-the-given-food-dataset-into-Amazon-Neptune)
-- [1.4. Food-Suggestor Lambda function](#15-Food-Suggestor-lambda-function)
+- [1.1. Copy the dataset files to Amazon S3 bucket](#11-Copy-the-dataset-files-to-S3-bucket)
+- [1.2. Creating S3 VPC Endpoint](#12-creating-amazon-s3-vpc-endpoint)
+- [1.3. Loading the dataset into Neptune](#13-loading-the-given-food-dataset-into-amazon-neptune)
+- [1.4. Food-Suggestor Lambda function](#14-Food-Suggestor-lambda-function)
 
 -----
 
