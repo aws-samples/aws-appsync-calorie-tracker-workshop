@@ -8,7 +8,7 @@ In this section, we will create:
 - An EC2 instance with Gremlin and Sparql clients installed. We will be using Gremlin traversal language to query the graph. 
 - A **suggest-food-for-user** lambda function deployed in a VPC that provides food suggestions based on user activities and personal information such as BMI.
 
-In order to ease the workshop, we have created a CloudFormation template that deploys the above resources.
+In order to ease the workshop, we have created a CloudFormation template that deploys the above resources. Please note for this workshop, we will be using the **Ireland (eu-west-1)** region
 
 -----
 ## Deploy the Cloudformation Stack
