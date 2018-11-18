@@ -1,12 +1,12 @@
 # Module 1: Preparing your AWS Cloud 9
 
-AWS Cloud9 is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser.
+AWS Cloud9 is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser. 
 
 In this section, we will create a AWS Cloud9 (C9) environment and configure it to access AWS resources.
 
 1. Open the [AWS Cloud9 console](https://console.aws.amazon.com/cloud9/)
 
-2. Choose Ireland region. Please ensure you are in the correct AWS region.
+2. Choose **Ireland** region. Please ensure you are in the correct AWS region.
 
   ![Cloud9 Env](../images/image_c9.png)
 
@@ -67,17 +67,13 @@ v8.12.0
 
 ## Cloning the project
 
-Within your `AWS Cloud9 environment`, run the following commands to copy the zip file containing the workshop artifacts from S3 to Cloud9 environment, and unzip it.
+Within your `AWS Cloud9 environment`, clone the workshop artifacts to Cloud9 environment.
 
 ```
-wget https://s3-us-west-2.amazonaws.com/calorie-test/aws-appsync-calorie-tracker-workshop.zip
-unzip aws-appsync-calorie-tracker-workshop.zip
-rm -rf __MACOSX/
-rm aws-appsync-calorie-tracker-workshop.zip
+git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop.git
 cd aws-appsync-calorie-tracker-workshop
 
 ```
-> Internal Note: The above steps will be replaced once we get the public github repo published.
 
   ![Folder Structure](../images/image_c9_folder_structure.png)
 
