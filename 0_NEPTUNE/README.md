@@ -23,19 +23,24 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
  #### Cloudformation Inputs:
 - Please provide the Stack Name
 - Update the following `EC2 Configuration` section under `Parameters`
-  - Specify the SSH keyPair name. If you do not have one, please [create a new KeyPair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) from within EC2 console.
+  - Ensure you specify the SSH keyPair name. If you do not have one, please [create a new KeyPair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) from within EC2 console.
   - Please provide the S3 Bucket Name. This needs to be a unique name.
   - Keep the rest as default and create the stack
 
   ![CFN](../images/image-cfn-inputs.png)
 
-- Click next and under `Capabilities`, check both the boxes and click `Crate Change Set` under Transform. Then click `Next`
+- Click next and under `Capabilities`, check both the boxes and click `Create Change Set` under Transform and then click `Next`
 
   ![CFN](../images/image-cfn-capability.png)
 
 Once the stack has been successfully deployed, the cloudformation will print all the resource details in the `Output` section:
 
   ![Outputs](../images/cfn_outputs.png)
+
+> Please make a note of the following **Outputs** in the Cloudformation which will be used in the later modules. 
+> - LoaderEndpoint
+> - NeptuneLoadFromS3IAMRoleArn
+> - S3Bucket
 
 You could also use the AWS CLI to fetch these details by running:
 
