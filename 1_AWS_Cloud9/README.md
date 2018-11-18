@@ -72,7 +72,6 @@ Within your `AWS Cloud9 environment`, clone the workshop artifacts to Cloud9 env
 ```
 git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop.git
 cd aws-appsync-calorie-tracker-workshop
-
 ```
 
   ![Folder Structure](../images/image_c9_folder_structure.png)
