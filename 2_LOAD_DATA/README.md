@@ -8,7 +8,7 @@ Steps:
 - [1.1. Copy the dataset files to Amazon S3 bucket](#11-Copy-the-dataset-files-to-S3-bucket)
 - [1.2. Creating S3 VPC Endpoint](#12-creating-amazon-s3-vpc-endpoint)
 - [1.3. Loading the dataset into Neptune](#13-loading-the-given-food-dataset-into-amazon-neptune)
-- [1.4. Food-Suggestor Lambda function](#14-Food-Suggestor-lambda-function)
+- [1.4. Food-Suggestor Lambda function](#14-food-suggestor-lambda-function)
 
 -----
 
@@ -194,17 +194,16 @@ Under AWS lambda, you will find a Lambda function named `suggest-food-for-user
 g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(values('calorie').is(lt(400))).filter(values('sugar').is(lt(2))).values('name').as('type').select('food','type').dedup()
 ```
 
-
 - In order to test this Lambda function, copy the following as test input
 
-  ```
+```
 {
   "bmi": 24,
   "calorie": 400,
   "sugar": 2,
   "userid": "83740"
 }
-  ```
+```
 
   ![gremlin](../images/image-lambda.png)
 
