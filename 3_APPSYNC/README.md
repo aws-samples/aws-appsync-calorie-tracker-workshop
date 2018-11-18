@@ -34,7 +34,8 @@ When the stack creation is completed successfully, you will have following 4 tab
 
 ![Calories Aggregator function](../images/image-calories-aggregator-lambda.png)
 
-Next, go to either your `AWS Cloud 9 terminal` or local command shell prompt and execute following command from the to load the sample activity categories (Make sure you are at the right directory):
+Next, go to your `AWS Cloud 9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
+
 ```
 aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
 ```
@@ -108,6 +109,11 @@ In this section we will create a GraphQL Schema. In the following first few step
   ##### Create Query - getUser
   - Now we will create a Query type **getUser** to fetch user details based on the User Id. The query **getUser** take **ID** as input argument and returns **User** type.
 
+  ##### Create Mutation - createUser
+    - Let's create a Mutation type **createUser**. This mutation will be used by our app to store user information.
+    - To create **createUser** mutation type, copy the text from below and paste it in your AppSync Schema.
+    - The mutation **createUser** takes **CreateUserInput** as input argument and return **User** type. **CreateUserInput** is an Input type which contains the attributes we want to store for each user.
+
   Your AppSync Schema should like the below and Click `Save`.
   ```
   type User {
@@ -123,30 +129,24 @@ In this section we will create a GraphQL Schema. In the following first few step
   type Query {
       getUser(id: ID!): User
   }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User
+  }
+
+  input CreateUserInput {
+    id: String
+    caloriesConsumed: Int
+    caloriesTargetPerDay: Int!
+    height: Float!
+    username: String!
+    weight: Float!
+  }
+
   ```
     ![AppSync Schema](../images/image-appsync-schema.png)
 
-  ##### Next, Create Mutation - createUser
-    - Now let's create a Mutation type **createUser**. This mutation will be used by our app to store user information.
-    - To create **createUser** mutation type, copy the text from below and paste it in your AppSync Schema.
-    ```
-    type Mutation {
-    	createUser(input: CreateUserInput!): User
-    }
-
-    input CreateUserInput {
-    	id: String
-    	caloriesConsumed: Int
-    	caloriesTargetPerDay: Int!
-    	height: Float!
-    	username: String!
-    	weight: Float!
-    }
-    ```
-    - The mutation **createUser** takes **CreateUserInput** as input argument and return **User** type. **CreateUserInput** is an Input type which contains the attributes we want to store for each user.
-
-
-- To save time, we have pre-created the schema. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
+- Wwe have pre-created the schema. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
 
   ![AppSync Schema](images/appsync-schema.jpg)
 

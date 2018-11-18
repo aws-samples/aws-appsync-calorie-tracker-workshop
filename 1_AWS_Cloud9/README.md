@@ -64,8 +64,25 @@ After the upgrade, verify the NodeJS version.
 $ node -v
 v8.12.0
 ```
+
+## Cloning the project
+
+Within your `AWS Cloud9 environment`, run the following commands to copy the zip file containing the workshop artifacts from S3 to Cloud9 environment, and unzip it.
+
+```
+wget https://s3-us-west-2.amazonaws.com/calorie-test/aws-appsync-calorie-tracker-workshop.zip
+unzip aws-appsync-calorie-tracker-workshop.zip
+rm -rf __MACOSX/
+rm aws-appsync-calorie-tracker-workshop.zip
+cd aws-appsync-calorie-tracker-workshop
+
+```
+> Internal Note: The above steps will be replaced once we get the public github repo published.
+
+  ![Folder Structure](../images/image_c9_folder_structure.png)
+
 ---
 
-Congratulations!!! You have completed setting up your AWS Cloud9 environment. In the next section, you will [load the given dataset into Amazon Neptune Cluster](../2_LOAD_DATA/README.md)
+Congratulations!!! You have completed setting up your AWS Cloud9 environment and have cloned the project. In the next section, you will [load the given dataset into Amazon Neptune Cluster](../2_LOAD_DATA/README.md)
 
 [Go back to the home page](../README.md)

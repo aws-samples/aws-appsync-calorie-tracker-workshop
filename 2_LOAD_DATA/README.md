@@ -5,31 +5,14 @@ Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup
 -----
 
 Steps:
-- [1.1. Cloning the project](#11-Cloning-the-project)
-- [1.2. Copy the dataset files to Amazon S3 bucket](#12-Copy-the-dataset-files-to-S3-bucket)
-- [1.3. Creating S3 VPC Endpoint](#13-Creating-Amazon-S3-VPC-Endpoint)
+- [1.1. Copy the dataset files to Amazon S3 bucket](#12-Copy-the-dataset-files-to-S3-bucket)
+- [1.2. Creating S3 VPC Endpoint](#13-Creating-Amazon-S3-VPC-Endpoint)
 - [1.4. Loading the dataset into Neptune](#14-Loading-the-given-food-dataset-into-Amazon-Neptune)
 - [1.5. Food-Suggestor Lambda function](#15-Food-Suggestor-lambda-function)
 
-## 1.1. Cloning the project
-
-Within your `AWS Cloud9 environment`, run the following commands to copy the zip file containing the workshop artifacts from S3 to Cloud9 environment, and unzip it.
-
-```
-wget https://s3-us-west-2.amazonaws.com/calorie-test/aws-appsync-calorie-tracker-workshop.zip
-unzip aws-appsync-calorie-tracker-workshop.zip
-rm -rf __MACOSX/
-rm aws-appsync-calorie-tracker-workshop.zip
-cd aws-appsync-calorie-tracker-workshop
-
-```
-> Internal Note: The above steps will be replaced once we get the public github repo published.
-
-  ![Folder Structure](../images/image_c9_folder_structure.png)
-
 -----
 
-## 1.2. Copy the dataset files to S3 bucket
+## 1.1. Copy the dataset files to S3 bucket
 
 - The `datasets` files can be found under `2_LOAD_DATA/datasets` folder.
 
@@ -46,7 +29,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://YOUR_BUCKET_NAME_HERE/ --recursive
   ![S3 CF outputs](../images/image-s3-copy-datasets.png)
 ------
 
-## 1.3. Creating Amazon S3 VPC Endpoint
+## 1.2. Creating Amazon S3 VPC Endpoint
 
 > Amazon Neptune provides a process for loading data from external files directly into a Neptune DB instance. The Neptune Loader command is faster, has less overhead, is optimized for large datasets, and supports both RDF (Resource Description Framework) and Gremlin data. The Neptune loader requires a VPC endpoint for Amazon S3.
 
@@ -92,7 +75,7 @@ aws s3 cp 2_LOAD_DATA/datasets/ s3://YOUR_BUCKET_NAME_HERE/ --recursive
 
 ----------
 
-## 1.4. Loading the given food dataset into Amazon Neptune
+## 1.3. Loading the given food dataset into Amazon Neptune
 
 In this workshop, we are using the Health and Nutrition Dataset provided by the [Center for Disease Control and Preventation](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Dietary&CycleBeginYear=2015). NHANES conducts studies designed to assess the health and nutritional status of adults and children in the United States. The survey is unique in that it combines interviews and physical examinations.
 
@@ -196,7 +179,7 @@ gremlin> g.V("83744").out('has').out('eats').values('name')
 
 ----
 
-## 1.5. Food-Suggestor lambda function.
+## 1.4. Food-Suggestor lambda function.
 
 Under AWS lambda, you will find a Lambda function named `suggest-food-for-user
 `. This is essentially running the following gremlin query where:
