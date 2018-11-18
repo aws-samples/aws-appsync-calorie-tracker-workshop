@@ -30,6 +30,7 @@ Oops!!!. if you find the page spinning and dont get any suggestions, lets config
 1. Go to AWS Appsync console, `data source`.
 
 ![AppSync DS](../images/image-appsync-datasource.png)
+
 2. Click `New`, Data Source Name: `suggestedFood`
 3. Data Source type as `AWS Lambda function`
 4. Region: `EU-WEST-1` and function ARN as `suggested-food-for-user`
