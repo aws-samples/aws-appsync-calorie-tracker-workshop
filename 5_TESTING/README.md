@@ -75,8 +75,7 @@ export const suggestedFood = `query SuggestedFood(
     category
     type
   }
-}
-`;
+}`;
 ```
 
 Start the application and should see the suggestions being returned
