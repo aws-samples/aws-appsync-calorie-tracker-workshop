@@ -4,6 +4,13 @@ In this section, we will create the backend for our application. We will use Ama
 
 To simplify the process, we will use AWS CloudFormation templates to create resources for our application backend.
 
+Steps:
+- [1. Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
+- [2. Create AppSync API backend](#step-2-create-appsync-api-backend)
+    [2.1 Setup data sources](#21-setup-data-sources)
+    [2.1 Setup data sources](#21-setup-data-sources)
+
+
 ### Step 1: Create DynamoDB Tables and Lambda function
 
 In this step, we will create 4 DynamoDB tables and a Lambda function using CloudFormation template. 
@@ -146,7 +153,7 @@ In this section we will create a GraphQL Schema. In the following first few step
   ```
     ![AppSync Schema](../images/image-appsync-schema.png)
 
-- Wwe have pre-created the schema. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
+- We have pre-created the schema. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
 
   ![AppSync Schema](images/appsync-schema.jpg)
 
