@@ -7,9 +7,12 @@ To simplify the process, we will use AWS CloudFormation templates to create reso
 Steps:
 - [1. Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
 - [2. Create AppSync API backend](#step-2-create-appsync-api-backend)
-    [2.1 Setup data sources](#21-setup-data-sources)
-    [2.1 Setup data sources](#21-setup-data-sources)
+  - [2.1 Setup data sources](#21-setup-data-sources)
+  - [2.2 Setup AppSync Schema](#22-setup-appsync-schema)
+  - [2.3 Configure resolvers](#23-configure-resolvers)
+ - [3. Setup Lambda event source](#add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
+-----
 
 ### Step 1: Create DynamoDB Tables and Lambda function
 
@@ -185,7 +188,8 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
   ![AppSync resolvers](images/appsync-resolvers.jpg)
 
 ---
-#### Add Amazon DynamoDB (user-table) as Event Source for `add-new-user-bmi` Lambda
+
+### Step 3: Add Amazon DynamoDB (user-table) as Event Source for `add-new-user-bmi` Lambda
 
 When a new user signup, the app captured their height and weight. Using this, we need calculate their BMI which will be used later to provide diet suggestions. 
 
