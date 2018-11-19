@@ -1,0 +1,32 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Dynamodb tables and data stream processing Lambda function (process data streams from Activity table and update User Aggregate table) for Calorie tracker application
+
+Parameters:
+  APIName:
+    Type: String
+    Description: "Name of the API, to generate names for resources"
+    MinLength: 3
+    MaxLength: 20
+    AllowedPattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+    Default: caltrack
+
+Resources:
+  LambdaFunctionStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - DynamoDBStack
+    Properties:
+      TemplateURL: 'https://reinvent-calorie-tracker-workshop.s3.amazonaws.com/3_APPSYNC/templates/lambda.yaml'
+      Parameters:
+        DynamoDBActivityTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableArn'
+        DynamoDBActivityTableStreamArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableStreamARN'
+        DynamoDBUserCaloriesAggTableName: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTable'
+        DynamoDBUserCaloriesAggTableArn: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTableArn'
+
+  DynamoDBStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: 'https://reinvent-calorie-tracker-workshop.s3.amazonaws.com/3_APPSYNC/templates/dynamodb-tables.yaml'
+      Parameters:
+        APIName: !Ref 'APIName'

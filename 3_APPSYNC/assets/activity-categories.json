@@ -1,0 +1,79 @@
+{
+    "caltrack_activity_category_table": [
+        {
+            "PutRequest": {
+                "Item": {
+                  "category": {
+                    "S": "Drink"
+                  },
+                  "type": {
+                    "L": [
+                      {
+                        "S": "Tea"
+                      },
+                      {
+                        "S": "Coffee"
+                      },
+                      {
+                        "S": "Shake"
+                      },
+                      {
+                        "S": "Juice"
+                      }
+                    ]
+                  }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                  "category": {
+                    "S": "Exercise"
+                  },
+                  "type": {
+                    "L": [
+                      {
+                        "S": "Walk"
+                      },
+                      {
+                        "S": "Run"
+                      },
+                      {
+                        "S": "Cardio"
+                      },
+                      {
+                        "S": "Weights"
+                      }
+                    ]
+                  }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                  "category": {
+                    "S": "Food"
+                  },
+                  "type": {
+                    "L": [
+                      {
+                        "S": "Breakfast"
+                      },
+                      {
+                        "S": "Lunch"
+                      },
+                      {
+                        "S": "Dinner"
+                      },
+                      {
+                        "S": "Snacks"
+                      }
+                    ]
+                  }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,160 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Dynamodb tables for Calorie tracker application
+
+Parameters:
+  APIName:
+    Type: String
+    Description: "Name of the API, to generate names for resources"
+    MinLength: 3
+    MaxLength: 20
+    AllowedPattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+
+Resources:
+  DynamoDBUserTable:
+    Type: "AWS::DynamoDB::Table"
+    Description: "Data store for User information"
+    Properties:
+      TableName: !Sub ${APIName}_user_table
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  DynamoDBActivityTable:
+    Type: "AWS::DynamoDB::Table"
+    Description: "Data store for User activities"
+    Properties:
+      TableName: !Sub ${APIName}_activity_table
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "userid"
+          AttributeType: "S"
+        - AttributeName: "creationDateTime"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        - IndexName: "userid-creationDateTime-index"
+          KeySchema:
+            -
+              AttributeName: "userid"
+              KeyType: "HASH"
+            -
+              AttributeName: "creationDateTime"
+              KeyType: "RANGE"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: "5"
+            WriteCapacityUnits: "5"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: "NEW_IMAGE"
+  DynamoDBActivityCategoryTable:
+    Type: "AWS::DynamoDB::Table"
+    Description: "Data store for activity categories and its types"
+    Properties:
+      TableName: !Sub ${APIName}_activity_category_table
+      AttributeDefinitions:
+        - AttributeName: "category"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "category"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  DynamoDBUserCaloriesAggregateTable:
+    Type: "AWS::DynamoDB::Table"
+    Description: "Data store for User calories aggregate per day"
+    Properties:
+      TableName: !Sub ${APIName}_user_aggregate_table
+      AttributeDefinitions:
+        - AttributeName: "userid"
+          AttributeType: "S"
+        - AttributeName: "date"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "userid"
+          KeyType: "HASH"
+        - AttributeName: "date"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  AppsyncRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - appsync.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /service-role/
+      RoleName: appsync-ddb-datasource
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                Effect: Allow
+                Resource:
+                  - !Join ['', [ !GetAtt 'DynamoDBUserTable.Arn' ]]
+                  - !Join ['', [ !GetAtt 'DynamoDBUserTable.Arn', '/*' ]]
+                  - !Join ['', [ !GetAtt 'DynamoDBActivityTable.Arn' ]]
+                  - !Join ['', [ !GetAtt 'DynamoDBActivityTable.Arn', '/*' ]]
+                  - !Join ['', [ !GetAtt 'DynamoDBActivityCategoryTable.Arn' ]]
+                  - !Join ['', [ !GetAtt 'DynamoDBActivityCategoryTable.Arn', '/*' ]]
+                  - !Join ['', [ !GetAtt 'DynamoDBUserCaloriesAggregateTable.Arn' ]]
+                  - !Join ['', [ !GetAtt 'DynamoDBUserCaloriesAggregateTable.Arn', '/*' ]]                                                     
+            Version: '2012-10-17'
+          PolicyName: appsync-dynamodb-ds
+
+Outputs:
+  UserTable:
+    Value: !Ref DynamoDBUserTable
+    Description: "User table name"
+  UserTableArn:
+    Value: !GetAtt 'DynamoDBUserTable.Arn'
+    Description: "User table ARN"
+  ActivityTable:
+    Value: !Ref DynamoDBActivityTable
+    Description: "Activity table name"
+  ActivityTableArn:
+    Value: !GetAtt 'DynamoDBActivityTable.Arn'
+    Description: "Activity table ARN"
+  ActivityTableStreamARN:
+    Value: !GetAtt 'DynamoDBActivityTable.StreamArn'
+    Description: "Activity table stream ARN"
+  ActivityCategoryTable:
+    Value: !Ref DynamoDBActivityCategoryTable
+    Description: "Activity category table name"
+  ActivityCategoryTableArn:
+    Value: !GetAtt 'DynamoDBActivityCategoryTable.Arn'
+    Description: "Activity category table ARN"
+  UserCaloriesAggregateTable:
+    Value: !Ref DynamoDBUserCaloriesAggregateTable
+    Description: "User calories aggregate table name"
+  UserCaloriesAggregateTableArn:
+    Value: !GetAtt 'DynamoDBUserCaloriesAggregateTable.Arn'
+    Description: "User calories aggregate table ARN"
+  

@@ -1,0 +1,105 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Lambda function to process data stream from Activity table and
+  update User Aggregate table
+
+Parameters:
+  DynamoDBActivityTableArn:
+    Type: String
+    Description: "Activity table ARN"
+  DynamoDBActivityTableStreamArn:
+    Type: String
+    Description: "Activity table stream ARN"
+  DynamoDBUserCaloriesAggTableName:
+    Type: String
+    Description: "User calories aggregate table name"
+  DynamoDBUserCaloriesAggTableArn:
+    Type: String
+    Description: "User calories aggregate table ARN"
+
+Resources:
+  AggregateCaloriesFunction:
+    Properties:
+      FunctionName: calories-aggreator-function
+      Description: The lambda gets triggered based off activity_table DynamoDB stream and updates the user_aggregate_table
+      Handler: update-daily-calories.lambda_handler
+      Role: !GetAtt 'AggregateCaloriesRole.Arn'
+      Runtime: python3.6
+      Timeout: 30
+      Code:
+        S3Bucket: 'reinvent-calorie-tracker-workshop'
+        S3Key: !Sub "3_APPSYNC/functions/packages/updateCalories.zip"
+      Environment:
+        Variables:
+          USER_CAL_AGG_TABLE: !Ref 'DynamoDBUserCaloriesAggTableName'
+    Type: AWS::Lambda::Function
+
+  AggregateCalories:
+    Properties:
+      ServiceToken: !GetAtt 'AggregateCaloriesFunction.Arn'
+    Type: AWS::CloudFormation::CustomResource
+
+  AggregateCaloriesRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Effect: Allow
+                Resource: arn:aws:logs:*:*:*
+            Version: '2012-10-17'
+          PolicyName: LambdaLogging
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:BatchGetItem
+                  - dynamodb:BatchWriteItem
+                Effect: Allow
+                Resource:
+                  - !Join ['', [ !Ref DynamoDBActivityTableArn ]]
+                  - !Join ['', [ !Ref DynamoDBActivityTableArn, '/*' ]]
+                  - !Join ['', [ !Ref DynamoDBUserCaloriesAggTableArn ]]
+                  - !Join ['', [ !Ref DynamoDBUserCaloriesAggTableArn, '/*' ]]
+            Version: '2012-10-17'
+          PolicyName: DynamoDBUpdates
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - dynamodb:DescribeStream
+                  - dynamodb:GetRecords
+                  - dynamodb:GetShardIterator
+                  - dynamodb:ListStreams
+                Effect: Allow
+                Resource:
+                  - !Join ['', [ !Ref DynamoDBActivityTableStreamArn ]]
+            Version: '2012-10-17'
+          PolicyName: AccessDynamoDBStreams
+
+  EventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !Sub ${DynamoDBActivityTableStreamArn}
+      FunctionName:
+        Fn::GetAtt:
+          - "AggregateCaloriesFunction"
+          - "Arn"
+      StartingPosition: "LATEST"
