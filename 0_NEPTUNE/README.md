@@ -2,13 +2,13 @@
 
 In this section, we will create:
 
-- Amazon Neptune Cluster in a private subnet within Amazon Virtual Private Cloud (VPC)
-- An IAM Role to load the given dataset from Amazon S3 into Amazon Neptune. Loading data from an Amazon S3 bucket requires an AWS Identity and Access Management (IAM) role that has access to the bucket. Amazon Neptune assumes this role in order to load the data.
-- S3 bucket to copy the given dataset files.
+- Amazon Neptune Cluster in a private subnet within an Amazon Virtual Private Cloud (VPC)
+- AWS Identity and Access Management (IAM) role to load the given dataset from an Amazon S3 bucket into Amazon Neptune cluster. Loading data from an Amazon S3 bucket requires an IAM role that has access to the S3 bucket. Amazon Neptune assumes this role in order to load the data.
+- S3 bucket to copy the given dataset files to.
 - An EC2 instance with Gremlin and Sparql clients installed. We will be using Gremlin traversal language to query the graph. 
-- A **suggest-food-for-user** lambda function deployed in a VPC that provides food suggestions based on user activities and personal information such as BMI.
+- A **suggest-food-for-user** lambda function deployed in a VPC which is used to provide food suggestions based on user activities and BMI.
 
-In order to ease the workshop, we have created a CloudFormation template that deploys the above resources. Please note for this workshop, we will be using the **Ireland (eu-west-1)** region
+In order to ease the workshop and save time, we have created a CloudFormation template that creates the above resources in your AWS Account. Please note, for this workshop we will be using the **Ireland (eu-west-1)** region.
 
 -----
 ## Deploy the Cloudformation Stack
@@ -20,24 +20,26 @@ Region| Launch
 eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorietracker-module0&templateURL=https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/0_NEPTUNE/templates/main.yaml)
 
 ---
- #### Cloudformation Inputs:
-- Please provide the Stack Name
-- Update the following `EC2 Configuration` section under `Parameters`
+ #### Deployment steps:
+1. Provide a Stack Name
+2. Update the following `EC2 Configuration` section under `Parameters`
   - Ensure you specify the SSH keyPair name. If you do not have one, please [create a new KeyPair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) from within EC2 console.
-  - Please provide the S3 Bucket Name. This needs to be a unique name.
-  - Keep the rest as default and create the stack
+  - Provide an S3 Bucket Name. This needs to be globally unique.
+  - Leave rest of the parameters with default values.
 
   ![CFN](../images/image-cfn-inputs.png)
 
-- Click next and under `Capabilities`, check both the boxes and click `Create Change Set` under Transform and then click `Next`
+3. Click next. Under `Capabilities`, check both the boxes and click `Create Change Set` under Transform. Then click `Next`.
 
   ![CFN](../images/image-cfn-capability.png)
 
-Once the stack has been successfully deployed, the cloudformation will print all the resource details in the `Output` section:
+  This will take 10-15 mintues to complete the stack.
+
+4. Once the stack has been successfully deployed, the cloudformation `Output` section will provide the necessary information about the resources being created, as shown below:
 
   ![Outputs](../images/cfn_outputs.png)
 
-> Please make a note of the following **Outputs** in the Cloudformation which will be used in the later modules. 
+> Please make a note of the following **Outputs** in a text editor, as we will be using it in the later modules of this workshop.
 > - LoaderEndpoint
 > - NeptuneLoadFromS3IAMRoleArn
 > - S3Bucket
@@ -45,7 +47,7 @@ Once the stack has been successfully deployed, the cloudformation will print all
 You could also use the AWS CLI to fetch these details by running:
 
 ```bash
-$ aws cloudformation describe-stacks --stack-name your-stack-name --query 'Stacks[0].Outputs'
+$ aws cloudformation describe-stacks --stack-name YOUR-STACK-NAME-HERE --query 'Stacks[0].Outputs'
 ``` 
 
 ---
