@@ -8,7 +8,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 2. Choose **Ireland** region. Please ensure you are in the correct AWS region.
 
-  ![Cloud9 Env](../images/image_c9.png)
+  	![Cloud9 Env](../images/image_c9.png)
 
 3. Click `Create Environment`
 
@@ -16,26 +16,25 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **m4.large**.
 
-  ![Cloud9 Instance](../images/image-c9-instance.png)
+  	![Cloud9 Instance](../images/image-c9-instance.png)
 
 6. Clic `Next Step` and click `Create Environment`. This will take 3-5 minutes to create the environment.
 
 7. Once your environment is ready, you will see the following screen. The bottom half of your window, you can see the Cloud9 terminal.
 
-  ![Cloud9 Env](../images/image-c9-view.png)
+  	![Cloud9 Env](../images/image-c9-view.png)
 
 
 8. Attach an IAM role to your Cloud9 EC2 instance.
-
-> IAM roles for EC2 make it easier for your applications to make API requests securely from an instance because they do not require you to manage AWS security credentials that the applications use.
-
+	> IAM roles for EC2 make it easier for your applications to make API requests securely from an instance because they do not require you to manage AWS security credentials that the applications use.
+	
     1. Go to EC2 console. Make sure you are in **Ireland** region. Search for the keyword `aws-cloud9-reinvent-calorie-tracker-workshop-` and select the instance. Under `Actions` | `Instance Settings` | Select `Attach or Replace IAM Role`
 
-    ![Cloud9 Env](../images/image-c9-ec2-instance.png)
+		![Cloud9 Env](../images/image-c9-ec2-instance.png)
 
     2. Search for the IAM Role with keyword `AWSCloud9InstanceProfile` and select the role that appears in the search result. Click `Apply`.
 
-    ![Cloud9 Env](../images/image-c9-role.png)
+    	![Cloud9 Env](../images/image-c9-role.png)
 
 9. Go to the Cloud9 console and within the terminal windows type the following S3 list command to view the S3 buckets in your region
 	```
