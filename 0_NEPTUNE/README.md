@@ -52,6 +52,6 @@ $ aws cloudformation describe-stacks --stack-name YOUR-STACK-NAME-HERE --query '
 
 ---
 
-Next, we will be setting up the [AWS Cloud9 environment](../1_AWS_Cloud9/README.md)
+Next, we will be setting up the [AWS Cloud9 environment Development Environment](../1_AWS_Cloud9/README.md)
 
 [Go back to the home page](../README.md)

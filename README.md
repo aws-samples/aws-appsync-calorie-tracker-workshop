@@ -32,7 +32,7 @@ This workshop requires:
 
 ## Steps:
 0. [Deploying Amazon Neptune Cluster](./0_NEPTUNE/README.md)
-1. [Setting up AWS Cloud 9](./1_AWS_Cloud9/README.md)
+1. [Setting up AWS Cloud 9 Development Environment](./1_AWS_Cloud9/README.md)
 2. [Loading dataset into Neptune Cluster](./2_LOAD_DATA/README.md)
 3. [AWS AppSync - GraphQL](./3_APPSYNC/README.md)
 4. [Setting up frontend - Vuejs application](./4_FRONTEND_APP/README.md)
