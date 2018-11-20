@@ -1,0 +1,187 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  This template creates a lambda function to copy the objects from source S3
+  bucket to the destination S3 bucket.
+Parameters:
+  SourceBucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: reinvent-calorie-tracker-workshop
+    Description: >-
+      S3 bucket name for the re:invent workshop assets. Bucket name can include
+      numbers, lowercase letters, uppercase letters, and hyphens (-). It
+      cannot start or end with a hyphen (-).
+    Type: String
+  DestBucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Description: >-
+      S3 bucket name for the re:invent workshop assets. Bucket name can include
+      numbers, lowercase letters, uppercase letters, and hyphens (-). It
+      cannot start or end with a hyphen (-).
+    Type: String
+  SourceBucketKeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/_]*$'
+    ConstraintDescription: >-
+      Key prefix can include numbers, lowercase letters, uppercase
+      letters, hyphens (-), and forward slash (/).
+    Default: '2_LOAD_DATA/datasets/'
+    Description: >-
+      S3 key prefix for the source bucket assets. Key prefix can
+      include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+    Type: String
+  DestBucketKeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/_]*$'
+    ConstraintDescription: >-
+      Key prefix can include numbers, lowercase letters, uppercase
+      letters, hyphens (-), and forward slash (/).
+    Default: ""
+    Description: >-
+      S3 key prefix for the destination bucket assets. Key prefix can
+      include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+    Type: String
+Resources:
+  CopyObjects:
+    Properties:
+      ServiceToken: !GetAtt
+        - CopyObjectsFunction
+        - Arn
+      Objects:
+        - vertex.csv
+      SourceBucket: !Ref SourceBucketName
+      SourceBucketPrefix: !Ref SourceBucketKeyPrefix
+      DestBucket: !Ref DestBucketName
+      DestBucketPrefix: !Ref DestBucketKeyPrefix
+    Type: 'AWS::CloudFormation::CustomResource'
+  CopyObjectsFunction:
+    Properties:
+      Code:
+        ZipFile: !Join
+          - |+
+
+          - - import json
+            - import logging
+            - import threading
+            - import boto3
+            - import cfnresponse
+            - ''
+            - ''
+            - 'def copy_objects(source_bucket, dest_bucket, src_prefix, dst_prefix, objects):'
+            - '    s3 = boto3.client(''s3'')'
+            - '    for o in objects:'
+            - '        src_key = src_prefix + o'
+            - '        dst_key = dst_prefix + o'
+            - '        copy_source = {'
+            - '            ''Bucket'': source_bucket,'
+            - '            ''Key'': src_key'
+            - '        }'
+            - '        s3.copy_object(CopySource=copy_source, Bucket=dest_bucket, Key=dst_key)'
+            - ''
+            - ''
+            - 'def delete_objects(bucket):'
+            - '    client = boto3.client(''s3'')'
+            - '    print("Collecting data from" + bucket)'
+            - '    paginator = client.get_paginator(''list_object_versions'')'
+            - '    result = paginator.paginate(Bucket=bucket)'
+            - '    objects = []'
+            - '    for page in result:'
+            - '        try:'
+            - '            for k in page[''Versions'']:'
+            - '                objects.append({''Key'':k[''Key''],''VersionId'': k[''VersionId'']})'
+            - '            try:'
+            - '                for k in page[''DeleteMarkers'']:'
+            - '                    version = k[''VersionId'']'
+            - '                    key = k[''Key'']'
+            - '                    objects.append({''Key'': key,''VersionId'': version})'
+            - '            except:'
+            - '                pass'
+            - '            print("deleting objects")'
+            - '            client.delete_objects(Bucket=bucket,     Delete={''Objects'': objects})'
+            - '           # objects = []'
+            - '        except:'
+            - '            pass'
+            - '    print("bucket already empty")'
+            - ''
+            - ''
+            - ''
+            - 'def timeout(event, context):'
+            - '    logging.error(''Execution is about to time out, sending failure response to CloudFormation'')'
+            - '    cfnresponse.send(event, context, cfnresponse.FAILED, {}, None)'
+            - ''
+            - ''
+            - 'def handler(event, context):'
+            - '    # make sure we send a failure to CloudFormation if the function is going to timeout'
+            - '    timer = threading.Timer((context.get_remaining_time_in_millis() / 1000.00) - 0.5, timeout, args=[event, context])'
+            - '    timer.start()'
+            - ''
+            - '    print(''Received event: %s'' % json.dumps(event))'
+            - '    status = cfnresponse.SUCCESS'
+            - '    try:'
+            - '        source_bucket = event[''ResourceProperties''][''SourceBucket'']'
+            - '        dest_bucket = event[''ResourceProperties''][''DestBucket'']'
+            - '        src_prefix = event[''ResourceProperties''][''SourceBucketPrefix'']'
+            - '        dst_prefix = event[''ResourceProperties''][''DestBucketPrefix'']'
+            - '        objects = event[''ResourceProperties''][''Objects'']'
+            - '        if event[''RequestType''] == ''Delete'':'
+            - '            # delete_objects(dest_bucket)'
+            - '            cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, None)'
+            - '        else:'
+            - '            copy_objects(source_bucket, dest_bucket, src_prefix, dst_prefix, objects)'
+            - '    except Exception as e:'
+            - '        logging.error(''Exception: %s'' % e, exc_info=True)'
+            - '        status = cfnresponse.FAILED'
+            - '    finally:'
+            - '        timer.cancel()'
+            - '        cfnresponse.send(event, context, status, {}, None)'
+            - ''
+      Description: Copies objects from a source S3 bucket to a destination S3 bucket
+      Handler: index.handler
+      Role: !GetAtt
+        - CopyObjectsRole
+        - Arn
+      Runtime: python2.7
+      Timeout: 240
+    Type: 'AWS::Lambda::Function'
+  CopyObjectsRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - 's3:GetObject'
+                Effect: Allow
+                Resource:
+                  - !Sub 'arn:aws:s3:::${SourceBucketName}/${SourceBucketKeyPrefix}*'
+                  - !Sub 'arn:aws:s3:::${DestBucketName}/${DestBucketKeyPrefix}*'
+              - Action:
+                  - 's3:PutObject'
+                  - 's3:DeleteObject'
+                  - 's3:GetObject'
+                  - 's3:ListBucket'
+                  - 's3:ListBucketVersions'
+                  - 's3:DeleteObjectVersion'
+                  - 's3:GetObjectVersion'
+                  - 's3:GetBucketVersioning'
+                Effect: Allow
+                Resource:
+                  - !Sub 'arn:aws:s3:::${DestBucketName}/${DestBucketKeyPrefix}*'
+                  - !Sub 'arn:aws:s3:::${DestBucketName}*'
+            Version: 2012-10-17
+          PolicyName: object-copier
+    Type: 'AWS::IAM::Role'
