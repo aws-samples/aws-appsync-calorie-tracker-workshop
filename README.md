@@ -2,7 +2,7 @@
 
 ## Overview 
 
-In this workshop, you will build a serverless Calorie tracker application that will allow users to setup a calorie target goal, allows you to add,update and track the calories consumed or burned on a daily basis as well  receive food suggestions based on their food habits.
+In this workshop, you will build a serverless Calorie tracker application that will allow users to setup a daily calorie target goal, allows them to add, update and track the calories consumed or burned on daily and receive food suggestions based on their food habits.
 
 Some of the features that you would be building today are:
 - User sign-up, login and logout.
@@ -26,7 +26,7 @@ Some of the features that you would be building today are:
 This workshop requires:
 
 - An active AWS Account with administrative permissions.
-- If you are using your own laptop, you should have [npm](https://docs.npmjs.com/getting-started/installing-node) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed.
+- A Cloud9 environment is recommended, but, if you are using your own laptop, you should have [npm](https://docs.npmjs.com/getting-started/installing-node) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed.
 - Knowledge of Javascript/ NodeJS will be an added advantage.
 - Knowledge of Amazon DynamoDB, AWS Lambda and Amazon Cognito will be an added advantage.
 
