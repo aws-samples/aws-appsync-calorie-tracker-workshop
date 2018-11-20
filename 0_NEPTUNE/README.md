@@ -23,21 +23,21 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
  #### Deployment steps:
 1. Provide a Stack Name
 2. Update the following `EC2 Configuration` section under `Parameters`
-  - Ensure you specify the SSH keyPair name. If you do not have one, please [create a new KeyPair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) from within EC2 console.
-  - Provide an S3 Bucket Name. This needs to be globally unique.
-  - Leave rest of the parameters with default values.
+    - Ensure you specify the SSH keyPair name. If you do not have one, please [create a new KeyPair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) from within EC2 console.
+    - Provide an S3 Bucket Name. This needs to be globally unique.
+    - Leave rest of the parameters with default values.
 
-  ![CFN](../images/image-cfn-inputs.png)
+    ![CFN](../images/image-cfn-inputs.png)
 
 3. Click next. Under `Capabilities`, check both the boxes and click `Create Change Set` under Transform. Then click `Next`.
 
-  ![CFN](../images/image-cfn-capability.png)
+    ![CFN](../images/image-cfn-capability.png)
 
-  This will take 10-15 mintues to complete the stack.
+    This will take 10-15 mintues to complete the stack.
 
 4. Once the stack has been successfully deployed, the cloudformation `Output` section will provide the necessary information about the resources being created, as shown below:
 
-  ![Outputs](../images/cfn_outputs.png)
+    ![Outputs](../images/cfn_outputs.png)
 
 > Please make a note of the following **Outputs** in a text editor, as we will be using it in the later modules of this workshop.
 > - LoaderEndpoint
