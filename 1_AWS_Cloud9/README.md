@@ -36,7 +36,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
     	![Cloud9 Env](../images/image-c9-role.png)
 
-9. Go to the Cloud9 console and within the terminal windows type the following S3 list command to view the S3 buckets in your region
+9. Go to the Cloud9 console and within the terminal windows type the following S3 list command to view the S3 buckets in your region. If you are able to see the list of S3 buckets, it means your Cloud9 envrionment has been successfully setup with right permission required for this workshop.
 	```
 	aws s3 ls --region eu-west-1
 	```
@@ -61,7 +61,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 	
 	```
 	$ node -v
-	v8.12.0
+	v8.13.0
 	```
 
 ## Cloning the project
@@ -69,8 +69,8 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 Within your `AWS Cloud9 environment`, clone the workshop GitHub repo.
 
 ```
-git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop.git
-cd aws-appsync-calorie-tracker-workshop
+Admin:~/environment $ git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop.git
+Admin:~/environment $ cd aws-appsync-calorie-tracker-workshop
 ```
 
   ![Folder Structure](../images/image_c9_folder_structure.png)
