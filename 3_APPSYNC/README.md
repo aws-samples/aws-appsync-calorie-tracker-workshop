@@ -1,4 +1,4 @@
-# Module 3: Create DynamoDB tables and AppSync backend
+	# Module 3: Create DynamoDB tables and AppSync backend
 
 In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
@@ -107,7 +107,8 @@ Click **New**. Fill the details as provided below and click **Create**.
 - Table name: **caltrack_activity_category_table**
 - Use an Existing Role: **appsync-ddb-datasource**
 
-Once you have create the datasource, you should have 4 Appsync Datasources. 
+Once you have created the datasources, you should see 4 Appsync Datasources in the console. 
+
 ![AppSync data source](../images/image-completed-ds.png)
 
 #### 2.2 Setup AppSync Schema
@@ -124,7 +125,7 @@ In this section we will create a GraphQL Schema. In the following first few step
     - To create **createUser** mutation type, copy the text from below and paste it in your AppSync Schema.
     - The mutation **createUser** takes **CreateUserInput** as input argument and return **User** type. **CreateUserInput** is an Input type which contains the attributes we want to store for each user.
 
-  Your AppSync Schema should like the below and Click `Save`.
+  Your AppSync Schema should look like below. Click `Save` to save your schema.
   ```
   type User {
     caloriesConsumed: Int
@@ -191,9 +192,9 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 
 ### Step 3: Add Amazon DynamoDB (user-table) as Event Source for `add-new-user-bmi` Lambda
 
-When a new user signup, the app captured their height and weight. Using this, we need calculate their BMI which will be used later to provide diet suggestions. 
+When a new user signup, the app captures their height and weight. Using this, we need to calculate their BMI which will be used later to provide diet suggestions. 
 
-In this step, we will setup configure Amazon DynamoDB as an event source to `add-new-user-bmi` Lambda function.
+In this step, we will configure Amazon DynamoDB as an event source to `add-new-user-bmi` Lambda function.
 
 - Go to AWS Lambda console.
 - Click `add-new-user-bmi` function.
