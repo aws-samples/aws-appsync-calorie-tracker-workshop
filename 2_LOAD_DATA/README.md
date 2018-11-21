@@ -2,14 +2,11 @@
 
 Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup, lets clone the project and load the dataset into our Neptune Cluster.
 
------
 
 Steps:
-- [1.1. Create S3 VPC Endpoint](#12-creating-amazon-s3-vpc-endpoint)
-- [1.2. Load the dataset into Neptune](#13-loading-the-given-food-dataset-into-amazon-neptune)
-- [1.3. Test Food-Suggestor Lambda function](#14-food-suggestor-lambda-function)
-
------
+- [1.1. Create S3 VPC Endpoint](#11-create-amazon-s3-vpc-endpoint)
+- [1.2. Load the dataset into Neptune](#12-load-the-given-food-dataset-into-amazon-neptune)
+- [1.3. Test Food-Suggestor Lambda function](#13-test-food-suggestor-lambda-function)
 
 ## 1.1. Create Amazon S3 VPC Endpoint
 
@@ -178,20 +175,20 @@ Under AWS lambda, you will find a Lambda function named `suggest-food-for-user
 - Then filter the results where calories is less than 400, sugar is less than 2 gm, return the `name` of food types that match this criteria and label the output as `type`.
 - Select the objects labels `food` and `type` from the path and remove (`dedup`) any repeated items.
 
-```
-g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(values('calorie').is(lt(400))).filter(values('sugar').is(lt(2))).values('name').as('type').select('food','type').dedup()
-```
+	```
+	g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(values('calorie').is(lt(400))).filter(values('sugar').is(lt(2))).values('name').as('type').select('food','type').dedup()
+	```
 
 - In order to test this Lambda function, copy the following as test input
 
-```
-{
-  "bmi": 24,
-  "calorie": 400,
-  "sugar": 2,
-  "userid": "83740"
-}
-```
+	```
+	{
+	  "bmi": 24,
+	  "calorie": 400,
+	  "sugar": 2,
+	  "userid": "83740"
+	}
+	```
 
   ![gremlin](../images/image-lambda.png)
 
@@ -204,7 +201,7 @@ g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(
 
 ---
 
-Congratulations!!!  You have successfully completed creating an Amazon Neptune Cluster, loaded the given dataset from S3 using Amazon S3 VPC endpoint, ran Gremlin queries and have tested the foodSuggestor lambda function.
+**Congratulations!!!**  You have successfully completed creating an Amazon Neptune Cluster, loaded the given dataset from S3 using Amazon S3 VPC endpoint, ran Gremlin queries and have tested the foodSuggestor lambda function.
 
 Next, lets configure [AWS Appsync](../3_APPSYNC/README.md)
 
