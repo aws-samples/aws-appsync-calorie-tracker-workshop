@@ -1,8 +1,8 @@
-	# Module 3: Create DynamoDB tables and AppSync backend
+# Module 3: Create DynamoDB tables and AppSync backend
 
 In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
-To simplify the process, we will use AWS CloudFormation templates to create resources for our application backend.
+To simplify the process, we will use AWS CloudFormation templates to create different resources for our application backend.
 
 Steps:
 - [1. Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
@@ -11,6 +11,12 @@ Steps:
   - [2.2 Setup AppSync Schema](#22-setup-appsync-schema)
   - [2.3 Configure resolvers](#23-configure-resolvers)
  - [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
+
+For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below. Use it only if you want to save time, and skip to next module.
+
+Region| Launch
+------|-----
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/master.yaml)
 
 -----
 
@@ -53,7 +59,9 @@ aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-c
 
 
 ### Step 2: Create AppSync API backend
-Now, we will use the DynamoDB tables created in Step 1 to create GraphQL backend. Open the AWS AppSync Console and click **Create API**.
+Now, we will use the DynamoDB tables created in Step 1 to create GraphQL backend. 
+
+Open the AWS AppSync Console and click **Create API**.
 
 ![AppSync Create API](images/appsync-createapi.jpg)
 
@@ -219,12 +227,12 @@ You have successfully configured DynamoDB as an event source for the Lambda func
 ---
 
 ## Summary
-Congratulations. You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
+**Congratulations!!** You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
 
 AppSync is setup to use DynamoDB tables as data sources to persist user information.
 
 Lambda function is subscribed to DynamoDB streams and is setup to be triggered every time user add or delete an activity.
 
-[Proceed to next section - Setting up the frontend application](../4_FRONTEND_APP/README.md)
+[Next - Setup the frontend application](../4_FRONTEND_APP/README.md)
 
 [Back to home page](../README.md)
