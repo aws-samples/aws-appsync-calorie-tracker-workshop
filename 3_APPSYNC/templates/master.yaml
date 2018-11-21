@@ -22,12 +22,19 @@ Parameters:
       \ letters, and hyphens, but should not start or end with a hyphen."
     Type: String
     Default: reinvent-2018
+    
+  S3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-_/]*$
+    ConstraintDescription: "Key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/)."
+    Description: "S3 key prefix for the workshop assets. Key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), underscore (_) and forward slash (/)."
+    Type: String
+    Default: 3_APPSYNC/
 
 Resources:
   DynamoDBStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/dynamodb-tables.yaml'
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/${S3KeyPrefix}templates/dynamodb-tables.yaml'
       Parameters:
         APIName: !Ref 'APIName'
 
@@ -36,20 +43,19 @@ Resources:
     DependsOn:
       - DynamoDBStack
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/lambda.yaml'
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/${S3KeyPrefix}templates/lambda.yaml'
       Parameters:
         DynamoDBActivityTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableArn'
         DynamoDBActivityTableStreamArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableStreamARN'
         DynamoDBUserCaloriesAggTableName: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTable'
         DynamoDBUserCaloriesAggTableArn: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTableArn'
-        S3BucketName: !Ref 'S3BucketName'
 
   AppSyncAPIStack:
     Type: AWS::CloudFormation::Stack
     DependsOn:
       - DynamoDBStack
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/appsync.yaml'
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/${S3KeyPrefix}templates/appsync.yaml'
       Parameters:
         APIName: !Ref 'APIName'
         DynamoDBUserTableName: !GetAtt 'DynamoDBStack.Outputs.UserTable'
@@ -60,7 +66,7 @@ Resources:
         DynamoDBActivityCategoryTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityCategoryTableArn'
         DynamoDBUserCaloriesAggTableName: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTable'
         DynamoDBUserCaloriesAggTableArn: !GetAtt 'DynamoDBStack.Outputs.UserCaloriesAggregateTableArn'
-        GraphQlSchemaS3DescriptionLocation: !Sub 's3://${S3BucketName}/assets/schema.graphql'
+        GraphQlSchemaS3DescriptionLocation: !Sub 's3://${S3BucketName}/${S3KeyPrefix}assets/schema.graphql'
 
   AppSyncResolverStack:
     Type: AWS::CloudFormation::Stack
@@ -68,13 +74,13 @@ Resources:
       - DynamoDBStack
       - AppSyncAPIStack
     Properties:
-      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/templates/appsync-resolvers.yaml'
+      TemplateURL: !Sub 'https://${S3BucketName}.s3.amazonaws.com/${S3KeyPrefix}templates/appsync-resolvers.yaml'
       Parameters:
-        AppSyncApiId: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncApiId'
-        AppSyncUserTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncUserTableDataSourceName'
-        AppSyncActivityTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncActivityTableDataSourceName'
-        AppSyncActivityCategoryTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncActivityCategoryTableDataSourceName'
-        AppSyncUserAggTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncUserAggTableDataSourceName'
+        AppSyncAPIId: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncApiId'
+        UserTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncUserTableDataSourceName'
+        ActivityTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncActivityTableDataSourceName'
+        ActivityCategoryTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncActivityCategoryTableDataSourceName'
+        UserAggTableDataSourceName: !GetAtt 'AppSyncAPIStack.Outputs.AppSyncUserAggTableDataSourceName'
 
 Outputs:
   AppSyncApp:
