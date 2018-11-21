@@ -190,7 +190,7 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     DependsOn: S3Bucket
     Properties:
-      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent2018-workshop/0_NEPTUNE/templates/copy-objects.yaml'
+      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/0_NEPTUNE/templates/copy-objects.yaml'
       TimeoutInMinutes: '5'
       Parameters:
         DestBucketName: !Ref S3Bucket
