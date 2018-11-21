@@ -116,15 +116,13 @@ export default {
         await API.graphql(graphqlOperation(createActivity, activity))
 
         // Success! Let's display a quick toast message to inform the user
-        if (!self.successToasterMessage) {
-          self.successToasterMessage = this.$f7.toast.create({
-            closeButton: true,
-            text: 'Activity added successfully!',
-            closeTimeout: 3000,
-            destroyOnClose: true,
-            position: 'top'
-          })
-        }
+        self.successToasterMessage = this.$f7.toast.create({
+          closeButton: true,
+          text: 'Activity added successfully!',
+          closeTimeout: 3000,
+          destroyOnClose: true,
+          position: 'top'
+        })
         
         // Open toast
         self.successToasterMessage.open();
@@ -133,14 +131,12 @@ export default {
         console.log('error:' + JSON.stringify(err))
 
         // Create toast with error message
-        if (!self.errorToasterMessage) {
-          self.errorToasterMessage = this.$f7.toast.create({
-            closeButton: true,
-            text: 'Error from AppSync: ' + JSON.stringify(err),
-            closeTimeout: 12000,
-            destroyOnClose: true
-          })
-        }
+        self.errorToasterMessage = this.$f7.toast.create({
+          closeButton: true,
+          text: 'Error from AppSync: ' + JSON.stringify(err),
+          closeTimeout: 12000,
+          destroyOnClose: true
+        })
         
         // Open toast
         self.errorToasterMessage.open();
