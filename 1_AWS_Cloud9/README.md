@@ -10,17 +10,17 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
   	![Cloud9 Env](../images/image_c9.png)
 
-3. Click `Create Environment`
+3. Click **Create Environment**.
 
-4. Name - `reinvent-calorie-tracker-workshop` and Click Next Step
+4. Provide a name, **reinvent-calorie-tracker-workshop** and Click **Next Step**.
 
-5. Under `Environmnent Settings`, choose **Create a new instance for environment (EC2)** and instance type as **m4.large**.
+5. Under **Environmnent Settings**, choose **Create a new instance for environment (EC2)** and **Instance type** as **m4.large**.
 
   	![Cloud9 Instance](../images/image-c9-instance.png)
 
-6. Clic `Next Step` and click `Create Environment`. This will take 3-5 minutes to create the environment.
+6. Click **Next Step** and click **Create Environment**. This will take 3-5 minutes to create the environment.
 
-7. Once your environment is ready, you will see the following screen. The bottom half of your window, you can see the Cloud9 terminal.
+7. Once your environment is ready, you will see the following screen. The top half is the welcome page and code editor window. And the bottom half is your terminal window.
 
   	![Cloud9 Env](../images/image-c9-view.png)
 
@@ -28,11 +28,11 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 8. Attach an IAM role to your Cloud9 EC2 instance.
 	> IAM roles for EC2 make it easier for your applications to make API requests securely from an instance because they do not require you to manage AWS security credentials that the applications use.
 	
-    1. Go to EC2 console. Make sure you are in **Ireland** region. Search for the keyword `aws-cloud9-reinvent-calorie-tracker-workshop-` and select the instance. Under `Actions` | `Instance Settings` | Select `Attach or Replace IAM Role`
+    1. Go to EC2 console. Make sure you are in **Ireland** region. Search for the keyword `aws-cloud9-reinvent-calorie-tracker-workshop-` and select the instance. Under **Actions** | **Instance Settings** | select **Attach or Replace IAM Role**.
 
 		![Cloud9 Env](../images/image-c9-ec2-instance.png)
 
-    2. Search for the IAM Role with keyword `AWSCloud9InstanceProfile` and select the role that appears in the search result. Click `Apply`.
+    2. Search for the IAM Role with keyword `AWSCloud9InstanceProfile` and select the role that appears in the search result. Click **Apply**.
 
     	![Cloud9 Env](../images/image-c9-role.png)
 
@@ -66,17 +66,17 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 
 ## Cloning the project
 
-Within your `AWS Cloud9 environment`, clone the workshop GitHub repo.
+Within your AWS Cloud9 environment, clone the workshop GitHub repo.
 
 ```
-Admin:~/environment $ git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop.git
-Admin:~/environment $ cd aws-appsync-calorie-tracker-workshop
+$ git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop.git
+$ cd aws-appsync-calorie-tracker-workshop
 ```
 
   ![Folder Structure](../images/image_c9_folder_structure.png)
 
 ---
 
-Congratulations!!! You have completed setting up your AWS Cloud9 environment and have cloned the project. In the next section, you will [load the given dataset into Amazon Neptune Cluster](../2_LOAD_DATA/README.md)
+**Congratulations!!!** You have completed setting up your AWS Cloud9 environment and have cloned the project. In the next section, you will [load the given dataset into Amazon Neptune Cluster](../2_LOAD_DATA/README.md)
 
 [Go back to the home page](../README.md)
