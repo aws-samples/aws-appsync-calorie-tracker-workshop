@@ -56,7 +56,7 @@ Steps:
 
 ## 1.2. Load the given food dataset into Amazon Neptune
 
-In this workshop, we are using the Health and Nutrition Dataset provided by the [Center for Disease Control and Preventation](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Dietary&CycleBeginYear=2015). NHANES conducts studies designed to assess the health and nutritional status of adults and children in the United States. The survey is unique in that it combines interviews and physical examinations.
+In this workshop, we are using a mock data similar to the Health and Nutrition Dataset provided by the [Center for Disease Control and Preventation](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Dietary&CycleBeginYear=2015). NHANES conducts studies designed to assess the health and nutritional status of adults and children in the United States. 
 
 The datasets that needs to be loaded into Amazon Neptune are available under the `datasets` folder.
 
@@ -170,13 +170,18 @@ Under AWS lambda, you will find a Lambda function named `suggest-food-for-user
 `. This is essentially running the following gremlin query where:
 
 - gremlin is traversing the vertex with label `person` and has a property `bmi` less than or equal to 24.
-- Get the outgoing traversal with edges as `has` and label it as `food`.
+- Get the outgoing traversal with edges as `has` and label it as `category`.
 - In the same way, get the outgoing traversal with edges as `eats`.
 - Then filter the results where calories is less than 400, sugar is less than 2 gm, return the `name` of food types that match this criteria and label the output as `type`.
-- Select the objects labels `food` and `type` from the path and remove (`dedup`) any repeated items.
+- Select the objects labels `category` and `type` from the path and remove (`dedup`) any repeated items.
 
 	```
-	g.V().has('person','bmi',lte(24)).out('has').id().as('food').out('eats').filter(values('calorie').is(lt(400))).filter(values('sugar').is(lt(2))).values('name').as('type').select('food','type').dedup()
+  g.V().has('person','bmi',lte(24)).
+    out('has').as('category').
+    out('eats').
+    has('calorie',lt(400)).
+    has('sugar',lt(2)).as('type').
+    select('category','type').by(id()).by('name').dedup()
 	```
 
 - In order to test this Lambda function, copy the following as test input
