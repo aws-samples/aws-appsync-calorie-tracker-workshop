@@ -2,13 +2,15 @@
 
 In this section, we will create:
 
-- [Amazon Neptune](https://aws.amazon.com/neptune/) Cluster in a private subnet within an Amazon Virtual Private Cloud (VPC)
+- Amazon Neptune Cluster in a private subnet within an Amazon Virtual Private Cloud (VPC)
 - AWS Identity and Access Management (IAM) role to load the given dataset from an Amazon S3 bucket into Amazon Neptune cluster. Loading data from an Amazon S3 bucket requires an IAM role that has permissions to  access the S3 bucket. Amazon Neptune assumes this role in order to load the data.
 - S3 bucket to copy the given dataset files to.
 - An EC2 instance with Gremlin and Sparql clients installed. We will be using Gremlin traversal language to query the graph. 
 - A **suggest-food-for-user** lambda function deployed in a VPC which is used to provide food suggestions based on user activities and BMI.
 
-In order to ease the workshop and save time, we have created a CloudFormation template that creates the above resources in your AWS Account. Please note, for this workshop we will be using the **Ireland (eu-west-1)** region.
+In order to ease the workshop and save time, we have created a CloudFormation template that creates the above resources in your AWS Account. 
+
+>Please note, for this workshop we will be using the **Ireland (eu-west-1)** region.
 
 -----
 ## Deploy the Cloudformation Stack
@@ -28,9 +30,11 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 
     ![CFN](../images/image-cfn-inputs.png)
 
-3. Click next. Under **Capabilities**, check both the boxes and click **Create Change Set** under Transform. Then click **Next**.
+3. Click next. Under **Capabilities**, check both the boxes and click **Create Change Set** under Transform. Then click **Next** and **Execute**
 
     ![CFN](../images/image-cfn-capability.png)
+
+    ![CFN](../images/image-cfn-execute.png)
 
     It will take 15-20 mintues to complete the stack.
 
@@ -52,6 +56,6 @@ $ aws cloudformation describe-stacks --stack-name YOUR-STACK-NAME-HERE --query '
 ---
 **Congratulations!** You have successfully setup an Amazon Neptune cluster.
 
-Next, we will be setting up the [AWS Cloud9 environment Development Environment](../1_AWS_Cloud9/README.md)
+Next, we will be setting up the [AWS Cloud9 Development Environment](../1_AWS_Cloud9/README.md)
 
 [Go back to the home page](../README.md)
