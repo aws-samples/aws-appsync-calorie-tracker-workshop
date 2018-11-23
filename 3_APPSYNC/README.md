@@ -12,11 +12,16 @@ Steps:
   - [2.3 Configure resolvers](#23-configure-resolvers)
  - [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
-For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below. Use it only if you want to save time, and skip to next module.
+For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below. Use it only if you want to save time and then go to [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
+
+<details>
+<summary><b>AppSync Master Cloudformation template</b></summary><p>
 
 Region| Launch
 ------|-----
 eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/master.yaml)
+
+</p></details>
 
 -----
 
