@@ -131,7 +131,7 @@ gremlin> g.V().count()
 ==>80
   ```
 
-> IMPORTANT: In case the count is not 80, please make sure `Step 3` under 1.4 is executed correctly.
+> IMPORTANT: In case the count is not 80, please make sure `Step 3` under 1.2 is executed correctly.
 
 **Query 2:** Returns the list of users whose BMI < 24
 
