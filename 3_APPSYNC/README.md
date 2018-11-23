@@ -238,6 +238,6 @@ AppSync is setup to use DynamoDB tables as data sources to persist user informat
 
 Lambda function is subscribed to DynamoDB streams and is setup to be triggered every time user add or delete an activity.
 
-[Next - Setup the frontend application](../4_FRONTEND_APP/README.md)
+[Next - Setup the frontend VueJS application](../4_FRONTEND_APP/README.md)
 
 [Back to home page](../README.md)
