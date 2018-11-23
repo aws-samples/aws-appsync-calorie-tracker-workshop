@@ -232,7 +232,9 @@ The filter ensures that when the query is executed it should only return activit
 
 There are many additional ways to lock-down and secure your AWS AppSync APIs. See the [AWS AppSync Developer's Guide](https://docs.aws.amazon.com/appsync/latest/devguide/security.html#amazon-cognito-user-pools-authorization) for additional details. 
 
-### 6a. Run the app (Cloud9 Environment)
+### 6. Run the app within AWS Cloud9
+
+#### 6a. Run the app (Cloud9 Environment)
 
 - Open the `4_FRONTEND_APP/buid/webpack.dev.conf.js` file and add the entry under devServer
 
@@ -248,7 +250,16 @@ where `xxxx` is the ID that AWS Cloud9 assigns to the environment. Please update
 $ npm start
 ```
 
-### 6b. Run the app (Local Environment)
+After Webpack is done arranging and compiling all of the App's assests, you should be seeing the following message:
+
+![Screenshot-7](../images/readme-7.png)
+
+In the Cloud9 menu bar, click **Preview** | **Preview Running Application** and click the highlighted (in red) to open the window in a new browser 
+
+![Screenshot-12](../images/image-app-preview.png)
+
+<details>
+<summary><b>In case you are using not using AWS Cloud9 to run the app (Local Environment)</b></summary><p>
 
 In order for the app to properly work it'll need to be served on a secure (HTTPS) server. We'll be using Webpack's `--https` flag to generate and serve a self-signed certificate. 
 
@@ -258,10 +269,11 @@ In order for the app to properly work it'll need to be served on a secure (HTTPS
 "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --https",
 ```
 
-
 After Webpack is done arranging and compiling all of the App's assests, you should be seeing the following message:
 
 ![Screenshot-7](../images/readme-7.png)
+
+</p></details>
 
 Since we're building a mobile app, we would recommend using your browser's development toolbar to mimic an actual iPhone 6 device screen:
 

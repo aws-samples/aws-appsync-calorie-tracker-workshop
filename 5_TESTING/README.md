@@ -23,7 +23,7 @@
 ---
 ### Next, lets check the suggested food
 
-Oops!!!. if you find the page spinning and dont get any suggestions, lets configure it and get it working
+Oops!!!. if you find the page spinning and/or dont get any suggestions, lets configure it and get it working
 
 #### Step 1: Setup a new Appsync Data source:
 
