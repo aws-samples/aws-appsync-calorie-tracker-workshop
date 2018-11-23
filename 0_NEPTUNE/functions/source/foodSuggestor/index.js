@@ -1,7 +1,6 @@
 'use strict';
 
 const gremlin = require('gremlin');
-const GraphSON = require('graphson');
 
 const DriverRemoteConnection = gremlin.driver.DriverRemoteConnection;
 const Graph = gremlin.structure.Graph;

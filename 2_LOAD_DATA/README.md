@@ -26,7 +26,7 @@ Steps:
 
   ![VPCE](../images/image-VPCE.png)
 
-7. Under `Policy`, select `custom`, copy and paste the following policy. Make sure you replace the YOUR_BUCKET_NAME_HERE with the S3 Bucket name from step 1.2.
+7. Under `Policy`, select `custom`, copy and paste the following policy. Make sure you replace the YOUR_BUCKET_NAME_HERE with the S3 Bucket that you created in Module 0 (check **reinvent-calorietracker-module0** outputs). 
 
   ```json
 {
@@ -42,8 +42,8 @@ Steps:
                 "s3:GetBucketLocation"
             ],
             "Resource": [
-                "arn:aws:s3:::YOUR_BUCKET_NAME_HERE",
-                "arn:aws:s3:::YOUR_BUCKET_NAME_HERE/*"
+                "arn:aws:s3:::S3_BUCKET_NAME_HERE",
+                "arn:aws:s3:::S3_BUCKET_NAME_HERE/*"
             ]
         }
     ]
@@ -159,7 +159,20 @@ Can you write a gremlin query to get the names of food consumed by one of the us
 
   ```
 gremlin> g.V("83744").out('has').out('eats').values('name')
-==> Sandwiches combined with Coffee, tea with: milk, cream, sugar
+==>Sandwiches combined with salads
+==>Sandwiches combined with Coffee, tea with: milk, cream, sugar
+==>Frozen meals combined with Cereals with: milk, sugar, fruit, butter.
+==>Sandwiches combined with salads
+==>Sandwiches combined with salads
+==>Sandwiches combined with Coffee, tea with: milk, cream, sugar
+==>salads
+==>Rice, pasta, spaghetti, eggs, other mixtures with: butter, gravy, sauce, condiments. combined with salads
+==>Sandwiches combined with salads
+==>Sandwiches combined with Coffee, tea with: milk, cream, sugar
+==>Sandwiches combined with Coffee, tea with: milk, cream, sugar
+==>salads
+==>Frozen meals combined with Cereals with: milk, sugar, fruit, butter.
+==>Rice, pasta, spaghetti, eggs, other mixtures with: butter, gravy, sauce, condiments. combined with salads
   ```
 
 ----
