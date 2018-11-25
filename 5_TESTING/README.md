@@ -54,7 +54,7 @@ Oops!!!. if you find the page spinning and/or dont get any suggestions, lets con
 
 3. Click Attach
 4. `Create a New Resolver`
-5. Select `suggesteFood` data source that was created in Step 1
+5. Select `suggestedFood` data source that was created in Step 1
 
 ![New Resolver](../images/create-suggested-food-resolver.png)
 
