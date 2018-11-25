@@ -234,9 +234,11 @@ You have successfully configured DynamoDB as an event source for the Lambda func
 ## Summary
 **Congratulations!!** You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
 
-AppSync is setup to use DynamoDB tables as data sources to persist user information.
+AppSync is setup to use DynamoDB tables as data sources to persist user information. The below picture shows the relationalship between Appsync Schema, resolver and Datasources.
 
-Lambda function is subscribed to DynamoDB streams and is setup to be triggered every time user add or delete an activity.
+![Appsync](../images/image-appsync-completed.png)
+
+We also configured DynamoDB as event source on **add-new-user-bmi** Lambda function and is setup to be triggered every time user add registers.
 
 [Next - Setup the frontend VueJS application](../4_FRONTEND_APP/README.md)
 
