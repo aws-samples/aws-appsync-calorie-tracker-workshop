@@ -38,3 +38,7 @@ This workshop requires:
 4. [Setting up frontend - Vuejs application](./4_FRONTEND_APP/README.md)
 5. [Testing the application](./5_TESTING/README.md)
 6. [Closing and Clean up](./6_CLEANUP/README.md)
+
+## License:
+
+This sample code is made available under a modified MIT license. See the LICENSE file.
