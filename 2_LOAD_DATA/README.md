@@ -2,9 +2,6 @@
 
 Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup, lets clone the project and load the dataset into our Neptune Cluster.
 
-![completed](../images/image-neptune-completed.png)
-
-
 Steps:
 - [1.1. Create S3 VPC Endpoint](#11-create-amazon-s3-vpc-endpoint)
 - [1.2. Load the dataset into Neptune](#12-load-the-given-food-dataset-into-amazon-neptune)
