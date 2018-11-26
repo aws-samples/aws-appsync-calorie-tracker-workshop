@@ -58,17 +58,19 @@ export default {
       self.$f7.preloader.show()
 
       // Send credentials to Cognito Endpoint
+      this.cognitoLogger.info('Authenticating ' + this.username + ' with AWS Cognito')
+
       Auth.signIn(this.username, this.password)
         .then(user => {
           // Create toast message
-          if (!self.successToastMessage) {
-            self.successToastMessage = self.$f7.toast.create({
-              closeButton: true,
-              text: 'Login Successful!' ,
-              closeTimeout: 3000,
-              destroyOnClose: true
-            })
-          }
+          self.successToastMessage = self.$f7.toast.create({
+            closeButton: true,
+            text: 'Login Successful!' ,
+            closeTimeout: 3000,
+            destroyOnClose: true
+          })
+
+          this.cognitoLogger.info('Authentication Successful')
 
           // Save user details in local storage
           localStorage['aws-calorie-tracker-userid'] = user.signInUserSession.idToken.payload.sub
@@ -87,15 +89,15 @@ export default {
           // Hide spinner
           self.$f7.preloader.hide()
 
+          this.cognitoLogger.error('Error while authenticating: ' + JSON.stringify(err))
+
           // Create toast error message
-          if (!self.errorToastMessage) {
-            self.errorToastMessage = self.$f7.toast.create({
-              closeButton: true,
-              text: 'Error from Cognito: ' + JSON.stringify(err) ,
-              closeTimeout: 3000,
-              destroyOnClose: true
-            })
-          }
+          self.errorToastMessage = self.$f7.toast.create({
+            closeButton: true,
+            text: 'Error from Cognito: ' + JSON.stringify(err) ,
+            closeTimeout: 3000,
+            destroyOnClose: true
+          })
 
           // Open toast message
           self.errorToastMessage.open()

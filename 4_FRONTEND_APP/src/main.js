@@ -27,6 +27,7 @@ import { AmplifyPlugin } from 'aws-amplify-vue'
 import aws_exports from './aws-exports'
 
 var appSyncLogger = new Logger('AppSync', 'INFO')
+var cognitoLogger = new Logger('Cognito', 'INFO')
 
 Amplify.configure(aws_exports)
 
@@ -38,6 +39,9 @@ Vue.mixin({
     return {
       get appSyncLogger() {
         return appSyncLogger
+      },
+      get cognitoLogger() {
+        return cognitoLogger
       }
     }
   }
