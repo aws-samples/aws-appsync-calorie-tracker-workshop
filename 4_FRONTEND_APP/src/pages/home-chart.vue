@@ -49,7 +49,7 @@ export default {
     const groupByCalorieDate = _(getUserAggregateDetails)
           .sortBy("date")
 
-    console.log("groupByCalorieDate", JSON.stringify(groupByCalorieDate));
+    // console.log("groupByCalorieDate", JSON.stringify(groupByCalorieDate));
 
         this.date = _(groupByCalorieDate)
           .map("date")

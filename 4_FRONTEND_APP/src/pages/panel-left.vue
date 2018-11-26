@@ -23,9 +23,9 @@ export default {
       localStorage.removeItem('aws-calorie-tracker-userid')
 
       // Sign out via Cognito
-      this.cognitoLogger('Sending sign out request')
+      this.cognitoLogger.info('Sending sign out request')
       Auth.signOut()
-      this.cognitoLogger('Done. You are now logged out.')
+      this.cognitoLogger.info('Done. You are now logged out.')
     }
   }
 }
