@@ -178,14 +178,13 @@ gremlin> g.V("83744").out('has').out('eats').values('name')
 
 ## 1.3. Test Food-Suggestor lambda function.
 
-Under AWS lambda, you will find a Lambda function named `suggest-food-for-user
-`. This is essentially running the following gremlin query where:
+Under AWS lambda, you will find a Lambda function named **suggest-food-for-user**. This is essentially running the following gremlin query where:
 
-- gremlin is traversing the vertex with label `person` and has a property `bmi` less than or equal to 24.
-- Get the outgoing traversal with edges as `has` and label it as `category`.
-- In the same way, get the outgoing traversal with edges as `eats`.
-- Then filter the results where calories is less than 400, sugar is less than 2 gm, return the `name` of food types that match this criteria and label the output as `type`.
-- Select the objects labels `category` and `type` from the path and remove (`dedup`) any repeated items.
+- gremlin is traversing the vertex with label **perso** and has a property **bmi** less than or equal to 24.
+- Get the outgoing traversal with edges as **has** and label it as **category**.
+- In the same way, get the outgoing traversal with edges as **eats**.
+- Then filter the results where calories is less than 400, sugar is less than 2 gm, return the **name** of food types that match this criteria and label the output as **type**.
+- Select the objects labels **category** and **type** from the path and remove (*dedup*) any repeated items.
 
 	```
   g.V().has('person','bmi',lte(24)).
