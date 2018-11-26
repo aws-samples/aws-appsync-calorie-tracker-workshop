@@ -93,7 +93,7 @@ We will be using DynamoDB as our data sources. We will create 4 data sources, on
 
 **UserTable data source**
 
-On the left pane, select **Data Sources**. Click **New**. Fill the details as provided below and click **Create**.
+On the left pane, select **Data Sources**. Click **Create data source**. Fill the details as provided below and click **Create**.
 - Data source name: **UserTable**
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
@@ -104,7 +104,7 @@ On the left pane, select **Data Sources**. Click **New**. Fill the details as pr
 
 **ActivityTable data source**
 
-Click **New**. Fill the details as provided below and click **Create**.
+Click **Create data source**. Fill the details as provided below and click **Create**.
 - Data source name: **ActivityTable**
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
@@ -113,7 +113,7 @@ Click **New**. Fill the details as provided below and click **Create**.
 
 **UserAggregateTable data source**
 
-Click **New**. Fill the details as provided below and click **Create**.
+Click **Create data source**. Fill the details as provided below and click **Create**.
 - Data source name: **UserAggregateTable**
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
@@ -122,7 +122,7 @@ Click **New**. Fill the details as provided below and click **Create**.
 
 **ActivityCategoryTable data source**
 
-Click **New**. Fill the details as provided below and click **Create**.
+Click **Create data source**. Fill the details as provided below and click **Create**.
 - Data source name: **ActivityCategoryTable**
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
@@ -138,15 +138,42 @@ In this section we will create a GraphQL Schema. In the following first few step
 - On the left pane, select **Schema**.
   ##### Create Type - User
   - First, we will create a **User** type which will contain the attributes we want to store in DynamoDB table for each user. 
-
+	```
+	  type User {
+	    caloriesConsumed: Int
+	    caloriesTargetPerDay: Int!
+	    height: Float!
+	    id: String!
+	    username: String!
+	    weight: Float!
+	    bmi: Float
+	  }
+	  ```
   ##### Create Query - getUser
   - Now we will create a Query type **getUser** to fetch user details based on the User Id. The query **getUser** take **ID** as input argument and returns **User** type.
-
+	 ```
+	 type Query {
+	      getUser(id: ID!): User
+	  }
+	 ```
   ##### Create Mutation - createUser
     - Let's create a Mutation type **createUser**. This mutation will be used by our app to store user information.
     - To create **createUser** mutation type, copy the text from below and paste it in your AppSync Schema.
     - The mutation **createUser** takes **CreateUserInput** as input argument and return **User** type. **CreateUserInput** is an Input type which contains the attributes we want to store for each user.
-
+	 ```
+	  type Mutation {
+	    createUser(input: CreateUserInput!): User
+	  }
+	
+	  input CreateUserInput {
+	    id: String
+	    caloriesConsumed: Int
+	    caloriesTargetPerDay: Int!
+	    height: Float!
+	    username: String!
+	    weight: Float!
+	  }
+	 ```
   Your AppSync Schema should look like below. Click `Save` to save your schema.
   ```
   type User {
@@ -179,7 +206,7 @@ In this section we will create a GraphQL Schema. In the following first few step
   ```
     ![AppSync Schema](../images/image-appsync-schema.png)
 
-- We have pre-created the schema. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
+- We have pre-created the overall schema of our application. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
 
   ![AppSync Schema](images/appsync-schema.jpg)
 
@@ -194,7 +221,6 @@ We will configure query, mutation and subscription resolvers in this step.
 > Make a note of your AppSync API ID.
 >- On the left page, select **Settings**.
 >- Click **Copy** button next to the API ID field.
->- Replace **API_ID** with your API ID, in the command below.
 
   ![AppSync resolvers](../images/image-appsync-api.png)
 
@@ -204,7 +230,9 @@ Region| Launch
 ------|-----
 eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/appsync-resolvers.yaml)
 
-  ![AppSync resolvers](../images/image-resolvers-ds.png)
+ - Paste the API ID for the *AppSyncAPIId* parameter value.
+
+  	![AppSync resolvers](../images/image-resolvers-ds.png)
 
 - When the CloudFormation stack is completed successfully, you will have your resolvers configured.
 
@@ -219,8 +247,8 @@ When a new user signup, the app captures their height and weight. Using this, we
 In this step, we will configure Amazon DynamoDB as an event source to `add-new-user-bmi` Lambda function.
 
 - Go to AWS Lambda console.
-- Click `add-new-user-bmi` function.
-- Under `triggers` in the left pane, select `DynamoDB`
+- Click **add-new-user-bmi** function.
+- Under **triggers** in the left pane, select **DynamoDB**
 - Select `DynamoDB` in the center pane, scroll down to `Configure trigger` section
 
   ![BMI Lambda](../images/image-add-bmi-lambda.png)
