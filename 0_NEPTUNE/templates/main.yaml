@@ -25,6 +25,34 @@ Metadata:
           - DBReplicaIdentifierSuffix
           - SetupGremlinConsole
           - SetupRDF4JConsole
+    ParameterLabels:
+      EC2SSHKeyPairName:
+        default: Key pair name
+      EC2ClientInstanceType:
+        default: Instance type
+      WorkshopName:
+        default: Workshop name
+      S3BucketName:
+        default: S3 bucket name
+      AttachBulkloadIAMRoleToNeptuneCluster:
+        default: Attatch bulk load IAM role
+      NeptuneEC2ClientExtraSG:
+        default: Neptune client security group
+      NeptuneEnableAuditLog:
+        default: Enable audit log
+      DbInstanceType:
+        default: DB instance type
+      NeptuneQueryTimeout:
+        default: Query timeout
+      IamAuthEnabled:
+        default: Is Auth enabled
+      DBReplicaIdentifierSuffix:
+        default: DB replica identifier suffix
+      SetupGremlinConsole:
+        default: Setup gremlin console
+      SetupRDF4JConsole:
+        default: Setup RDF4J console
+    
 Parameters:
   EC2ClientInstanceType:
     Description: EC2 instance with Gremlin and Sparql clients installed. We will be using Gremlin traversal language to query the graph.
@@ -158,6 +186,14 @@ Resources:
     Type: "AWS::S3::Bucket"
     Properties:
       BucketName: !Ref S3BucketName
+  CopyObjectsStack:
+    Type: 'AWS::CloudFormation::Stack'
+    DependsOn: S3Bucket
+    Properties:
+      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/0_NEPTUNE/templates/copy-objects.yaml'
+      TimeoutInMinutes: '5'
+      Parameters:
+        DestBucketName: !Ref S3Bucket
   NeptuneStack:
     Type: 'AWS::CloudFormation::Stack'
     Properties:

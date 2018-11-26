@@ -101,10 +101,14 @@ export default {
     subscribeToDeleteActivity() {
       var self = this
 
+      this.appSyncLogger.info('Subscribing to the onDelete subscription')
+
       // Subscripte to the onDeleteActivities subscription
       self.subscription = API.graphql(graphqlOperation(onDeleteActivity)
         ).subscribe({
           next: ({ value: { data }}) => {
+            this.appSyncLogger.info('onDeleteActivity Subscription Invoked! Refreshing Activities.')
+
             // Zero all arrays so we don't get duplicates oncd we refresh activities
             self.sortedActivities = []
             self.activites = []
@@ -114,6 +118,8 @@ export default {
             self.getActivities()
           }
         })
+
+      this.appSyncLogger.info('Subscribed to onDelete subscription: ' + JSON.stringify(self.subscription))
     },
     async getActivities() {
       // Display spinner
@@ -121,15 +127,22 @@ export default {
       
       try {
         // Fetch all activities associated with the current UserID
+        this.appSyncLogger.info('Invoking the listActivites Query')
+
         const activities = await API.graphql(graphqlOperation(listActivities, { userid: localStorage['aws-calorie-tracker-userid'] }))
         this.activities = activities.data.listActivities.items
+
+        this.appSyncLogger.info('listActivities returned: ' + JSON.stringify(this.activities))
         
         // Fetch all possible categories
+        this.appSyncLogger.info('Invoking the listActivityCategoriesOnly Query')
+
         const categories = await API.graphql(graphqlOperation(listActivityCategoriesOnly))
         this.categories = categories.data.listActivityCategories.items
 
+        this.appSyncLogger.info('listActivityCategoriesOnly returned: ' + JSON.stringify(this.categories))
       } catch(err) {
-        console.log(err)
+        this.appSyncLogger.error('Error while invoking queries: ' + JSON.stringify(err))
       }
 
       // Done! Let's quickly sort each activity to match its respective category
@@ -137,6 +150,8 @@ export default {
     },
     async deleteActivity(activityId) {
       try {
+        this.appSyncLogger.info('Invoking the deleteActivity mutation')
+
         // Delete an activity via the deleteActivity Mutation
         const { data: { deleteActivity: { items }} } = await API.graphql(graphqlOperation(deleteActivity, {
           input: {
@@ -144,7 +159,7 @@ export default {
           }
         }))
       } catch(err) {
-        console.log(err)
+        this.appSyncLogger.error('Error while invoking deleteActivity: ' + JSON.stringy(err))
       }
     },
     convertIsoDateToString(isoDate) {

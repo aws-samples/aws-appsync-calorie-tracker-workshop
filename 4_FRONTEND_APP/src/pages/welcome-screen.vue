@@ -74,9 +74,13 @@ export default {
   methods: {
     async createUserDetails() {
       try {
+        this.appSyncLogger.info('Invoking the createUser Mutation')
+
         const { data: { createUser: { items }} } = await API.graphql(graphqlOperation(createUser, this.data))
+
+        this.appSyncLogger.info('createUser invoked successfully')
       } catch (err) {
-        console.log('Error:' + JSON.stringify(err))
+        this.appSyncLogger.error('Error while invoking createUser: ' + JSON.stringify(err))
       }
 
       // Ready to go! Navigate to home screen

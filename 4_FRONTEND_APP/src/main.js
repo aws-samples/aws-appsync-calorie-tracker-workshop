@@ -15,19 +15,37 @@ import IconsStyles from './css/icons.css';
 import AppStyles from './css/app.css';
 
 // Import App Component
-import App from './app';
+import App from './app'
 
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue)
 
 // Init AWS AmplifyJS
-import Amplify, * as AmplifyModules from 'aws-amplify';
-import { AmplifyPlugin } from 'aws-amplify-vue';
-import aws_exports from './aws-exports';
+import Amplify, * as AmplifyModules from 'aws-amplify'
+import { Logger } from 'aws-amplify';
+import { AmplifyPlugin } from 'aws-amplify-vue'
+import aws_exports from './aws-exports'
+
+var appSyncLogger = new Logger('AppSync', 'INFO')
+var cognitoLogger = new Logger('Cognito', 'INFO')
 
 Amplify.configure(aws_exports)
 
 Vue.use(AmplifyPlugin, AmplifyModules)
+
+// Init Amplify Logger Mixin
+Vue.mixin({
+  data: function() {
+    return {
+      get appSyncLogger() {
+        return appSyncLogger
+      },
+      get cognitoLogger() {
+        return cognitoLogger
+      }
+    }
+  }
+})
 
 // Init App
 new Vue({

@@ -2,7 +2,7 @@
 
 In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
-To simplify the process, we will use AWS CloudFormation templates to create resources for our application backend.
+To simplify the process, we will use AWS CloudFormation templates to create different resources for our application backend.
 
 Steps:
 - [1. Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
@@ -11,6 +11,26 @@ Steps:
   - [2.2 Setup AppSync Schema](#22-setup-appsync-schema)
   - [2.3 Configure resolvers](#23-configure-resolvers)
  - [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
+
+For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below. Use it only if you want to save time.
+
+<details>
+<summary><b>AWS AppSync Master CloudFormation template</b></summary><p>
+
+Region| Launch
+------|-----
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/master.yaml)
+
+Once the Cloudformation stack has completed, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
+
+```
+aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
+```
+![Calories Aggregator function](../images/image-dynamo-batch-write.png)
+
+Next, go to [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
+
+</p></details>
 
 -----
 
@@ -44,7 +64,7 @@ When the stack creation is completed successfully, you will have following 4 tab
 
 ![Calories Aggregator function](../images/image-calories-aggregator-lambda.png)
 
-Next, go to your `AWS Cloud 9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
+Next, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
 
 ```
 aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
@@ -53,7 +73,9 @@ aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-c
 
 
 ### Step 2: Create AppSync API backend
-Now, we will use the DynamoDB tables created in Step 1 to create GraphQL backend. Open the AWS AppSync Console and click **Create API**.
+Now, we will use the DynamoDB tables created in Step 1 to create GraphQL backend. 
+
+Open the AWS AppSync Console and click **Create API**.
 
 ![AppSync Create API](images/appsync-createapi.jpg)
 
@@ -71,7 +93,7 @@ We will be using DynamoDB as our data sources. We will create 4 data sources, on
 
 **UserTable data source**
 
-On the left pane, select **Data Sources**. Click **New**. Fill the details as provided below and click **Create**.
+On the left pane, select **Data Sources**. Click **Create data source**. Fill the details as provided below and click **Create**.
 - Data source name: **UserTable**
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
@@ -82,7 +104,7 @@ On the left pane, select **Data Sources**. Click **New**. Fill the details as pr
 
 **ActivityTable data source**
 
-Click **New**. Fill the details as provided below and click **Create**.
+Click **Create data source**. Fill the details as provided below and click **Create**.
 - Data source name: **ActivityTable**
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
@@ -91,7 +113,7 @@ Click **New**. Fill the details as provided below and click **Create**.
 
 **UserAggregateTable data source**
 
-Click **New**. Fill the details as provided below and click **Create**.
+Click **Create data source**. Fill the details as provided below and click **Create**.
 - Data source name: **UserAggregateTable**
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
@@ -100,14 +122,15 @@ Click **New**. Fill the details as provided below and click **Create**.
 
 **ActivityCategoryTable data source**
 
-Click **New**. Fill the details as provided below and click **Create**.
+Click **Create data source**. Fill the details as provided below and click **Create**.
 - Data source name: **ActivityCategoryTable**
 - Data source type: **Amazon DynamoDB table**
 - Region: **EU-WEST-1**
 - Table name: **caltrack_activity_category_table**
 - Use an Existing Role: **appsync-ddb-datasource**
 
-Once you have create the datasource, you should have 4 Appsync Datasources. 
+Once you have created the datasources, you should see 4 Appsync Datasources in the console. 
+
 ![AppSync data source](../images/image-completed-ds.png)
 
 #### 2.2 Setup AppSync Schema
@@ -115,16 +138,43 @@ In this section we will create a GraphQL Schema. In the following first few step
 - On the left pane, select **Schema**.
   ##### Create Type - User
   - First, we will create a **User** type which will contain the attributes we want to store in DynamoDB table for each user. 
-
+	```
+	  type User {
+	    caloriesConsumed: Int
+	    caloriesTargetPerDay: Int!
+	    height: Float!
+	    id: String!
+	    username: String!
+	    weight: Float!
+	    bmi: Float
+	  }
+	  ```
   ##### Create Query - getUser
   - Now we will create a Query type **getUser** to fetch user details based on the User Id. The query **getUser** take **ID** as input argument and returns **User** type.
-
+	 ```
+	 type Query {
+	      getUser(id: ID!): User
+	  }
+	 ```
   ##### Create Mutation - createUser
     - Let's create a Mutation type **createUser**. This mutation will be used by our app to store user information.
     - To create **createUser** mutation type, copy the text from below and paste it in your AppSync Schema.
     - The mutation **createUser** takes **CreateUserInput** as input argument and return **User** type. **CreateUserInput** is an Input type which contains the attributes we want to store for each user.
-
-  Your AppSync Schema should like the below and Click `Save`.
+	 ```
+	  type Mutation {
+	    createUser(input: CreateUserInput!): User
+	  }
+	
+	  input CreateUserInput {
+	    id: String
+	    caloriesConsumed: Int
+	    caloriesTargetPerDay: Int!
+	    height: Float!
+	    username: String!
+	    weight: Float!
+	  }
+	 ```
+  Your AppSync Schema should look like below. Click `Save` to save your schema.
   ```
   type User {
     caloriesConsumed: Int
@@ -156,7 +206,7 @@ In this section we will create a GraphQL Schema. In the following first few step
   ```
     ![AppSync Schema](../images/image-appsync-schema.png)
 
-- We have pre-created the schema. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
+- We have pre-created the overall schema of our application. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
 
   ![AppSync Schema](images/appsync-schema.jpg)
 
@@ -171,7 +221,6 @@ We will configure query, mutation and subscription resolvers in this step.
 > Make a note of your AppSync API ID.
 >- On the left page, select **Settings**.
 >- Click **Copy** button next to the API ID field.
->- Replace **API_ID** with your API ID, in the command below.
 
   ![AppSync resolvers](../images/image-appsync-api.png)
 
@@ -181,7 +230,9 @@ Region| Launch
 ------|-----
 eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/appsync-resolvers.yaml)
 
-  ![AppSync resolvers](../images/image-resolvers-ds.png)
+ - Paste the API ID for the *AppSyncAPIId* parameter value.
+
+  	![AppSync resolvers](../images/image-resolvers-ds.png)
 
 - When the CloudFormation stack is completed successfully, you will have your resolvers configured.
 
@@ -191,13 +242,13 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 
 ### Step 3: Add Amazon DynamoDB (user-table) as Event Source for `add-new-user-bmi` Lambda
 
-When a new user signup, the app captured their height and weight. Using this, we need calculate their BMI which will be used later to provide diet suggestions. 
+When a new user signup, the app captures their height and weight. Using this, we need to calculate their BMI which will be used later to provide diet suggestions. 
 
-In this step, we will setup configure Amazon DynamoDB as an event source to `add-new-user-bmi` Lambda function.
+In this step, we will configure Amazon DynamoDB as an event source to `add-new-user-bmi` Lambda function.
 
 - Go to AWS Lambda console.
-- Click `add-new-user-bmi` function.
-- Under `triggers` in the left pane, select `DynamoDB`
+- Click **add-new-user-bmi** function.
+- Under **triggers** in the left pane, select **DynamoDB**
 - Select `DynamoDB` in the center pane, scroll down to `Configure trigger` section
 
   ![BMI Lambda](../images/image-add-bmi-lambda.png)
@@ -218,12 +269,14 @@ You have successfully configured DynamoDB as an event source for the Lambda func
 ---
 
 ## Summary
-Congratulations. You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
+**Congratulations!!** You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
 
-AppSync is setup to use DynamoDB tables as data sources to persist user information.
+AppSync is setup to use DynamoDB tables as data sources to persist user information. The below picture shows the relationalship between Appsync Schema, resolver and Datasources.
 
-Lambda function is subscribed to DynamoDB streams and is setup to be triggered every time user add or delete an activity.
+![Appsync](../images/image-appsync-completed.png)
 
-[Proceed to next section - Setting up the frontend application](../4_FRONTEND_APP/README.md)
+We also configured DynamoDB as event source on **add-new-user-bmi** Lambda function and is setup to be triggered every time user add registers.
+
+[Next - Setup the frontend VueJS application](../4_FRONTEND_APP/README.md)
 
 [Back to home page](../README.md)

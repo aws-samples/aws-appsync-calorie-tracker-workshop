@@ -41,6 +41,8 @@ export default {
       self.$f7.preloader.show()
 
 			// Verify user via Cognito's confirmSignUp function
+			this.cognitoLogger.info('Verifying ' + this.username + ' with AWS Cognito Endpoint')
+
 			Auth.confirmSignUp(this.username, this.code)
 			.then(data => {
 				console.log(data)

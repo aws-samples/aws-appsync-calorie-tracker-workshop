@@ -74,7 +74,7 @@ export default {
           .map("calories")
           .value();
 
-    console.log(`${this.labels} - ${this.calories}`)
+    // console.log(`${this.labels} - ${this.calories}`)
 
     this.renderChart({
       labels: this.labels ? this.labels: ["No Data"] ,

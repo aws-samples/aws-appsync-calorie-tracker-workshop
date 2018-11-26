@@ -70,13 +70,17 @@ export default {
   },
   async created() {
     try {
+      this.appSyncLogger.info('Invoking the listActivityCategories Query')
+
       const { data: { listActivityCategories: { items }} } = await API.graphql(graphqlOperation(listActivityCategories))
+
+      this.appSyncLogger.info('listActivityCategories returned: ' + JSON.stringify(items))
 
       this.categories = items
       this.loading = false
 
     } catch (err) {
-      console.log(err)
+      this.appSyncLogger.error('Error while invoking listActivityCategories: ' + JSON.stringify(err))
     }
   },
   methods: {
@@ -112,39 +116,38 @@ export default {
       }
 
       try {
-        // Perform Mutation
+        this.appSyncLogger.info('Invoking the createActivity Mutation')
+
         await API.graphql(graphqlOperation(createActivity, activity))
 
         // Success! Let's display a quick toast message to inform the user
-        if (!self.successToasterMessage) {
-          self.successToasterMessage = this.$f7.toast.create({
-            closeButton: true,
-            text: 'Activity added successfully!',
-            closeTimeout: 3000,
-            destroyOnClose: true,
-            position: 'top'
-          })
-        }
+        self.successToasterMessage = this.$f7.toast.create({
+          closeButton: true,
+          text: 'Activity added successfully!',
+          closeTimeout: 3000,
+          destroyOnClose: true,
+          position: 'top'
+        })
         
         // Open toast
         self.successToasterMessage.open();
       } catch (err) {
         // Uh oh! Something went run. Print error to the console and also display toast error message
-        console.log('error:' + JSON.stringify(err))
+        this.appSyncLogger.error('Error while invoking createActivity: ' + JSON.stringify(err))
 
         // Create toast with error message
-        if (!self.errorToasterMessage) {
-          self.errorToasterMessage = this.$f7.toast.create({
-            closeButton: true,
-            text: 'Error from AppSync: ' + JSON.stringify(err),
-            closeTimeout: 12000,
-            destroyOnClose: true
-          })
-        }
+        self.errorToasterMessage = this.$f7.toast.create({
+          closeButton: true,
+          text: 'Error from AppSync: ' + JSON.stringify(err),
+          closeTimeout: 12000,
+          destroyOnClose: true
+        })
         
         // Open toast
         self.errorToasterMessage.open();
       }
+
+      this.appSyncLogger.info('createActivity mutation invoked successfully!')
 
       // Success! Close preloader and reset input fields
       this.reset()
