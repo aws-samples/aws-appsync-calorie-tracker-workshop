@@ -232,10 +232,13 @@ The filter ensures that when the query is executed it should only return activit
 
 There are many additional ways to lock-down and secure your AWS AppSync APIs. See the [AWS AppSync Developer's Guide](https://docs.aws.amazon.com/appsync/latest/devguide/security.html#amazon-cognito-user-pools-authorization) for additional details. 
 
-### 6. Run the app within AWS Cloud9
+### 6. Run the app
 
-#### 6a. Run the app (Cloud9 Environment)
+<details>
+<summary><b>
+Cloud9 Environment</b></summary>
 
+<p>
 - Open the `4_FRONTEND_APP/buid/webpack.dev.conf.js` file and add the entry under devServer
 
 ```
@@ -258,6 +261,10 @@ In the Cloud9 menu bar, click **Preview** | **Preview Running Application** and 
 
 ![Screenshot-12](../images/image-app-preview.png)
 
+</p>
+</details>
+
+
 <details>
 <summary><b>In case you are using not using AWS Cloud9 to run the app (Local Environment)</b></summary><p>
 
@@ -267,6 +274,12 @@ In order for the app to properly work it'll need to be served on a secure (HTTPS
 
 ```json
 "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --https",
+```
+
+- To start the app in development mode, run:
+
+```bash
+$ npm start
 ```
 
 After Webpack is done arranging and compiling all of the App's assests, you should be seeing the following message:
