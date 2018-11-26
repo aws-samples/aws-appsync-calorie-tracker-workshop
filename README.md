@@ -12,7 +12,7 @@ Some of the features that you would be building today are:
 
 ## Architecture diagram:
 
-![Architecture](./images/architecture.png)
+![Architecture](./images/architecturev1.png)
 
 ## Services used:
 - AWS AppSync
