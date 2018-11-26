@@ -94,13 +94,19 @@ export default {
         const userid = localStorage['aws-calorie-tracker-userid']
 
         // Fetch user BMI
+        this.appSyncLogger.info('Invoking the getUserBmi Query')
+
         const { data: { getUser: { bmi }} } = await API.graphql(graphqlOperation(getUserBmi, {
           id: localStorage['aws-calorie-tracker-userid']
         }))
 
         this.bmi = bmi
 
+        this.appSyncLogger.info('getUserBmi returned: ' + this.bmi)
+
         // Fetch suggestions from Neptune via AppSync's suggestedFood Query
+        this.appSyncLogger.info('Invoking the suggestedFood Query')
+
         const suggestions = await API.graphql(graphqlOperation(suggestedFood, {
           userid: localStorage['aws-calorie-tracker-userid'],
           bmi: this.bmi
@@ -108,6 +114,8 @@ export default {
 
         // Populate suggestion array with results
         this.suggestions = suggestions.data.suggestedFood
+
+        this.appSyncLogger.info('suggetedFood returned: ' + JSON.stringify(this.suggestions))
 
         // Populate last updated string
         this.lastUpdated = new Date().toString()

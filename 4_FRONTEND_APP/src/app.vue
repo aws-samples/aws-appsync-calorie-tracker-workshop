@@ -15,6 +15,7 @@
 
 <script>
 import { components } from 'aws-amplify-vue'
+import { Logger } from 'aws-amplify'
 
 // Import Routes
 import routes from './routes.js'
@@ -31,7 +32,7 @@ export default {
         name: 'Framework7', // App name
         theme: 'auto', // Automatic theme detection
         // App routes
-        routes: routes,
+        routes: routes
       }
     }
   }
