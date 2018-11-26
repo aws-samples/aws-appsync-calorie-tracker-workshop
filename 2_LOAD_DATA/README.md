@@ -1,6 +1,6 @@
 # Module 2: Loading the dataset
 
-Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup, lets clone the project and load the dataset into our Neptune Cluster.
+Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup, lets load the dataset into our Neptune Cluster.
 
 Steps:
 - [1.1. Create S3 VPC Endpoint](#11-create-amazon-s3-vpc-endpoint)
