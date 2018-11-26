@@ -106,8 +106,12 @@ You should see something similar to this message once done:
 Congrats! The app is now live in production.
 
 ### Other Ideas:
-- Login to app using Cognito's Federated Auth - Facebook
-- Fine tune the gremlin query to provide personalized suggestions
+
+You are welcome to contribute and add features to this app to make it fun learning app about AWS AppSync, Amazon Neptune, AWS Amplify or any other services. Below are some of the ideas:
+
+- Login using Cognito's Federated Auth - Facebook
+- Fine tune the gremlin query to provide personalized suggestions using Machine Learning
+- Offline capability.
 
 [Proceed to next section - Closing and Cleanup](../6_CLEANUP/README.md)
 
