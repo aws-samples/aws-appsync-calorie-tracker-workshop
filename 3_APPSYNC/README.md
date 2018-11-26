@@ -12,14 +12,23 @@ Steps:
   - [2.3 Configure resolvers](#23-configure-resolvers)
  - [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
-For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below. Use it only if you want to save time and then go to [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
+For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below. Use it only if you want to save time.
 
 <details>
-<summary><b>AppSync Master Cloudformation template</b></summary><p>
+<summary><b>AWS AppSync Master CloudFormation template</b></summary><p>
 
 Region| Launch
 ------|-----
 eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/master.yaml)
+
+Once the Cloudformation stack has completed, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
+
+```
+aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
+```
+![Calories Aggregator function](../images/image-dynamo-batch-write.png)
+
+Next, go to [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
 </p></details>
 
@@ -55,7 +64,7 @@ When the stack creation is completed successfully, you will have following 4 tab
 
 ![Calories Aggregator function](../images/image-calories-aggregator-lambda.png)
 
-Next, go to your `AWS Cloud 9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
+Next, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
 
 ```
 aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
