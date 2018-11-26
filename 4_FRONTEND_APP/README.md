@@ -235,9 +235,10 @@ There are many additional ways to lock-down and secure your AWS AppSync APIs. Se
 ### 6. Run the app
 
 <details>
-<summary><b>Cloud9 Environment</b></summary>
+<summary><b>AWS Cloud9 Environment</b></summary>
 
 <p>
+
 - Open the `4_FRONTEND_APP/buid/webpack.dev.conf.js` file and add the entry under devServer
 
 ```
