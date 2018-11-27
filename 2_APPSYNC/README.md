@@ -47,7 +47,7 @@ Use the following link to deploy the stack.
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/2_APPSYNC/templates/dynamodb-lambda.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module2&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/2_APPSYNC/templates/dynamodb-lambda.yaml)
 
 ![CFN](../images/image-appsync-cf-inputs.png)
 
