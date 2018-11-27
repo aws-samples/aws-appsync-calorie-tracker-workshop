@@ -20,6 +20,10 @@
 
 ![add activities](../images/dashboard.png)
 
+# Summary
+
+**Well done !!!**. You now have an app that allows you to register, set a goal and add or delete activities. You can attempt the next Bonus Module to configure the app to return food suggestions.
+
 BONUS Module - [Proceed to configure food suggestions](../5_NEPTUNE_SUGGESTIONS/README.md)
 
 [Back to home page](../README.md)
