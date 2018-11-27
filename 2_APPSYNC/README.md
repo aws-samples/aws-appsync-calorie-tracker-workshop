@@ -2,7 +2,7 @@
 
 In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
-AppSync is setup to DynamoDB tables as data source to persist user information. The below picture shows the relationalship between Appsync Schema, resolver and Datasources.
+AppSync is setup to DynamoDB tables as data source to persist user information. The below picture shows the relationship between Appsync Schema, resolver and Datasources.
 
 ![Appsync](../images/image-appsync-completed.png)
 
