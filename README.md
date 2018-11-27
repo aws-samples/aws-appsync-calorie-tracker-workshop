@@ -34,7 +34,7 @@ This workshop requires:
 0. [Deploying Amazon Neptune Cluster](./0_NEPTUNE/README.md)
 1. [Setting up AWS Cloud 9 Development Environment](./1_AWS_Cloud9/README.md)
 2. [AWS AppSync - GraphQL](./2_APPSYNC/README.md)
-3. [Setting up frontend - Vuejs application](./3_FRONTEND_APP/README.md)
+3. [Setting up frontend - VueJS application](./3_FRONTEND_APP/README.md)
 4. [Testing the application](./4_TESTING/README.md)
 5. [Configuring the App to provide the Food suggestions ](./5_NEPTUNE_SUGGESTIONS/README.md)
 6. [Closing and Clean up](./6_CLEANUP/README.md)

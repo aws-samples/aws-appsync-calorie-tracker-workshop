@@ -269,7 +269,7 @@ You have successfully configured DynamoDB as an event source for the Lambda func
 ---
 
 ## Summary
-**Congratulations!!** You have successfully created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
+**Congratulations!!** You have successfully completed module 2 in which you created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
 
 AppSync is setup to use DynamoDB tables as data sources to persist user information. The below picture shows the relationalship between Appsync Schema, resolver and Datasources.
 
