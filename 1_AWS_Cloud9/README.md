@@ -2,6 +2,9 @@
 
 AWS Cloud9 is a cloud-based integrated development environment (IDE) that lets you write, run, and debug your code with just a browser. 
 
+> **Note**: If you choose to use your laptop as your development environment, you can skip this module.
+
+## Create Cloud9 Environment
 In this section, we will create a AWS Cloud9 (C9) environment and configure it to access AWS resources.
 
 1. Open the [AWS Cloud9 console](https://console.aws.amazon.com/cloud9/)
@@ -28,15 +31,17 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 8. Attach an IAM role to your Cloud9 EC2 instance.
 	> IAM roles for EC2 make it easier for your applications to make API requests securely from an instance because they do not require you to manage AWS security credentials that the applications use.
 	
-    1. Go to EC2 console. Make sure you are in **Ireland** region. Search for the keyword `aws-cloud9-reinvent-calorie-tracker-workshop-` and select the instance. Under **Actions** | **Instance Settings** | select **Attach or Replace IAM Role**.
+    1. Go to EC2 console. Make sure you are in **Ireland** region. 
+    2. Click **Instances** on the left navigation bar. 
+    3. Search for the keyword `aws-cloud9-reinvent-calorie-tracker-workshop-` and select the instance. Under **Actions** | **Instance Settings** | select **Attach or Replace IAM Role**.
 
 		![Cloud9 Env](../images/image-c9-ec2-instance.png)
 
-    2. Search for the IAM Role with keyword `AWSCloud9InstanceProfile` and select the role that appears in the search result. Click **Apply**.
+    4. Search for the IAM Role with keyword `AWSCloud9InstanceProfile` and select the role that appears in the search result. Click **Apply**.
 
     	![Cloud9 Env](../images/image-c9-role.png)
 
-9. Go to the Cloud9 console and within the terminal windows type the following S3 list command to view the S3 buckets in your region. If you are able to see the list of S3 buckets, it means your Cloud9 envrionment has been successfully setup with right permission required for this workshop.
+9. Go to your Cloud9 IDE and within the terminal window, type the following S3 list command to view the S3 buckets in your region. If you are able to see the list of S3 buckets, it means your Cloud9 envrionment has been successfully setup with right permission required for this workshop.
 	```
 	aws s3 ls --region eu-west-1
 	```
@@ -64,7 +69,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 	v8.13.0
 	```
 
-## Cloning the project
+## Clone the project
 
 Within your AWS Cloud9 environment, clone the workshop GitHub repo.
 
