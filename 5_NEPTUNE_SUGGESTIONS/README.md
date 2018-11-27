@@ -108,9 +108,19 @@ curl http://reinvent-calorie-tracker.cluster-5v2bkf.eu-west-1.neptune.amazonaws.
   ```
 cd apache-tinkerpop-gremlin-console-3.3.2
 bin/gremlin.sh
-:remote connect tinkerpop.server conf/neptune-remote.yaml
-:remote console
   ```
+
+At the `gremlin>` prompt, enter the following to connect to the Neptune DB instance.
+
+```
+:remote connect tinkerpop.server conf/neptune-remote.yaml
+```
+
+At the `gremlin>` prompt, enter the following to switch to remote mode. This sends all Gremlin queries to the remote connection.
+
+```
+:remote console
+```
 
   ![gremlin](../images/image-gremlin.png)
 

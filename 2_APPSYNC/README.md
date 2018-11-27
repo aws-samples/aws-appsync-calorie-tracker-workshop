@@ -53,12 +53,9 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 
 > Leave all Cloudformation inputs as defaults and click Next and Create the Stack
 
-When the stack creation is completed successfully, you will have following 4 tables and a Lambda function created. You can check the status of your stack from the CloudFormation console.
+When the stack creation is completed successfully, you will have following 4 DynamoDB tables and a Lambda function created. 
 
-- caltrack_user_table
-- caltrack_activity_table
-- caltrack_activity_category_table
-- caltrack_user_aggregate_table
+Here's what we just deployed:
 
 ![DynamoDB Tables](../images/image-dynamodb.png)
 
@@ -234,7 +231,7 @@ eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.pn
 
   	![AppSync resolvers](../images/image-resolvers-ds.png)
 
-- When the CloudFormation stack is completed successfully, you will have your resolvers configured.
+The CloudFormation Stack has configured the resolvers for you.
 
   ![AppSync resolvers](images/appsync-resolvers.jpg)
 
