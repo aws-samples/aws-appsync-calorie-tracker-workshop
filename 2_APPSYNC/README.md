@@ -2,7 +2,11 @@
 
 In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
-To simplify the process, we will use AWS CloudFormation templates to create different resources for our application backend.
+AppSync is setup to DynamoDB tables as data source to persist user information. The below picture shows the relationalship between Appsync Schema, resolver and Datasources.
+
+![Appsync](../images/image-appsync-completed.png)
+
+We will use AWS CloudFormation templates to create different resources for our application backend.
 
 Steps:
 - [1. Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
@@ -12,7 +16,7 @@ Steps:
   - [2.3 Configure resolvers](#23-configure-resolvers)
  - [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
-For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below. Use it only if you want to save time.
+For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below (not recommended). Use it only if you want to save time.
 
 <details>
 <summary><b>AWS AppSync Master CloudFormation  template</b></summary><p>
@@ -266,14 +270,8 @@ You have successfully configured DynamoDB as an event source for the Lambda func
 ---
 
 ## Summary
-**Congratulations!!** You have successfully completed module 2 in which you created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend.
+**Congratulations!!** You have successfully completed module 2 in which you created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend. We also configured DynamoDB as event source on **add-new-user-bmi** Lambda function.
 
-AppSync is setup to use DynamoDB tables as data sources to persist user information. The below picture shows the relationalship between Appsync Schema, resolver and Datasources.
-
-![Appsync](../images/image-appsync-completed.png)
-
-We also configured DynamoDB as event source on **add-new-user-bmi** Lambda function.
-
-[Next - Let's setup the frontend VueJS application](../3_FRONTEND_APP/README.md)
+Proceed to Module 3 - [Setup the frontend VueJS application](../3_FRONTEND_APP/README.md)
 
 [Back to home page](../README.md)
