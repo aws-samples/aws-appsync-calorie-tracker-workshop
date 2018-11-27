@@ -1,4 +1,4 @@
-# Module 2: Create DynamoDB tables and AppSync backend
+# Module 2: AWS AppSync backend
 
 In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 

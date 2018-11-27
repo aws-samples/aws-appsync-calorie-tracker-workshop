@@ -1,4 +1,4 @@
-# Module 5: Configuring the App to return the Food suggestions
+# Module 5: Configuring the App to provide the Food suggestions
 
 Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup, lets load the dataset into our Neptune Cluster.
 

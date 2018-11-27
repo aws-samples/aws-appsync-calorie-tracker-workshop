@@ -36,7 +36,7 @@ This workshop requires:
 2. [AWS AppSync - GraphQL](./2_APPSYNC/README.md)
 3. [Setting up frontend - Vuejs application](./3_FRONTEND_APP/README.md)
 4. [Testing the application](./4_TESTING/README.md)
-5. [Loading dataset into Neptune Cluster](./5_LOAD_DATA/README.md)
+5. [Configuring the App to provide the Food suggestions ](./5_NEPTUNE_SUGGESTIONS/README.md)
 6. [Closing and Clean up](./6_CLEANUP/README.md)
 
 ## License:
