@@ -1,6 +1,6 @@
 # Module 5: Configuring the App to provide the Food suggestions
 
-Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup, lets load the dataset into our Neptune Cluster.
+Now that you have got the Calorie tracker application up and running, lets configure the app to provide food suggestions. In this module, we will first create S3 VPC endpoint, load the dataset into Netptune cluster and then update AppSync schema and resolver to return the food suggestions to the user.
 
 Steps:
 - [1.1. Create S3 VPC Endpoint](#11-create-amazon-s3-vpc-endpoint)
@@ -285,8 +285,9 @@ $ npm start
 
 **Congratulations!!!**  You now have a fully fledged app that allows you to register, set a goal and provide food suggestions. 
 
-###  Build app for production
+<details><summary><b>(Optional) Build app for production</b></summary>
 
+<p>
 We will be using AWS Amplify to build, push and host our app on S3. Simply run within your Cloud9 terminal:
 
 ```
@@ -302,6 +303,8 @@ You should see something similar to this message once done:
 ![Screenshot-9](../images/readme-9.png)
 
 The app is now live in production.
+<p>
+</details>
 
 ---
 ### Other Ideas:
@@ -312,6 +315,6 @@ You are welcome to contribute and add features to this app to make it fun learni
 - Fine tune the gremlin query to provide personalized suggestions using Machine Learning
 - Offline capability.
 
-[Closing and Clean-up](../6_CLEANUP/README.md)
+Next, [closing and Clean-up](../6_CLEANUP/README.md)
 
 [Back to home page](../README.md)

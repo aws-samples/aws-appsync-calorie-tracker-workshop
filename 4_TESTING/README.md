@@ -20,6 +20,6 @@
 
 ![add activities](../images/dashboard.png)
 
-[Proceed to configure food suggestions](../5_NEPTUNE_SUGGESTIONS/README.md)
+BONUS Module - [Proceed to configure food suggestions](../5_NEPTUNE_SUGGESTIONS/README.md)
 
 [Back to home page](../README.md)
