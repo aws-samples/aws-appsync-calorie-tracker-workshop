@@ -177,7 +177,8 @@ We will be leveraging the Cognito User Pool we've created earlier for autorizati
 ![Screenshot-10](../images/image-amplify-4.png)
 
 - Select the relevant region and user pool at the newly revealed "User Pool configuration" section. Default action should be set to `ALLOW`:
-![Screenshot-12](../images/readme-12.png)
+
+   ![Screenshot-12](../images/readme-12.png)
 
 - Click the `Save` button to save and apply changes. Once done the AppSync Endpoint will only accept requests containing valid tokens in respect to the configured Cognito User Pool.
 
