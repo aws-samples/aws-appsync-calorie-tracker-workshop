@@ -131,8 +131,7 @@ Open the `src/graphql/queries.js` file and add the following queries:
 export const getUserBmi = `query getUser($id: String!) {
   getUser(id: $id) {
     bmi
-  }
-}`;
+  }}`;
 ``` 
 
 #### ListActivityCategories:
@@ -153,8 +152,7 @@ export const listActivityCategoriesOnly = `query ListActivityCategories(
     }
     nextToken
   }
-}
-`;
+}`;
 ```
 
 There would be some scenarios where the client-side code would only need to fetch specific values for specific parameters. 
@@ -244,6 +242,8 @@ public: 'xxxx.vfs.cloud9.eu-west-1.amazonaws.com',
 ```
 
 where `xxxx` is the ID that AWS Cloud9 assigns to the environment. Please update the ID corresponding to your C9 environment. This can be found in AWS Cloud9 Environment details.
+
+![Screenshot-12](../images/image-cloud9-id.png)
 
 - To start the app in development mode, run:
 
