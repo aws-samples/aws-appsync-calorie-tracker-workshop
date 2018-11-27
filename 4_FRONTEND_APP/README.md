@@ -44,8 +44,6 @@ $ amplify configure
 
 ### 2. Initalize AmplifyJS
 
-From the root of the app directory run:
-
 ``` bash
 $ amplify init
 ```
