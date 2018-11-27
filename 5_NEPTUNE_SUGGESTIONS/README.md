@@ -1,4 +1,4 @@
-# Module 2: Loading the dataset
+# Module 5: Configuring the App to return the Food suggestions
 
 Now that you have got an Amazon Neptune cluster and AWS Cloud9 environment setup, lets load the dataset into our Neptune Cluster.
 
@@ -6,6 +6,7 @@ Steps:
 - [1.1. Create S3 VPC Endpoint](#11-create-amazon-s3-vpc-endpoint)
 - [1.2. Load the dataset into Neptune](#12-load-the-given-food-dataset-into-amazon-neptune)
 - [1.3. Test Food-Suggestor Lambda function](#13-test-food-suggestor-lambda-function)
+- [1.4. Wiring everything together](#14-Wiring-everything-together)
 
 ## 1.1. Create Amazon S3 VPC Endpoint
 
@@ -115,7 +116,7 @@ bin/gremlin.sh
 
 **Step 3:**  In **Step 1**, we loaded all the vertices. Here we would be creating the edges or relationship between the person, actvity and the food they consumed.
 
-Copy and paste all the queries from `2_LOAD_DATA/datasets/food_edges.txt` into the gremlin console
+Copy and paste all the queries from `5_NEPTUNE_SUGGESTIONS/datasets/food_edges.txt` into the gremlin console
 
   ![gremlin](../images/image-gremlin-edges.png)
 
@@ -215,10 +216,102 @@ Under AWS lambda, you will find a Lambda function named **suggest-food-for-user*
 - Test the lambda function which should return a list of suggested food based on the given BMI
 
 
+
+## 1.4. Wiring everything together
+
+#### Step 1: Setup a new Appsync Data source:
+
+1. Go to AWS AppSync console, `data source`.
+
+![AppSync DS](../images/image-appsync-datasource.png)
+
+2. Click `New`, Data Source Name: `suggestedFood`
+3. Data Source type as `AWS Lambda function`
+4. Region: `EU-WEST-1` and function ARN as `suggested-food-for-user`
+5. Create a new role and click `Create`
+
+#### Step 2: Adding suggestedFood query to Appsync schema:
+1. Under your Appsync schema, locate `type Query`, ensure you have `suggestedFood` query. If not, please add the following after `listUsers` and `Save Schema`.
+
+```
+	suggestedFood(
+		bmi: Float,
+		calorie: Float,
+		sugar: Float,
+		userid: String!
+	): [Activity]
+
+```
+2. Under `Resolvers` in the right pane, locate suggestedFood
+
+![AppSync DS](../images/image-resolvers-suggested.png)
+
+3. Click Attach
+4. `Create a New Resolver`
+5. Select `suggestedFood` data source that was created in Step 1
+
+![New Resolver](../images/create-suggested-food-resolver.png)
+
+6. Save Resolver.
+
+#### Step 3: Updating the graphql schema in your code:
+
+Within `3_FRONTEND_APP/src/graphql/queries.js`, update the `suggestedFood` schema to return only category and type. Save the code change.
+
+```Javascript
+export const suggestedFood = `query SuggestedFood(
+  $userid: String!
+  $bmi: Float
+  $calorie: Float
+  $sugar: Float
+) {
+  suggestedFood(userid: $userid, bmi: $bmi, calorie: $calorie, sugar: $sugar) {
+    category
+    type
+  }
+}`;
+```
+
+Start the application and should see the suggestions being returned
+
+```bash
+$ npm start
+```
+
+![New Resolver](../images/suggestions.png)
+
+
+# Summary
+
+**Congratulations!!!**  You now have a fully fledged app that allows you to register, set a goal and provide food suggestions. 
+
+###  Build app for production
+
+We will be using AWS Amplify to build, push and host our app on S3. Simply run within your Cloud9 terminal:
+
+```
+$ amplify add hosting
+```
+
+And pick 'PROD' as the environment and leave all other options at their default value. 
+
+Once you're ready, run the `$ amplify publish` command. Amplify will then build the app using Webpack, upload the assests to the designated S3 Bucket and setup all the necessary configuration and permissions to host the app on that bucket. As a bonus we also get Cloudfront in front of the bucket to cache all the static assests (HTML, JavaScript, etc.) and make our app blazing fast!
+
+You should see something similar to this message once done:
+
+![Screenshot-9](../images/readme-9.png)
+
+The app is now live in production.
+
 ---
+### Other Ideas:
 
-**Congratulations!!!**  You have successfully completed creating an Amazon Neptune Cluster, loaded the given dataset from S3 using Amazon S3 VPC endpoint, ran Gremlin queries and have tested the foodSuggestor lambda function.
+You are welcome to contribute and add features to this app to make it fun learning app about AWS AppSync, Amazon Neptune, AWS Amplify or any other services. Below are some of the ideas:
 
-Next, lets configure [AWS Appsync](../3_APPSYNC/README.md)
+- Login using Cognito's Federated Auth - Facebook
+- Fine tune the gremlin query to provide personalized suggestions using Machine Learning
+- Offline capability.
+
+[Closing and Clean-up](../6_CLEANUP/README.md)
 
 [Back to home page](../README.md)

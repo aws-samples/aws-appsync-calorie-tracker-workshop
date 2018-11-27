@@ -29,7 +29,7 @@ Parameters:
     ConstraintDescription: >-
       Key prefix can include numbers, lowercase letters, uppercase
       letters, hyphens (-), and forward slash (/).
-    Default: '2_LOAD_DATA/datasets/'
+    Default: '5_NEPTUNE_SUGGESTIONS/datasets/'
     Description: >-
       S3 key prefix for the source bucket assets. Key prefix can
       include numbers, lowercase letters, uppercase letters, hyphens (-), and

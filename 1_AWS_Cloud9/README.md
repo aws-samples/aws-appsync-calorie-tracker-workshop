@@ -77,6 +77,6 @@ $ cd aws-appsync-calorie-tracker-workshop
 
 ---
 
-**Congratulations!!!** You have completed setting up your AWS Cloud9 environment and have cloned the project. In the next section, you will [load the given dataset into Amazon Neptune Cluster](../2_LOAD_DATA/README.md)
+**Congratulations!!!** You have completed setting up your AWS Cloud9 environment and have cloned the project. In the next section, you will [configure AppSync](../2_APPSYNC/README.md)
 
 [Go back to the home page](../README.md)

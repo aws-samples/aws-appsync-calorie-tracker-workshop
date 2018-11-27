@@ -1,4 +1,4 @@
-# Module 3: Create DynamoDB tables and AppSync backend
+# Module 2: Create DynamoDB tables and AppSync backend
 
 In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
@@ -15,16 +15,16 @@ Steps:
 For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below. Use it only if you want to save time.
 
 <details>
-<summary><b>AWS AppSync Master CloudFormation template</b></summary><p>
+<summary><b>AWS AppSync Master CloudFormation  template</b></summary><p>
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/master.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/2_APPSYNC/templates/master.yaml)
 
 Once the Cloudformation stack has completed, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
 
 ```
-aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
+aws dynamodb batch-write-item --request-items file://2_APPSYNC/assets/activity-categories.json --region eu-west-1
 ```
 ![Calories Aggregator function](../images/image-dynamo-batch-write.png)
 
@@ -47,7 +47,7 @@ Use the following link to deploy the stack.
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/dynamodb-lambda.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/2_APPSYNC/templates/dynamodb-lambda.yaml)
 
 ![CFN](../images/image-appsync-cf-inputs.png)
 
@@ -67,7 +67,7 @@ When the stack creation is completed successfully, you will have following 4 tab
 Next, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
 
 ```
-aws dynamodb batch-write-item --request-items file://3_APPSYNC/assets/activity-categories.json --region eu-west-1
+aws dynamodb batch-write-item --request-items file://2_APPSYNC/assets/activity-categories.json --region eu-west-1
 ```
 ![Calories Aggregator function](../images/image-dynamo-batch-write.png)
 
@@ -206,7 +206,7 @@ In this section we will create a GraphQL Schema. In the following first few step
   ```
     ![AppSync Schema](../images/image-appsync-schema.png)
 
-- We have pre-created the overall schema of our application. Copy the contents of the **3_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
+- We have pre-created the overall schema of our application. Copy the contents of the **2_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
 
   ![AppSync Schema](images/appsync-schema.jpg)
 
@@ -228,7 +228,7 @@ Use the following link to deploy the stack.
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/3_APPSYNC/templates/appsync-resolvers.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/2_APPSYNC/templates/appsync-resolvers.yaml)
 
  - Paste the API ID for the *AppSyncAPIId* parameter value.
 
@@ -277,6 +277,6 @@ AppSync is setup to use DynamoDB tables as data sources to persist user informat
 
 We also configured DynamoDB as event source on **add-new-user-bmi** Lambda function.
 
-[Next - Setup the frontend VueJS application](../4_FRONTEND_APP/README.md)
+[Next - Let's setup the frontend VueJS application](../3_FRONTEND_APP/README.md)
 
 [Back to home page](../README.md)

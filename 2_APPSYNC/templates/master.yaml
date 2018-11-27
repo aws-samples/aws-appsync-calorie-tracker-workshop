@@ -28,7 +28,7 @@ Parameters:
     ConstraintDescription: "Key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/)."
     Description: "S3 key prefix for the workshop assets. Key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), underscore (_) and forward slash (/)."
     Type: String
-    Default: 3_APPSYNC/
+    Default: 2_APPSYNC/
 
 Resources:
   DynamoDBStack:
