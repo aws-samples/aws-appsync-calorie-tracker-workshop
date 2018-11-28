@@ -262,13 +262,13 @@ Under AWS lambda, you will find a Lambda function named **suggest-food-for-user*
 
 ![New Resolver](../images/create-suggested-food-resolver.png)
 
-6. Save Resolver.
+6. Leave the default mapping templates as if and save the resolver.
 
 #### Step 3: Updating the graphql schema in your code:
 
 Within `3_FRONTEND_APP/src/graphql/queries.js`, update the `suggestedFood` schema to return only category and type. Save the code change.
 
-```Javascript
+```javascript
 export const suggestedFood = `query SuggestedFood(
   $userid: String!
   $bmi: Float
