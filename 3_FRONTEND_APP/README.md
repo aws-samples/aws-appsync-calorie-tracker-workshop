@@ -17,14 +17,13 @@ In this module, we will configure the frontend VueJS application to use AWS Apps
 $ cd 3_FRONTEND_APP/ && npm install
 ```
 
+This will install the necessary NPM dependencies for the app to run. The [AWS Amplify](https://aws-amplify.github.io/) module which is a JavaScript library for building cloud-powered apps.
+
 ![Screenshot-1](../images/image-frontend.png)
 
-Next, install and configure [AWS Amplify](https://aws-amplify.github.io/). AWS Amplify includes:
+Next, install and configure [AWS Amplify CLI](https://aws-amplify.github.io/docs/cli/init).
 
-* a JavaScript library with support for React Native and web frameworks including 
-React, Angular, Vue and Ionic
-* a style guide including UI components
-* the Amplify CLI with support for managing the serverless backend, web hosting, and codegen
+The Amplify Command Line Interface (CLI) is a unified toolchain to create and manage your serverless infrastructure on AWS. we will be using it in the next steps to setup our serverless infrastructure and push it to our AWS environment.
 
 Start by running:
 
@@ -131,7 +130,8 @@ Open the `src/graphql/queries.js` file and add the following queries:
 export const getUserBmi = `query getUser($id: String!) {
   getUser(id: $id) {
     bmi
-  }}`;
+  }
+}`;
 ``` 
 
 #### ListActivityCategories:
