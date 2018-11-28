@@ -1,14 +1,14 @@
 # Module 2: AWS AppSync backend
 
-In this section, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
+In this module, we will create the backend for our application. We will use Amazon DynamoDB to store user information and AWS AppSync to create GraphQL based backend.
 
-AppSync is setup to DynamoDB tables as data source to persist user information. The below picture shows the relationship between AppSync Schema, resolver and Datasources.
+AppSync is setup with DynamoDB tables as data source to persist user information. The below picture shows the relationship between AppSync schema, resolver and data sources.
 
 ![Appsync](../images/image-appsync-completed.png)
 
-We will use AWS CloudFormation templates to create different resources for our application backend.
+As we go through different steps in this module, you will learn what resources we are creating and what is it used for in the application. However, in the interest of time we will use CloudFormation templates to create the resources, instead of creating it manually.
 
-Steps:
+Following are the steps to create application backend:
 - [1. Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
 - [2. Create AppSync API backend](#step-2-create-appsync-api-backend)
   - [2.1 Setup data sources](#21-setup-data-sources)
@@ -16,31 +16,9 @@ Steps:
   - [2.3 Configure resolvers](#23-configure-resolvers)
  - [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
-For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below (not recommended). Use it only if you want to save time.
+## Step 1: Create DynamoDB Tables and Lambda function
 
-<details>
-<summary><b>AWS AppSync Master CloudFormation  template</b></summary><p>
-
-Region| Launch
-------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/2_APPSYNC/templates/master.yaml)
-
-Once the Cloudformation stack has completed, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
-
-```
-aws dynamodb batch-write-item --request-items file://2_APPSYNC/assets/activity-categories.json --region eu-west-1
-```
-![Calories Aggregator function](../images/image-dynamo-batch-write.png)
-
-Next, go to [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
-
-</p></details>
-
------
-
-### Step 1: Create DynamoDB Tables and Lambda function
-
-In this step, we will create 4 DynamoDB tables and a Lambda function using CloudFormation template. 
+We will create 4 DynamoDB tables and a Lambda function using CloudFormation template. 
 
 - DynamoDB tables are used to store user information and Lambda function is used to aggregate the user calories based on the user activities and update it in User Aggregate table. 
 - If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. 
@@ -268,6 +246,27 @@ In this step, we will configure Amazon DynamoDB as an event source to `add-new-u
 You have successfully configured DynamoDB as an event source for the Lambda function.
 
 ---
+For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below (not recommended). Use it only if you want to save time.
+
+<details>
+<summary><b>AWS AppSync Master CloudFormation  template</b></summary><p>
+
+Region| Launch
+------|-----
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/2_APPSYNC/templates/master.yaml)
+
+Once the Cloudformation stack has completed, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
+
+```
+aws dynamodb batch-write-item --request-items file://2_APPSYNC/assets/activity-categories.json --region eu-west-1
+```
+![Calories Aggregator function](../images/image-dynamo-batch-write.png)
+
+Next, go to [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
+
+</p></details>
+
+-----
 
 ## Summary
 **Congratulations!!** You have successfully completed module 2 in which you created DynamoDB tables, Lambda function and AWS AppSync GraphQL backend. We also configured DynamoDB as event source on **add-new-user-bmi** Lambda function.
