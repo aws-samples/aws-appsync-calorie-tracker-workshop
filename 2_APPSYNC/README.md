@@ -6,15 +6,16 @@ AppSync is setup with DynamoDB tables as data source to persist user information
 
 ![Appsync](../images/image-appsync-completed.png)
 
-As we go through different steps in this module, you will learn what resources we are creating and what is it used for in the application. However, in the interest of time we will use CloudFormation templates to create the resources, instead of creating it manually.
+As we go through different steps in this module, you will learn what resources we are creating and what is it used for in the application.
 
 Following are the steps to create the application backend:
 
 1. [Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
 2. [Create AppSync API backend](#step-2-create-appsync-api-backend)
-    1. [Setup data sources](#21-setup-data-sources)
-    2. [Setup AppSync Schema](#22-setup-appsync-schema)
-    3. [Configure resolvers](#23-configure-resolvers)
+    1. [Create AppSync API](#create-appsync-api)
+    2. [Setup data sources](#setup-data-sources)
+    3. [Create AppSync Schema](#create-appsync-schema)
+    4. [Configure resolvers](#configure-resolvers)
 3. [Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
 ## Step 1: Create DynamoDB Tables and Lambda function
@@ -53,7 +54,13 @@ aws dynamodb batch-write-item --request-items file://2_APPSYNC/assets/activity-c
 
 
 ## Step 2: Create AppSync API backend
-Now, we will use the DynamoDB tables created in Step 1 to create GraphQL backend. 
+In this step, we will do the following:
+- Create an AppSync API for our application
+- Setup 4 data sources, one for each dynamoDB table
+- Create AppSync schema.
+- Create resolvers for query, mutation and subscriber types.
+
+### Create AppSync API
 
 Open the AWS AppSync Console and click **Create API**.
 
@@ -66,7 +73,7 @@ Choose **Build from Scratch** and click **Start**.
 Enter a name for your API `Calorie Tracker App` and click **Create**.
 
 
-#### 2.1 Setup data sources
+### Setup data sources
 We will be using DynamoDB as our data sources. We will create 4 data sources, one for each DynamoDB table.
 
 ![AppSync DS](../images/image-appsync-datasource.png)
@@ -113,11 +120,11 @@ Once you have created the datasources, you should see 4 Appsync Datasources in t
 
 ![AppSync data source](../images/image-completed-ds.png)
 
-#### 2.2 Setup AppSync Schema
-In this section we will create a GraphQL Schema. In the following first few steps, we will show you how to create type, query and mutations from scratch. But, in the interest of time, we have the GrapphQL schema pre-created for you, which you can directly copy and paste in your schema editor.
-- On the left pane, select **Schema**.
-  ##### Create Type - User
-  - First, we will create a **User** type which will contain the attributes we want to store in DynamoDB table for each user. 
+### Create AppSync Schema
+In this section we will create a GraphQL Schema. In the following first few steps, we will show how you can define the type, query and mutations from scratch. But, in the interest of time, we have the GrapphQL schema pre-created for you, which you will directly copy and paste in your schema editor.
+
+##### Entity type - User
+  - To store user information in the DynamoDB table, we need to define a type called **User**. It will be defined as below. 
 	```
 	  type User {
 	    caloriesConsumed: Int
@@ -129,17 +136,17 @@ In this section we will create a GraphQL Schema. In the following first few step
 	    bmi: Float
 	  }
 	  ```
-  ##### Create Query - getUser
-  - Now we will create a Query type **getUser** to fetch user details based on the User Id. The query **getUser** take **ID** as input argument and returns **User** type.
+##### Query type - getUser
+  - To fetch user details using User Id, we need to define a *query* type, called **getUser**. The query **getUser** take **ID** as input argument and returns **User** type.
 	 ```
 	 type Query {
 	      getUser(id: ID!): User
 	  }
 	 ```
-  ##### Create Mutation - createUser
-    - Let's create a Mutation type **createUser**. This mutation will be used by our app to store user information.
-    - To create **createUser** mutation type, copy the text from below and paste it in your AppSync Schema.
-    - The mutation **createUser** takes **CreateUserInput** as input argument and return **User** type. **CreateUserInput** is an Input type which contains the attributes we want to store for each user.
+##### Mutation type - createUser
+  - Mutation type is used to create or update information in the data source.
+  - To store user information we need to create a *mutation* type called **createUser**
+  - The mutation **createUser** takes **CreateUserInput** as input argument and return **User** type. **CreateUserInput** is an Input type which contains the attributes we want to store for each user.
 	 ```
 	  type Mutation {
 	    createUser(input: CreateUserInput!): User
@@ -154,7 +161,7 @@ In this section we will create a GraphQL Schema. In the following first few step
 	    weight: Float!
 	  }
 	 ```
-  Your AppSync Schema should look like below. Click `Save` to save your schema.
+  Putting above 3 types together, your AppSync Schema will look like below.
   ```
   type User {
     caloriesConsumed: Int
@@ -184,43 +191,48 @@ In this section we will create a GraphQL Schema. In the following first few step
   }
 
   ```
-    ![AppSync Schema](../images/image-appsync-schema.png)
 
-- We have pre-created the overall schema of our application. Copy the contents of the **2_APPSYNC/assets/schema.graphql** file, select all in your Schema editor and paste the schema, then click **Save**.
+However, for our application we need more than above 3 types. We need to create entity types for all 4 dynamoDB tables; query types for fetching user details, activity details; and mutation types for saving user information, activity information and activity deletion.
+
+We have pre-created the schema of our application. You can find the schema in the workshop project directory at *2_APPSYNC/assets/schema.graphql*. Follow the steps below to create the schema.
+
+- Copy the contents of the **2_APPSYNC/assets/schema.graphql** file
+- In the **AppSync** console, under **Calorie Tracker App**, click **Schema** on the left navigation pane
+- Select all the content of the schema editor and Paste the schema, then click **Save Schema**.
 
   ![AppSync Schema](images/appsync-schema.jpg)
 
-- At this point, you have your GraphQL schema ready for your app, but we do not have the resolvers configured. In next section, we will configure resolvers for our types.
+At this point, we have the GraphQL schema ready for our app, but we do not have the resolvers configured. In next section, we will configure resolvers for our query, mutation and subscriber types.
 
-#### 2.3 Configure resolvers
+#### Configure resolvers
 
-> GraphQL resolvers connect the fields in a type's schema to a data source. Resolvers are the mechanism by which requests are fulfilled. Resolvers in AWS AppSync use mapping templates written in Apache Velocity Template Language (VTL) to convert a GraphQL expression into a format the data source can use
+GraphQL resolvers connect the fields in a type's schema to a data source. Resolvers are the mechanism by which requests are fulfilled. Resolvers in AWS AppSync use mapping templates written in Apache Velocity Template Language (VTL) to convert a GraphQL expression into a format the data source can use
 
 We will configure query, mutation and subscription resolvers in this step. 
 
-> Make a note of your AppSync API ID.
->- On the left page, select **Settings**.
->- Click **Copy** button next to the API ID field.
+Make a note of your AppSync API ID.
+- On the left navigation pane, select **Settings**.
+- Click **Copy** button next to the API ID field.
 
   ![AppSync resolvers](../images/image-appsync-api.png)
 
-Use the following link to deploy the stack. 
+Because we have a lot of resolvers to configure (for each query, mutation and subscription), in the interest of time, we will use a CloudFormation template to create resolvers for this workshop. However, feel free to open the *2_APPSYNC/templates/appsync-resolvers.yaml* file to see how resolvers are written, after the workshop. 
+
+Click the following link to launch a CloudFormation stack. 
 
 Region| Launch
 ------|-----
 eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3-eu-west-1.amazonaws.com/reinvent-calorie-tracker-workshop/2_APPSYNC/templates/appsync-resolvers.yaml)
 
- - Paste the API ID for the *AppSyncAPIId* parameter value.
+ Paste the API ID for the *AppSyncAPIId* parameter value and create the stack.
 
-  	![AppSync resolvers](../images/image-resolvers-ds.png)
+ ![AppSync resolvers](../images/image-resolvers-ds.png)
 
-The CloudFormation Stack has configured the resolvers for you.
+When stack creation is completed, you will have the resolvers configured and it will look like below screenshot.
 
   ![AppSync resolvers](images/appsync-resolvers.jpg)
 
----
-
-### Step 3: Add Amazon DynamoDB (user-table) as Event Source for `add-new-user-bmi` Lambda
+## Step 3: Add Amazon DynamoDB (user-table) as Event Source for `add-new-user-bmi` Lambda
 
 When a new user signup, the app captures their height and weight. Using this, we need to calculate their BMI which will be used later to provide diet suggestions. 
 
@@ -246,11 +258,9 @@ In this step, we will configure Amazon DynamoDB as an event source to `add-new-u
 
 You have successfully configured DynamoDB as an event source for the Lambda function.
 
----
-For each of the above steps we have separate CloudFormation templates, however, you can deploy all the resources with one-click using the master template below (not recommended). Use it only if you want to save time.
-
 <details>
-<summary><b>AWS AppSync Master CloudFormation  template</b></summary><p>
+You can deploy all the resources of this module with one-click using the master template below. Use it only if you want to save time.
+<summary><b>AWS AppSync Master CloudFormation template (Skip)</b></summary><p>
 
 Region| Launch
 ------|-----
