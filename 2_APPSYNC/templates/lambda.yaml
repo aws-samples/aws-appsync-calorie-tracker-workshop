@@ -28,7 +28,7 @@ Resources:
       Timeout: 30
       Code:
         S3Bucket: 'reinvent-calorie-tracker-workshop'
-        S3Key: !Sub "3_APPSYNC/functions/packages/updateCalories.zip"
+        S3Key: !Sub "2_APPSYNC/functions/packages/updateCalories.zip"
       Environment:
         Variables:
           USER_CAL_AGG_TABLE: !Ref 'DynamoDBUserCaloriesAggTableName'

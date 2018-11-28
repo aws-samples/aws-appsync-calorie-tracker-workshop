@@ -9,6 +9,7 @@ Please make sure you delete all the resources that was created as part of this w
 3. Go to Cloudformation console and delete all the `reinvent-calorietracker-*` stack.
 4. Delete all the Cloudformation stacks that was created by AWS Amplify.
 5. In AWS AppSync console, please delete the `Calorie Tracker API`
+6. Go to IAM Console, select `Users` from the left navigation, and delete the amplify user.
 
 
 Congratulations, You have successfully completed building a Serverless Calorie tracker application with AWS AppSync and Amazon Neptune Database.

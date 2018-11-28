@@ -1,4 +1,4 @@
-# Module 4: Frontend VueJS application
+# Module 3: Frontend VueJS application
 
 In this module, we will configure the frontend VueJS application to use AWS Appsync and Amazon Cognito for Authentication. We will use AWS Amplify, a Javascript library, that does the heavy lifting and building web and mobile application really simple.
 
@@ -12,19 +12,18 @@ In this module, we will configure the frontend VueJS application to use AWS Apps
 
 ### 1. Install dependencies and AWS Amplify
 
-- Go to AWS Cloud9 terminal and type the following command. Please ensure you are in the correct directory `aws-appsync-calorie-tracker-workshop/4_FRONTEND_APP`
+- Go to AWS Cloud9 terminal and type the following command. Please ensure you are in the correct directory `aws-appsync-calorie-tracker-workshop/3_FRONTEND_APP`
 ``` bash
-$ cd 4_FRONTEND_APP/ && npm install
+$ cd 3_FRONTEND_APP/ && npm install
 ```
+
+This will install the necessary NPM dependencies for the app to run. The [AWS Amplify](https://aws-amplify.github.io/) module which is a JavaScript library for building cloud-powered apps.
 
 ![Screenshot-1](../images/image-frontend.png)
 
-Next, install and configure [AWS Amplify](https://aws-amplify.github.io/). AWS Amplify includes:
+Next, install and configure [AWS Amplify CLI](https://aws-amplify.github.io/docs/cli/init).
 
-* a JavaScript library with support for React Native and web frameworks including 
-React, Angular, Vue and Ionic
-* a style guide including UI components
-* the Amplify CLI with support for managing the serverless backend, web hosting, and codegen
+The Amplify Command Line Interface (CLI) is a unified toolchain to create and manage your serverless infrastructure on AWS. we will be using it in the next steps to setup our serverless infrastructure and push it to our AWS environment.
 
 Start by running:
 
@@ -43,8 +42,6 @@ $ amplify configure
 ![Screenshot-1](../images/image-amplify-2.png)
 
 ### 2. Initalize AmplifyJS
-
-From the root of the app directory run:
 
 ``` bash
 $ amplify init
@@ -115,15 +112,15 @@ Pop over to the AWS Console if you'd like to take a better look at the newly cre
 
 In the previous step we added Cognito Authentication to our app. The next step would be to generate the AppSync Queries, Mutations and Subscriptions for us by parsing the AppSync GraphQL Schema in the AWS Account.
 
-Go to the [AWS AppSync Console](https://console.aws.amazon.com/appsync/home) and scroll to the `"Integrate Your App"` section and choosing the `JavaScript option`, then copy the codegen code snippet.
+Go to the [AWS AppSync Console](https://console.aws.amazon.com/appsync/home), click on your AppSync app, scroll to the `"Integrate Your App"` section, and choosing the `JavaScript option`, copy the codegen code snippet.
 
 ![Screenshot-5](../images/readme-5.png)
 
-Click through the onscreen options:
+Run the command in your Cloud9 terminal and click through the onscreen options:
 
 ![Screenshot-6](../images/readme-6.png)
 
-Viola! Amplify just fetched all avaliable queries, mutations ans subscriptions from our AppSync Schema and generated their respective code snippets in the `src/graphql` folder. Browse to this folder with your favourite IDE, we'll need to add 2 queries that Amplify did not generate.
+Viola! Amplify just fetched all avaliable queries, mutations and subscriptions from our AppSync Schema and generated their respective code snippets in the `src/graphql` folder. Browse to this folder with your favourite IDE. Next, we'll need to add 2 queries that Amplify did not generate.
 
 Open the `src/graphql/queries.js` file and add the following queries:
 
@@ -134,7 +131,7 @@ export const getUserBmi = `query getUser($id: String!) {
   getUser(id: $id) {
     bmi
   }
-}`
+}`;
 ``` 
 
 #### ListActivityCategories:
@@ -155,17 +152,16 @@ export const listActivityCategoriesOnly = `query ListActivityCategories(
     }
     nextToken
   }
-}
-`;
+}`;
 ```
 
 There would be some scenarios where the client-side code would only need to fetch specific values for specific parameters. 
 
-In REST-based APIs this could be achieved in two eays: 
+In REST-based APIs this could be achieved in two ways: 
 
 1. Getting all available fields and then cherry picking the necessary values on the clide-side. This solution should work, however it is not cost effective and may not scale well when you'll have millions (or more!) of concurrent clients polling your API for data.
 
-2. Making a server-side change to the API by adding an additional GET query to return only the necessary parameters that are needed. This solution is effective, but it also complicated your development cycles, as each of these changes would require a production change to your APIs.
+2. Making a server-side change to the API by adding an additional GET query to return only the necessary parameters that are needed. This solution is effective, but it also complicate your development cycles, as each of these changes would require a production change to your APIs.
 
 Luckily this is not an issue with GraphQL. As you can see in the queries we've added above, we can specify which parameters should be returned at runtime. No performance penalty, no changes to our precious production API.
 
@@ -181,9 +177,10 @@ We will be leveraging the Cognito User Pool we've created earlier for autorizati
 ![Screenshot-10](../images/image-amplify-4.png)
 
 - Select the relevant region and user pool at the newly revealed "User Pool configuration" section. Default action should be set to `ALLOW`:
-![Screenshot-12](../images/readme-12.png)
 
-- Click the `Save` button to save and apply changes. Once done the AppSync Endpoint should only accept requests containing valid tokens in respect to the configured Cognito User Pool.
+   ![Screenshot-12](../images/readme-12.png)
+
+- Click the `Save` button to save and apply changes. Once done the AppSync Endpoint will only accept requests containing valid tokens in respect to the configured Cognito User Pool.
 
 Let's configure our frontend code to send the authentication and authorization tokens with every AWS AppSync API call. Since we're using AWS Amplify this would only require a one line change. 
 
@@ -191,7 +188,7 @@ Let's configure our frontend code to send the authentication and authorization t
 
 ![Screenshot-12](../images/image-amplify-5.png)
 
-Right, so now our AppSync Endpoint will only accept requests from Cognito-authenticated users. This is an important first step towards securing our API, however we're still missing granular access control. Or are we?
+Now our AppSync Endpoint will only accept requests from Cognito-authenticated users. This is an important first step towards securing our API, however we're still missing granular access control. Or are we?
 
 Consider the `deleteActivity` mutation resolver template:
 
@@ -232,15 +229,22 @@ The filter ensures that when the query is executed it should only return activit
 
 There are many additional ways to lock-down and secure your AWS AppSync APIs. See the [AWS AppSync Developer's Guide](https://docs.aws.amazon.com/appsync/latest/devguide/security.html#amazon-cognito-user-pools-authorization) for additional details. 
 
-### 6. Run the app within AWS Cloud9
+### 6. Run the app
 
-- Open the `4_FRONTEND_APP/buid/webpack.dev.conf.js` file and add the entry under devServer
+<details>
+<summary><b>AWS Cloud9 Environment</b></summary>
+
+<p>
+
+- Open the `3_FRONTEND_APP/build/webpack.dev.conf.js` file and add the entry under devServer
 
 ```
-public: '06ef390e4f5e480eb483a9bdc7a5974a.vfs.cloud9.eu-west-1.amazonaws.com',
+public: 'xxxx.vfs.cloud9.eu-west-1.amazonaws.com',
 ```
 
-where `06ef390e4f5e480eb483a9bdc7a5974a` is the ID that AWS Cloud9 assigns to the environment. Please update the ID corresponding to your C9 environment. This can be found in AWS Cloud9 Environment details.
+where `xxxx` is the ID that AWS Cloud9 assigns to the environment. Please update the ID corresponding to your C9 environment. This can be found in AWS Cloud9 Environment details.
+
+![Screenshot-12](../images/image-cloud9-id.png)
 
 - To start the app in development mode, run:
 
@@ -248,16 +252,45 @@ where `06ef390e4f5e480eb483a9bdc7a5974a` is the ID that AWS Cloud9 assigns to th
 $ npm start
 ```
 
-After Webpack is done arranging the compiling all of the App's assests, you should be seeing the following message:
+After Webpack is done arranging and compiling all of the App's assests, you should be seeing the following message:
 
 ![Screenshot-7](../images/readme-7.png)
+
+In the Cloud9 menu bar, click **Preview** | **Preview Running Application** and click the highlighted (in red) to open the window in a new browser 
+
+![Screenshot-12](../images/image-app-preview.png)
+
+</p>
+</details>
+
+
+<details>
+<summary><b>In case you are using not using AWS Cloud9 to run the app (Local Environment)</b></summary><p>
+
+In order for the app to properly work it'll need to be served on a secure (HTTPS) server. We'll be using Webpack's `--https` flag to generate and serve a self-signed certificate. 
+
+- Open the `3_FRONTEND_APP/package.json` file and add the https flag under "dev":
+
+```json
+"dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --https",
+```
+
+- To start the app in development mode, run:
+
+```bash
+$ npm start
+```
+
+After Webpack is done arranging and compiling all of the App's assests, you should be seeing the following message:
+
+![Screenshot-7](../images/readme-7.png)
+
+</p></details>
 
 Since we're building a mobile app, we would recommend using your browser's development toolbar to mimic an actual iPhone 6 device screen:
 
 ![Screenshot-8](../images/readme-8.png)
 
-Next, [lets test the application, shall we?](../5_TESTING/README.md)
+Next, [lets test the application, shall we?](../4_TESTING/README.md)
 
 [Back to home page](../README.md)
-
-
