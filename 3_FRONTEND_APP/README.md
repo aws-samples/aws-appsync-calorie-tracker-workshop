@@ -236,7 +236,7 @@ There are many additional ways to lock-down and secure your AWS AppSync APIs. Se
 
 <p>
 
-- Open the `3_FRONTEND_APP/buid/webpack.dev.conf.js` file and add the entry under devServer
+- Open the `3_FRONTEND_APP/build/webpack.dev.conf.js` file and add the entry under devServer
 
 ```
 public: 'xxxx.vfs.cloud9.eu-west-1.amazonaws.com',

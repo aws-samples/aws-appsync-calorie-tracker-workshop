@@ -86,8 +86,9 @@ curl -X POST \
 
 
 
-  ![curl](../images/image-curl.png)
+![curl](../images/image-curl.png)
 
+**NOTE**: If CURL command take longer than 10 seconds OR returns *S3 access deined* error, check [troubleshooting section](TROUBLESHOOTING.md#s3-error-when-loading-data-to-neptune-cluster-using-curl-command).
 
 ---
 You can check the status of your load with the following command. Replace the `NEPTUNE_LOADER_ENDPOINT_HERE`, `LOAD_ID_HERE` and run the command. Ensure the `status` is **LOAD_COMPLETED** as shown in the picture below
