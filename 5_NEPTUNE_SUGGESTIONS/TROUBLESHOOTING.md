@@ -9,7 +9,7 @@ Following are the steps to resolve some of the common issues you may encounter d
 Try the following steps.
 
 Check VPC Endpoint policy
-- In module 5, step *1.1 Create Amazon S3 VPC Endpoint*, make sure the VPC endpoint policy you created has the right bucket name.
+- In module 5, step *1.1 Create Amazon S3 VPC Endpoint*, make sure the VPC endpoint policy you created has the right **S3 bucket name**.
 
 Update VPC Endpoint route tables
-- Modify the route tables you attached to the VPC Endpoints in module 5, step *1.1 Create Amazon S3 VPC Endpoint*. Select all 3 route tables.
+- Modify the route tables you attached to the VPC Endpoints in module 5, step *1.1 Create Amazon S3 VPC Endpoint*. Select the **main** route table having 3 subnets.
