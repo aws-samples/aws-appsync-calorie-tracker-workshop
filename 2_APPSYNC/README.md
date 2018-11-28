@@ -8,24 +8,25 @@ AppSync is setup with DynamoDB tables as data source to persist user information
 
 As we go through different steps in this module, you will learn what resources we are creating and what is it used for in the application. However, in the interest of time we will use CloudFormation templates to create the resources, instead of creating it manually.
 
-Following are the steps to create application backend:
-- [1. Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
-- [2. Create AppSync API backend](#step-2-create-appsync-api-backend)
-  - [2.1 Setup data sources](#21-setup-data-sources)
-  - [2.2 Setup AppSync Schema](#22-setup-appsync-schema)
-  - [2.3 Configure resolvers](#23-configure-resolvers)
- - [3. Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
+Following are the steps to create the application backend:
+
+1. [Create DynamoDB Tables and Lambda function](#step-1-create-dynamodb-tables-and-lambda-function)
+2. [Create AppSync API backend](#step-2-create-appsync-api-backend)
+    1. [Setup data sources](#21-setup-data-sources)
+    2. [Setup AppSync Schema](#22-setup-appsync-schema)
+    3. [Configure resolvers](#23-configure-resolvers)
+3. [Setup Lambda event source](#step-3-add-amazon-dynamodb-user-table-as-event-source-for-add-new-user-bmi-lambda)
 
 ## Step 1: Create DynamoDB Tables and Lambda function
+In this step we are creating following 4 DynamoDB tables:
+- User - to store user details such as username, height, weight, etc.
+- Activity - to store user activity details i.e. username, calories consumed or burned, date and time
+- Activity Category - to store Activity category and its type.
+- User Aggregate - to store aggregated values of calories consumed and calories burned per user per day.
 
-We will create 4 DynamoDB tables and a Lambda function using CloudFormation template. 
+We are also creating a Lambda function to aggregate the calories consumed and calories burned by each user on every activity, and update it in the dynamoDB table. This Lambda function will be executed every time user logs an activity in the app and it's triggered through Activity DynamoDB stream.
 
-- DynamoDB tables are used to store user information and Lambda function is used to aggregate the user calories based on the user activities and update it in User Aggregate table. 
-- If the activity category is either Food or Drink, it will add the calories to the 'caloriesConsumed' field for the user. 
-- If the activity category is Exercise, it will add the calories to the 'caloriesBurned' field for the user.
-- The Lambda function will be executed every time user logs an activity in the app, using User activity DynamoDB stream.
-
-Use the following link to deploy the stack. 
+Use the following link to launch the stack. 
 
 Region| Launch
 ------|-----
@@ -43,7 +44,7 @@ Here's what we just deployed:
 
 ![Calories Aggregator function](../images/image-calories-aggregator-lambda.png)
 
-Next, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
+Next, go to your *AWS Cloud9 terminal*, type the following command to load the sample activity categories (Make sure you are in the workshop project directory):
 
 ```
 aws dynamodb batch-write-item --request-items file://2_APPSYNC/assets/activity-categories.json --region eu-west-1
@@ -51,7 +52,7 @@ aws dynamodb batch-write-item --request-items file://2_APPSYNC/assets/activity-c
 ![Calories Aggregator function](../images/image-dynamo-batch-write.png)
 
 
-### Step 2: Create AppSync API backend
+## Step 2: Create AppSync API backend
 Now, we will use the DynamoDB tables created in Step 1 to create GraphQL backend. 
 
 Open the AWS AppSync Console and click **Create API**.
