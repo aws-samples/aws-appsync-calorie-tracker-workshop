@@ -174,7 +174,7 @@ Conditions:
       - ''
 Globals:
   Function:
-    Runtime: nodejs8.10
+    Runtime: nodejs10.x
     Handler: index.handler
     Environment:
       Variables: 
