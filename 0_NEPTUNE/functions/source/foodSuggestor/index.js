@@ -6,7 +6,7 @@ const DriverRemoteConnection = gremlin.driver.DriverRemoteConnection;
 const Graph = gremlin.structure.Graph;
 const P = gremlin.process.P;
 const __ = gremlin.process.statics;
-const dc = new DriverRemoteConnection(`ws://${process.env.NEPTUNE_ENDPOINT}:${process.env.NEPTUNE_PORT}/gremlin`);
+const dc = new DriverRemoteConnection(`wss://${process.env.NEPTUNE_ENDPOINT}:${process.env.NEPTUNE_PORT}/gremlin`);
 const graph = new Graph();
 const g = graph.traversal().withRemote(dc);
 
