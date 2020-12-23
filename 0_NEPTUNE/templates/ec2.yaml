@@ -173,6 +173,21 @@ Resources:
             - pip install --upgrade awscli
             - |+
 
+            - wget https://www.amazontrust.com/repository/SFSRootCAG2.cer
+            - |+
+
+            - cp {@jre_path}/lib/security/cacerts /tmp/certs/cacerts
+            - |+
+
+            - >-
+              sudo keytool -import 
+             -alias neptune-tests-ca 
+             -keystore /tmp/certs/cacerts 
+             -file /home/ec2-user/SFSRootCAG2.cer 
+             -noprompt 
+             -storepass changeit
+            - |+
+
             - !If 
               - AttachBulkloadIAMRoleToNeptuneClusterCondition
               - !Join 
@@ -195,16 +210,16 @@ Resources:
                 - ''
                 - - >-
                     wget
-                    https://archive.apache.org/dist/tinkerpop/3.3.2/apache-tinkerpop-gremlin-console-3.3.2-bin.zip
+                    https://archive.apache.org/dist/tinkerpop/3.3.2/apache-tinkerpop-gremlin-console-3.4.8-bin.zip
                   - |+
 
-                  - unzip apache-tinkerpop-gremlin-console-3.3.2-bin.zip
+                  - unzip apache-tinkerpop-gremlin-console-3.4.8-bin.zip
                   - |+
 
-                  - rm apache-tinkerpop-gremlin-console-3.3.2-bin.zip
+                  - rm apache-tinkerpop-gremlin-console-3.4.8-bin.zip
                   - |+
 
-                  - cd apache-tinkerpop-gremlin-console-3.3.2/conf
+                  - cd apache-tinkerpop-gremlin-console-3.4.8/conf
                   - |+
 
                   - 'echo hosts: ['
@@ -215,6 +230,9 @@ Resources:
                   - 'echo port: '
                   - !Ref NeptuneDBClusterPort
                   - ' >> neptune-remote.yaml'
+                  - |+
+
+                  - 'echo connectionPool: { enableSsl: true,  trustStore: /tmp/certs/cacerts } >> neptune-remote.yaml'
                   - |+
 
                   - >-
