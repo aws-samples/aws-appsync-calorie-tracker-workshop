@@ -44,3 +44,4 @@ admin.env
 
 #Ignore _meta folder
 _meta/resources
+copyobjectstos3master.sh
