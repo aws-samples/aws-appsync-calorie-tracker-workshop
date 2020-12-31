@@ -244,7 +244,7 @@ Resources:
     Type: AWS::Serverless::Function
     DependsOn: NeptuneStack
     Properties:
-      CodeUri: s3://aws-appsync-calorie-tracker-master/0_NEPTUNE/functions/source/foodSuggestor/food-suggestor.zip
+      CodeUri: s3://aws-appsync-calorie-tracker-master/0_NEPTUNE/functions/source/foodSuggestor/food-Suggestor.zip
       Description: Suggests food based on user BMI
       FunctionName: suggest-food-for-user
       MemorySize: 512

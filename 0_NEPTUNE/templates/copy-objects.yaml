@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   This template creates a lambda function to copy the objects from source S3
-  bucket to the destination S3 bucket.
+  bucket to the destination S3 bucket. test
 Parameters:
   SourceBucketName:
     AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
