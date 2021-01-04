@@ -499,7 +499,7 @@ Outputs:
     Description: Loader Endpoint for Neptune
     Value: !Join 
       - ''
-      - - 'http://'
+      - - 'https://'
         - !GetAtt 
           - NeptuneCluster
           - Endpoint
