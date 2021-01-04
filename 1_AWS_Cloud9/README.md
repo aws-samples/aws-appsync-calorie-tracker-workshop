@@ -42,13 +42,13 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
     	![Cloud9 Env](../images/image-c9-role.png)
 
 9. Increase the size of the Cloud9 EC2 instance root volume.
-	> To ensure we do not run out of disk space when developing we need to incfrease teh root volume size.
+	> To ensure we do not run out of disk space when developing we need to increase the root volume size.
 
 	1. Go to EC2 console. Make sure you are in **Ireland** region. 
     2. Click **Instances** on the left navigation bar. 
     3. Search for the keyword `aws-cloud9-reinvent-calorie-tracker-workshop-` and select the instance.
 	4. Select the **Storge** tab and click the volume link in the **Volume ID** column
-	5. Check the volume is selected then select **Actions then Modify Volume**
+	5. Check the volume is selected then select **Actions** then **Modify Volume**
 	6. Change the size from the default value to **20** and click the **Modify** button
 	7. Navigate back to the instance as per points 1 to 3.
 	8. Once selected click **Instance State** button then select **Reboot**
