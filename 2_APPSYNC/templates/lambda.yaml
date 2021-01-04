@@ -27,7 +27,7 @@ Resources:
       Runtime: python3.6
       Timeout: 30
       Code:
-        S3Bucket: 'reinvent-calorie-tracker-workshop'
+        S3Bucket: 'aws-appsync-calorie-tracker-master'
         S3Key: !Sub "2_APPSYNC/functions/packages/updateCalories.zip"
       Environment:
         Variables:
