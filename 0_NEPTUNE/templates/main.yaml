@@ -190,14 +190,14 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     DependsOn: S3Bucket
     Properties:
-      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/aws-appsync-calorie-tracker-master/0_NEPTUNE/templates/copy-objects.yaml'
+      TemplateURL: !Sub 'https://s3.ap-southeast-2.amazonaws.com/aws-appsync-calorie-tracker-workshop/0_NEPTUNE/templates/copy-objects.yaml'
       TimeoutInMinutes: '5'
       Parameters:
         DestBucketName: !Ref S3Bucket
   NeptuneStack:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/aws-appsync-calorie-tracker-master/0_NEPTUNE/templates/neptune.yaml'
+      TemplateURL: !Sub 'https://s3.ap-southeast-2.amazonaws.com/aws-appsync-calorie-tracker-workshop/0_NEPTUNE/templates/neptune.yaml'
       TimeoutInMinutes: '15'
       Parameters:
         DBReplicaIdentifierSuffix: !Ref DBReplicaIdentifierSuffix
@@ -208,7 +208,7 @@ Resources:
   NeptuneEC2Client:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: !Sub 'https://s3.eu-west-1.amazonaws.com/aws-appsync-calorie-tracker-master/0_NEPTUNE/templates/ec2.yaml'
+      TemplateURL: !Sub 'https://s3.ap-southeast-2.amazonaws.com/aws-appsync-calorie-tracker-workshop/0_NEPTUNE/templates/ec2.yaml'
       TimeoutInMinutes: '30'
       Parameters:
         EC2SSHKeyPairName: !Ref EC2SSHKeyPairName

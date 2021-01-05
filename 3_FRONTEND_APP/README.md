@@ -48,6 +48,8 @@ $ amplify init
 ```
 
 Follow the onscreen questions.
+- Enter a name for the project: `Use Default or Enter a Name`
+- Enter a name for the environment: `Use Default`
 - Choose default editor: `Choose anything`
 - Choose the type of app that you're building: `javascript`
 - What javascript framework are you using: `vue`
@@ -77,14 +79,20 @@ $ amplify add auth
 - Select the authentication/authorization services that you want to use: `User Sign-Up & Sign-In only (Best used with a cloud API only)`
 - Please provide a friendly name for your resource: `default`
 - Please provide a name for your user pool: `default`
+- How do you want users to be able to sign in? `Username`
+- Do you want to add User Pool Groups? `No`
+- Do you want to add an admin queries API? `No`
 - Multifactor authentication (MFA) user login options: `OFF`
 - Email based user registration/forgot password: `Enabled`
 - Please specify an email verification subject: `Your verification code`
 - Please specify an email verification message: `Your verification code is {####}`
 - Do you want to override the default password policy for this User Pool? `No`
-- Userpool users are created with a standard set of attributes: `default`
+- What attributes are required for signing up? `Email`
 - Specify the app's refresh token expiration period: `30`
-- Do you want to specify the user attributes: `No`
+- Do you want to specify the user attributes this app can read and write?: `No`
+- Do you want to enable any of the following capabilities? `Default`  NOTE: Default is no options selected.
+- Do you want to use an OAuth flow? `No`
+- Do you want to configure Lambda Triggers for Cognito? `No`
 
 The end result should look something like this:
 

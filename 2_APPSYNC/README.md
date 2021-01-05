@@ -31,7 +31,7 @@ Use the following link to launch the stack.
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module2&templateURL=https://s3-eu-west-1.amazonaws.com/aws-appsync-calorie-tracker-master/2_APPSYNC/templates/dynamodb-lambda.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module2&templateURL=https://s3.ap-southeast-2.amazonaws.com/aws-appsync-calorie-tracker-workshop/2_APPSYNC/templates/dynamodb-lambda.yaml)
 
 ![CFN](../images/image-appsync-cf-inputs.png)
 
@@ -222,7 +222,7 @@ Click the following link to launch a CloudFormation stack.
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3-eu-west-1.amazonaws.com/aws-appsync-calorie-tracker-master/2_APPSYNC/templates/appsync-resolvers.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3.ap-southeast-2.amazonaws.com/aws-appsync-calorie-tracker-workshop/2_APPSYNC/templates/appsync-resolvers.yaml)
 
  Paste the API ID for the *AppSyncAPIId* parameter value and create the stack.
 
@@ -264,7 +264,7 @@ You can deploy all the resources of this module with one-click using the master 
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3-eu-west-1.amazonaws.com/aws-appsync-calorie-tracker-master/2_APPSYNC/templates/master.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-calorie-tracker-module3&templateURL=https://s3.ap-southeast-2.amazonaws.com/aws-appsync-calorie-tracker-workshop/2_APPSYNC/templates/master.yaml)
 
 Once the Cloudformation stack has completed, go to your `AWS Cloud9 terminal`, type the following command to load the sample activity categories (Make sure you are at the right directory):
 
