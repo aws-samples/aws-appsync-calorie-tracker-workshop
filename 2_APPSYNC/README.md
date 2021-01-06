@@ -222,7 +222,7 @@ Click the following link to launch a CloudFormation stack.
 
 Region| Launch
 ------|-----
-eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3.eu-west-1.amazonaws.com/aws-appsync-calorie-tracker-workshop/2_APPSYNC/templates/appsync-resolvers.yaml)
+eu-west-1 (Ireland) | [![Launch](../images/cloudformation-launch-stack-button.png)](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=reinvent-cal-tracker-resolver&templateURL=https://s3.eu-west-1.amazonaws.com/aws-appsync-calorie-tracker-workshop-master/2_APPSYNC/templates/appsync-resolvers.yaml)
 
  Paste the API ID for the *AppSyncAPIId* parameter value and create the stack.
 
