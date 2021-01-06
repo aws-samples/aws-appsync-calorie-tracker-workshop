@@ -263,7 +263,8 @@ Under AWS lambda, you will find a Lambda function named **suggest-food-for-user*
 
 ![New Resolver](../images/create-suggested-food-resolver.png)
 
-6. Leave the default mapping templates as if and save the resolver.
+6. Enable both the `Request Mapping` and `Response Mapping` templates by toogling to the two (2) switches
+7. Save the resolver.
 
 #### Step 3: Updating the graphql schema in your code:
 
