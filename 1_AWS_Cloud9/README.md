@@ -87,7 +87,7 @@ In this section, we will create a AWS Cloud9 (C9) environment and configure it t
 Within your AWS Cloud9 environment, clone the workshop GitHub repo.
 
 ```
-$ git clone https://github.com/aws-samples/aws-appsync-calorie-tracker-workshop.git
+$ git clone https://github.com/hindcraig3/aws-appsync-calorie-tracker-workshop
 $ cd aws-appsync-calorie-tracker-workshop
 ```
 
