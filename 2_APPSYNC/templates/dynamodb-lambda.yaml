@@ -17,7 +17,7 @@ Resources:
     DependsOn:
       - DynamoDBStack
     Properties:
-      TemplateURL: 'https://aws-appsync-calorie-tracker-workshop-master-master.s3.amazonaws.com/2_APPSYNC/templates/lambda.yaml'
+      TemplateURL: 'https://aws-appsync-calorie-tracker-workshop-master.s3.amazonaws.com/2_APPSYNC/templates/lambda.yaml'
       Parameters:
         DynamoDBActivityTableArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableArn'
         DynamoDBActivityTableStreamArn: !GetAtt 'DynamoDBStack.Outputs.ActivityTableStreamARN'
