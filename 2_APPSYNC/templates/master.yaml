@@ -21,7 +21,7 @@ Parameters:
       \ stored. The bucket name can include numbers, lowercase letters, uppercase \
       \ letters, and hyphens, but should not start or end with a hyphen."
     Type: String
-    Default: aws-appsync-calorie-tracker-workshop
+    Default: aws-appsync-calorie-tracker-workshop-master
     
   S3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-_/]*$
